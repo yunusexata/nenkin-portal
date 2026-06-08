@@ -20,7 +20,6 @@ Route::group([], __DIR__ . '/web/Other.php');
 Route::group([], __DIR__ . '/web/Account.php');
 Route::group([], __DIR__ . '/web/MasterClient.php');
 
-Route::middleware(['auth', 'access_permission'])->group(function () {
 
 Route::group(["controller" => DashboardController::class, "prefix" => "dashboard", "as" => "dashboard."], function () {
     Route::get('/', 'index')->name('index');
@@ -41,7 +40,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/documents/preview-matching/{temp_batch_id}', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'previewMatching'])->name('admin.documents.previewMatching');
     Route::post('/admin/documents/preview-assign', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'assignPreviewFailure'])->name('admin.documents.previewAssign');
     Route::post('/admin/documents/confirm-upload', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'confirmAndUpload'])->name('admin.documents.confirmUpload');
-    
+
     Route::get('/admin/documents/batches/{id}', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'batchDetail'])->name('admin.documents.batchDetail');
     Route::get('/admin/documents/batches/{id}/failures/export', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'exportFailures'])->name('admin.documents.failures.export');
     Route::post('/admin/documents/failures/{id}/resolve', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'resolveFailure'])->name('admin.documents.failures.resolve');
