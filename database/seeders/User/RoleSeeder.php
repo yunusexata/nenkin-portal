@@ -18,6 +18,7 @@ class RoleSeeder extends Seeder
     ];
     const client = [
         PermissionHelper::ACCESS_DASHBOARD => [PermissionHelper::TYPE_READ],
+        PermissionHelper::ACCESS_CLIENT_FORM_CONFIRMATION => PermissionHelper::TYPE_ALL,
     ];
     public function run(): void
     {

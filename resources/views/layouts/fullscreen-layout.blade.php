@@ -10,10 +10,10 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    <!-- Alpine.js -->
-    {{-- <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script> --}}
-
+    
+    @livewireStyles
+    
+    @stack('css')
     <!-- Theme Store -->
     <script>
         document.addEventListener('alpine:init', () => {
@@ -99,7 +99,9 @@ window.addEventListener('resize', checkMobile);">
 
 </body>
 
+    @livewireScripts
     <script>
+        
         
         Livewire.on("{{ Alert::EVENT_INFO }}", (event) => {
             Swal.fire({
@@ -108,6 +110,11 @@ window.addEventListener('resize', checkMobile);">
                 text: event[2],
             });
         });
+
+        Livewire.on("{{ Alert::EVENT_CONSOLE_LOG }}", (event) => {
+            console.log(event[0])
+        });
+
         Livewire.on("{{ Alert::EVENT_CONFIRMATION }}", (event) => {
             Swal.fire({
                 icon: event[0],
@@ -126,6 +133,50 @@ window.addEventListener('resize', checkMobile);">
                 }
             });
         });
+        Livewire.on("{{ Alert::EVENT_INFORMATION }}", (event) => {
+            console.log(event);
+            Swal.fire({
+                position: "top-end",
+                icon: event[0],
+                title: event[1],
+                showConfirmButton: false,
+                timer: 1500
+            });
+            // Swal.fire({
+            //     icon: event[0],
+            //     title: event[1],
+            //     text: event[2],
+            //     showCancelButton: true,
+            //     confirmButtonColor: "#3085d6",
+            //     cancelButtonColor: "#d33",
+            //     confirmButtonText: event[3],
+            //     cancelButtonText: event[4],
+            // }).then((result) => {
+            //     if (result.isConfirmed) {
+            //         Livewire.dispatch(event[5]);
+            //     } else {
+            //         Livewire.dispatch(event[6]);
+            //     }
+            // });
+        });
+
+        Livewire.on('refresh-page', (data) => {
+            location.reload();
+        });
+
+        Livewire.on('consoleLog', (data) => {
+            console.log(data)
+        });
+        window.copyToClipboard = function(text)
+        {
+            navigator.clipboard.writeText(text)
+            .then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil Copy Link Form Kandidat!',
+                });
+            });
+        }
     </script>
 @stack('scripts')
 

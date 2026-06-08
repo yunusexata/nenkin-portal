@@ -128,6 +128,9 @@
             @include('layouts.app-header')
             <!-- app header end -->
             <div class="p-4 mx-auto max-w-[76vw] md:p-6">
+                @yield('header')
+            </div>
+            <div class="p-4 mx-auto max-w-[76vw] md:p-6">
                 @yield('content')
             </div>
         </div>

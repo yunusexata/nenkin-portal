@@ -23,7 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'client_id',
         'name',
-        'phone',
+        'n_whatsapp',
         'email',
         'password',
         'pic',

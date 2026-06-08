@@ -12,19 +12,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('client_submissions', function (Blueprint $table) {
+        Schema::create('client_confirmations', function (Blueprint $table) {
             $this->scheme($table, false);
         });
 
-        Schema::create('_history_client_submissions', function (Blueprint $table) {
+        Schema::create('_history_client_confirmations', function (Blueprint $table) {
             $this->scheme($table, true);
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('client_submissions');
-        Schema::dropIfExists('_history_client_submissions');
+        Schema::dropIfExists('client_confirmations');
+        Schema::dropIfExists('_history_client_confirmations');
     }
 
     private function scheme(Blueprint $table, $is_history = false)
@@ -35,12 +35,11 @@ return new class extends Migration
         if ($is_history) {
             $table->bigInteger('obj_id')->unsigned();
         } else {
-            $table->index('client_id', 'client_submissions_client_id_idx');
+            $table->index('client_id', 'client_confirmations_client_id_idx');
         }
         $table->unsignedBigInteger('client_id');
 
         // FORM SUBMISSION
-        $table->string('email');
         $table->string('nenkin_80_received_type')->nullable();
         $table->string('current_position')->nullable();
         $table->string('back_to_jp_type')->nullable();
@@ -49,6 +48,7 @@ return new class extends Migration
         $table->integer('departure_year')->nullable();
         $table->integer('estimated_return_month')->nullable();
         $table->integer('estimated_return_year')->nullable();
+        $table->text('indonesia_address')->nullable();
 
         $table->bigInteger("created_by")->unsigned()->nullable();
         $table->bigInteger("updated_by")->unsigned()->nullable();

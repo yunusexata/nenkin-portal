@@ -43,7 +43,7 @@ class Client extends Model
     const STATUS_ACTIVE = 'active';
     const STATUS_COMPLETE = 'complete';
 
-    const CLAIM_TYPE_RE_ENTRY = 're_entry';
+    // const CLAIM_TYPE_RE_ENTRY = 're_entry';
     const CLAIM_TYPE_ADJUSTMENT = 'adjusment';
     const CLAIM_TYPE_NORMAL = 'normal';
     const CLAIM_TYPE_SPEED = 'speed';
@@ -68,5 +68,9 @@ class Client extends Model
     public function magicLink()
     {
         return $this->hasOne(ClientMagicLink::class);
+    }
+    public function confirmation()
+    {
+        return $this->hasOne(ClientConfirmation::class);
     }
 }

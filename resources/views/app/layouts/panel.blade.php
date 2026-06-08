@@ -131,11 +131,6 @@
 
                         <!--begin::Navbar-->
                         <div class="app-navbar flex-shrink-0">
-                            <div class="app-navbar-item ms-1 ms-md-4">
-                                <div class='menu-item'>
-                                    <livewire:core.connection-state />
-                                </div>
-                            </div>
 
                             <!--begin::User menu-->
                             <div class="app-navbar-item ms-1 ms-md-4" id="kt_header_user_menu_toggle">

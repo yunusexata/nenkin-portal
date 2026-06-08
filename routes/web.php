@@ -20,7 +20,9 @@ Route::group([], __DIR__ . '/web/Other.php');
 Route::group([], __DIR__ . '/web/Account.php');
 Route::group([], __DIR__ . '/web/MasterClient.php');
 
-Route::group(["controller" => DashboardController::class, "prefix" => "dashboard", "as" => "dashboard."], function () {
-    Route::get('/', 'index')->name('index');
+Route::middleware(['auth', 'access_permission'])->group(function () {
+
+    Route::group(["controller" => DashboardController::class, "prefix" => "dashboard", "as" => "dashboard."], function () {
+        Route::get('/', 'index')->name('index');
+    });
 });
-Route::middleware(['auth', 'access_permission'])->group(function () {});

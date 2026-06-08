@@ -65,44 +65,32 @@ class Datatable extends Component
     {
         return [
             [
-                'name' => 'Aksi',
+                'name' => 'Action',
                 'sortable' => false,
                 'searchable' => false,
                 'render' => function ($item) {
-
                     $editHtml = "";
                     if ($this->isCanUpdate) {
+
                         $editUrl = route('permission.edit', $item->id);
-                        $editHtml = "<div class='col-auto mb-2'>
-                            <a class='btn btn-primary btn-sm' href='$editUrl'>
-                                <i class='ki-duotone ki-notepad-edit fs-1'>
-                                    <span class='path1'></span>
-                                    <span class='path2'></span>
-                                </i>
-                                Ubah
+                        $editHtml = "<div class='col-auto'>
+                            <a type='button' href='$editUrl' class='inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-2 py-1 text-sm bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300'>
+                                <span class='material-symbols-outlined text-lg' data-icon='edit'>edit</span>
                             </a>
                         </div>";
                     }
 
                     $destroyHtml = "";
+                    $destroyHtml = "";
                     if ($this->isCanDelete) {
-                        $destroyHtml = "<div class='col-auto mb-2'>
-                            <button class='btn btn-danger btn-sm m-0' 
-                                wire:click=\"showDeleteDialog($item->id)\">
-                                <i class='ki-duotone ki-trash fs-1'>
-                                    <span class='path1'></span>
-                                    <span class='path2'></span>
-                                    <span class='path3'></span>
-                                    <span class='path4'></span>
-                                    <span class='path5'></span>
-                                </i>
-                                Hapus
+                        $destroyHtml = "<div class='col-auto'>
+                            <button type='button' class='inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-2 py-1 text-sm bg-red-500 text-white shadow-theme-xs hover:bg-red-600 disabled:bg-brand-300' wire:click=\"showDeleteDialog($item->id)\">
+                                <span class='material-symbols-outlined text-lg' data-icon='delete'>delete</span>
                             </button>
                         </div>";
                     }
-
-                    $html = "<div class='row'>
-                        $editHtml $destroyHtml 
+                    $html = "<div class='flex flex-nowrap justify-start p-0 m-0 gap-1'>
+                        $editHtml $destroyHtml
                     </div>";
 
                     return $html;

@@ -1,39 +1,38 @@
-@extends('app.layouts.panel')
-
-@section('title', 'Jabatan - Detail')
+@extends('layouts.app')
 
 @section('header')
-    <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
-        <!--begin::Title-->
-        <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Jabatan - Detail</h1>
-        <!--end::Title-->
-        <!--begin::Breadcrumb-->
-        <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
-            <li class="breadcrumb-item text-muted">Jabatan</li>
-            {{-- <li class="breadcrumb-item">
-                <span class="bullet bg-gray-400 w-5px h-2px"></span>
-            </li> --}}
-        </ul>
-        <!--end::Breadcrumb-->
-
-        <div class='row'>
-            <div class="col-md-auto mt-2">
-                <a class="btn btn-info" href="{{ route('role.index') }}">
-                    <i class="ki-duotone ki-arrow-left fs-1">
-                        <span class="path1"></span>
-                        <span class="path2"></span>
-                    </i>
-                    Kembali
-                </a>
-            </div>
+    <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        
+        <div>
+            <h2 class="text-title-md2 font-bold text-black dark:text-white">
+                Jabatan
+            </h2>
+            
+            <nav class="mt-1">
+                <ul class="flex items-center gap-2">
+                    <li>
+                        <a class="font-medium text-primary" href="#">Dashboard</a>
+                    </li>
+                    <li class="text-body dark:text-bodydark">/</li>
+                    <li class="font-medium text-body dark:text-bodydark">Jabatan</li>
+                </ul>
+            </nav>
         </div>
+
+        <div class="flex items-center">
+            <a 
+                href="{{ route('role.index') }}" 
+                class="inline-flex items-center justify-center gap-2.5 rounded bg-primary px-6 py-3 text-center font-medium bg-blue-300 rounded hover:bg-opacity-90 shadow-sm"
+            >
+                Kembali
+            </a>
+        </div>
+
     </div>
 @stop
-
 @section('content')
-    <div class="card">
-        <div class="card-body">
-            <livewire:account.role.detail :objId="$objId" />
-        </div>
-    </div>
+    
+    <x-common.component-card title="">
+        <livewire:account.role.detail :objId="$objId" />
+    </x-common.component-card>
 @stop

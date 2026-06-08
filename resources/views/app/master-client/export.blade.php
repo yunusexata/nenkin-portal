@@ -48,7 +48,7 @@
                         <td>{{ $data['dob'] ? Carbon\Carbon::parse($data['dob'])->format('Ymd') : '' }}</td>
                         <td>{{ $data['phone'] }}</td>
                         <td>{{ $data['pic'] }}</td>
-                        <td>{{ $data->magicLink['token'] }}</td>
+                        <td>{{ route('client.create', $data->magicLink['token']) }}</td>
                     </tr>
                 @endforeach
             @endif

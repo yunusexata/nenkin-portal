@@ -1,0 +1,145 @@
+
+        <!-- Main Card -->
+        <div class="bg-white text-[#111827] rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+            <div class="bg-[#F97316] p-4 text-white text-center font-bold tracking-wide text-sm uppercase">
+                Formulir Informasi Klien
+            </div>
+
+            <form wire:submit="store" class="p-6 sm:p-8 space-y-5">
+                @csrf
+
+                <!-- General Database Error Alert -->
+                @error('error_database')
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 text-red-700 text-sm rounded-r-lg">
+                    {{ $message }}
+                </div>
+                @enderror
+
+                <!-- Nama Lengkap -->
+                <div>
+                    <input type="text" 
+                           id="name" 
+                           name="name" 
+                           value="{{ $name }}"
+                           class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-center text-[#111827] uppercase placeholder-gray-400"
+                           readonly>
+                    
+                </div>
+
+                
+                <!-- Status Penerimaan Nenkin 80% -->
+                <div>
+                    <label for="nenkin_80_received_type" class="block text-sm font-semibold text-gray-700 mb-1">Status Penerimaan Nenkin 80%</label>
+                    <select id="nenkin_80_received_type" 
+                            name="nenkin_80_received_type"
+                            wire:model="nenkin_80_received_type" 
+                            required
+                            class="w-full px-4 py-2.5 bg-white rounded-lg border border-gray-300 text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#F97316] focus:border-transparent transition">
+                        <option value="">-- Pilih Status --</option>
+                        @foreach (\App\Models\Client\ClientConfirmation::NENKIN_80_RECEIVED_TYPE_CHOICE as $key => $value)
+                            <option value="{{ $key }}">{{ $value }}</option>
+                        @endforeach
+                    </select>
+                    @error('nenkin_80_received_type')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Posisi Saat Ini -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Posisi Saat Ini</label>
+                    <div class="grid grid-cols-2 gap-3">
+
+                        @foreach (\App\Models\Client\ClientConfirmation::CURRENT_POSITION_CHOICE as $key => $value)
+                            <label class="flex items-center justify-center px-4 py-3 border rounded-lg cursor-pointer transition select-none hover:bg-gray-50 border-gray-300 [&:has(input:checked)]:border-[#F97316] [&:has(input:checked)]:bg-orange-50 [&:has(input:checked)]:text-[#F97316]">
+                                <input type="radio" wire:model.live="current_position" value="{{$key}}" class="sr-only" required>
+                                <span class="text-sm font-medium">{{$value}}</span>
+                            </label>
+                        @endforeach
+                    </div>
+                    @error('current_position')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Rencana Kembali ke Jepang (6 Bulan) -->
+                @if ($current_position === \App\Models\Client\ClientConfirmation::CURRENT_POSITION_INDONESIA)
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Rencana Kembali ke Jepang dalam 6 Bulan?</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            
+                            @foreach (\App\Models\Client\ClientConfirmation::BACK_TO_JP_TYPE_CHOICE as $key => $value)
+                                <label class="flex items-center justify-center px-4 py-3 border rounded-lg cursor-pointer transition select-none hover:bg-gray-50 border-gray-300 [&:has(input:checked)]:border-[#F97316] [&:has(input:checked)]:bg-orange-50 [&:has(input:checked)]:text-[#F97316]">
+                                    <input type="radio" id="back_to_jp_type_{{ $key }}" wire:model.live="back_to_jp_type" value="{{ $key }}" class="sr-only" required>
+                                    <span class="text-sm font-medium">{{$value}}</span>
+                                </label>
+                            @endForeach
+                            
+                        </div>
+                        <p class="text-gray-400 text-[10px] mt-0.5">Jawaban Ya, Hanya Untuk Yang Sudah Tanda Tangan Kontrak / Sudah di Telfon Oleh Pihak Kaisha/Kumiai.</p>
+                        @error('rencana_kembali')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                @elseif ($current_position === \App\Models\Client\ClientConfirmation::CURRENT_POSITION_JEPANG)
+                
+                    <div id="container_estimasi" class="transition duration-300">
+                        <label for="estimated_return" class="block text-sm font-semibold text-gray-700 mb-1">Buat Kamu Yang Posisi Sudah Ada Di Jepang, Estimasi Kepulangan</label>
+                        <input type="month" 
+                            id="estimated_return" 
+                            wire:model="estimated_return" 
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#F97316] focus:border-transparent transition">
+                        <p class="text-gray-400 text-[10px] mt-0.5">Silakan pilih bulan & tahun perkiraan Kepulangan Anda.</p>
+                        @error('estimated_return')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                @endif
+
+                <!-- Estimasi Keberangkatan (Conditional) -->
+                @if ($back_to_jp_type === \App\Models\Client\ClientConfirmation::BACK_TO_JP_TYPE_YES &&
+                $current_position === \App\Models\Client\ClientConfirmation::CURRENT_POSITION_INDONESIA )
+                    
+                    <div id="container_estimasi" class="transition duration-300">
+                        <label for="departure" class="block text-sm font-semibold text-gray-700 mb-1">Estimasi Bulan Kembali Ke Jepang</label>
+                        <input type="month" 
+                            id="departure" 
+                            wire:model="departure" 
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#F97316] focus:border-transparent transition">
+                        <p class="text-gray-400 text-[10px] mt-0.5">Silakan pilih bulan & tahun perkiraan keberangkatan Anda.</p>
+                        @error('departure')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    
+                @endif
+
+                <!-- Alamat Indonesia -->
+                <div>
+                    <label for="indonesia_address" class="block text-sm font-semibold text-gray-700 mb-1">Alamat Lengkap Indonesia</label>
+                    <textarea id="indonesia_address" 
+                              name="indonesia_address" 
+                              rows="3" 
+                              wire:model="indonesia_address"
+                              required 
+                              placeholder="Masukkan alamat detail (Jalan, No. Rumah, RT/RW, Kecamatan, Kabupaten, Provinsi)"
+                              class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-[#111827] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#F97316] focus:border-transparent transition"></textarea>
+                    @error('indonesia_address')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="pt-2">
+                    <p class="w-full bg-[#465fff] text-white py-3 px-4 rounded-lg font-bold hover:bg-orange-600 focus:outline-none text-center transition-all cursor-pointer shadow-md">
+                        TIPE SERVIS {{ strtoupper($claim_type) }}
+                    </p>
+                </div>
+                <!-- Submit Button -->
+                <div class="pt-2">
+                    <button type="submit" 
+                            class="w-full bg-[#F97316] text-white py-3 px-4 rounded-lg font-bold hover:bg-orange-600 focus:outline-none focus:ring-4 focus:ring-orange-200 transition-all cursor-pointer shadow-md">
+                        SIMPAN DATA
+                    </button>
+                </div>
+            </form>
+        </div>

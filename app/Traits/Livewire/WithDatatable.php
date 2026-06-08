@@ -10,7 +10,7 @@ trait WithDatatable
 {
     use WithPagination, WithoutUrlPagination;
 
-    protected $paginationTheme = 'bootstrap';
+    protected $paginationTheme = 'tailwind';
 
     public $pageName = "";
     public $lengthOptions = [10, 25, 50, 100];

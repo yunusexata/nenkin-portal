@@ -34,11 +34,12 @@ return new class extends Migration
 
         if ($is_history) {
             $table->bigInteger('obj_id')->unsigned();
+            $table->uuid('token');
         } else {
+            $table->uuid('token')->unique();
             $table->index('token', 'client_magic_links_token_idx');
         }
         $table->unsignedBigInteger('client_id');
-        $table->uuid('token')->unique();
 
         $table->string('email')->nullable();
         $table->string('password')->nullable();

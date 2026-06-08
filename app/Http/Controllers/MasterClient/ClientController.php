@@ -7,13 +7,13 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
-    public function index()
+    public function form_confirmation()
     {
-        return view('app.master-client.index');
+        return view('app.client.form-confirmation');
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        return view('app.client.create', ["token" => null]);
+        return view('app.client.create', ["token" => $request->token]);
     }
 }

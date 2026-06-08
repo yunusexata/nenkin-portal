@@ -34,6 +34,8 @@ class PermissionHelper
     // Form Gensen
     const ACCESS_IMPORT_DATA_JEPANG = 'import_data_jepang';
     const ACCESS_MASTER_CLIENT = 'master_client';
+    const ACCESS_CLIENT = 'client';
+    const ACCESS_CLIENT_FORM_CONFIRMATION = 'client_form_confirmation';
 
     const ACCESS_ALL = [
         self::ACCESS_DASHBOARD,
@@ -44,6 +46,8 @@ class PermissionHelper
         // 
         self::ACCESS_IMPORT_DATA_JEPANG,
         self::ACCESS_MASTER_CLIENT,
+        self::ACCESS_CLIENT,
+        self::ACCESS_CLIENT_FORM_CONFIRMATION,
     ];
 
     const TRANSLATE_ACCESS = [
@@ -55,6 +59,8 @@ class PermissionHelper
         // 
         self::ACCESS_IMPORT_DATA_JEPANG => 'Import Data Jepang',
         self::ACCESS_MASTER_CLIENT => 'Master Data Client',
+        self::ACCESS_CLIENT => 'Master Data Client',
+        self::ACCESS_CLIENT_FORM_CONFIRMATION => 'Formulir Konfirmasi',
     ];
 
     const ACCESS_TYPE_ALL = [
@@ -65,6 +71,8 @@ class PermissionHelper
 
         self::ACCESS_IMPORT_DATA_JEPANG => self::TYPE_ALL,
         self::ACCESS_MASTER_CLIENT => self::TYPE_ALL,
+        self::ACCESS_CLIENT => self::TYPE_ALL,
+        self::ACCESS_CLIENT_FORM_CONFIRMATION => self::TYPE_ALL,
     ];
 
     /*
