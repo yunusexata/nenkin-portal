@@ -21,14 +21,14 @@ class DashboardRepository extends MasterDataRepository
 
         return GensenForm::query()
             ->selectRaw("
-            DATE(created_at) as transaction_date,
+            CAST(created_at AS DATE) as transaction_date,
             pic_code,
             COUNT(*) as total
         ")
             ->whereBetween('created_at', [$start, $end])
             ->whereNotNull('pic_code')
             ->groupByRaw("
-            DATE(created_at),
+            CAST(created_at AS DATE),
             pic_code
         ")
             ->orderBy('transaction_date')
