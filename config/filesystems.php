@@ -60,16 +60,17 @@ return [
             'report' => false,
         ],
 
-        // 'supabase' => [
-        //     'driver' => 's3',
-        //     'key' => env('SUPABASE_ACCESS_KEY_ID'),
-        //     'secret' => env('SUPABASE_SECRET_ACCESS_KEY'),
-        //     'region' => env('SUPABASE_DEFAULT_REGION'),
-        //     'bucket' => env('SUPABASE_BUCKET'),
-        //     'endpoint' => env('SUPABASE_ENDPOINT'),
-        //     'visibility' => 'private',
-        //     'use_path_style_endpoint' => true,
-        // ],
+        'supabase' => [
+            'driver' => 's3',
+            'key' => env('SUPABASE_ACCESS_KEY_ID', env('SUPABASE_KEY')),
+            'secret' => env('SUPABASE_SECRET_ACCESS_KEY', env('SUPABASE_SECRET_KEY', env('SUPABASE_KEY'))),
+            'region' => env('SUPABASE_DEFAULT_REGION', 'us-east-1'),
+            'bucket' => env('SUPABASE_BUCKET'),
+            'endpoint' => env('SUPABASE_ENDPOINT', env('SUPABASE_URL')),
+            'visibility' => 'private',
+            'use_path_style_endpoint' => true,
+            'throw' => true,
+        ],
     ],
 
     /*

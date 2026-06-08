@@ -53,4 +53,9 @@ class User extends Authenticatable implements MustVerifyEmail
     const ROLE_SUPER_ADMIN = 'SUPERADMIN';
     const ROLE_HS = 'HS';
     const ROLE_CLIENT = 'CLIENT';
+
+    public function client()
+    {
+        return $this->belongsTo(\App\Models\Client\Client::class, 'client_id');
+    }
 }

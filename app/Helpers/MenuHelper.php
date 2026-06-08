@@ -6,14 +6,23 @@ class MenuHelper
 {
     public static function getMainNavItems()
     {
-        return [
-
+        $items = [
             [
                 'icon' => 'dashboard',
                 'name' => 'Master Data Client',
                 'path' => route('master_client.index'),
             ],
         ];
+
+        if (auth()->check() && !auth()->user()->hasRole(\App\Models\User::ROLE_CLIENT)) {
+            $items[] = [
+                'icon' => 'forms',
+                'name' => 'Upload Dokumen',
+                'path' => route('admin.documents.index'),
+            ];
+        }
+
+        return $items;
     }
 
     public static function getOthersItems()

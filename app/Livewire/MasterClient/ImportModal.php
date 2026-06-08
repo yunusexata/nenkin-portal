@@ -22,6 +22,10 @@ class ImportModal extends Component
     use WithFileUploads;
 
     public $input_file;
+    public $fileName;
+    public $storedDisk;
+    public $storedPath;
+    public $realPath;
 
     // Import Pipeline
     public $previewBulkStatusRows;
@@ -31,7 +35,32 @@ class ImportModal extends Component
     // IMPORT PIPELINE
     public function updatedInputFile()
     {
-        consoleLog($this, 'con');
+        if (!$this->input_file) {
+            return;
+        }
+
+        $extension = $this->input_file->extension();
+        $this->fileName = $this->input_file->getClientOriginalName();
+        if (!str_ends_with($this->fileName, '.' . $extension)) {
+            $this->fileName .= '.' . $extension;
+        }
+        $this->storedDisk = env('DEFAULT_STORE_DISK', 'private');
+        if ($this->storedDisk === 'pivate' || $this->storedDisk === 'public') {
+            $this->storedDisk = 'public'; // fallback to public if default is public or typo
+        }
+        $storedName = Str::uuid() . '.' . $extension;
+        $filePath = "import_excel_jp";
+
+        $this->storedPath = Storage::disk($this->storedDisk)->putFileAs(
+            $filePath,
+            $this->input_file,
+            $storedName,
+            [
+                'visibility' => 'private',
+            ]
+        );
+        $this->realPath = $this->input_file->getRealPath();
+
         $import = new ExcelImportBulk();
         Excel::import($import, $this->input_file);
 
@@ -40,47 +69,49 @@ class ImportModal extends Component
 
 
         $d = [];
-        foreach ($import->rows as $index => $row) {
-            $d = [
+        if ($import->rows) {
+            foreach ($import->rows as $index => $row) {
+                $d = [
 
-                'no_jp' => $row['no_input_jpn'],
-                'name' => $row['nama'],
-                'dob' => $row['tgl_lahir'],
-                'phone' => $row['no_telp'],
-                'raw_data' => $row,
-                'facebook' => $row['nama_fb'],
-                'instagram' => $row['nama_ig'],
-                'pic' => $row['pic'],
-                'lpk' => $row['lpk'],
-                'note' => $row['note'],
-            ];
-            $validator = Validator::make($d, [
-                'no_jp' => 'required',
-                'name' => 'required',
-                'dob' => 'required',
-                'pic' => 'required',
-            ], [
-                'no_jp.required' => 'No Input Japan harus di isi',
-                'name.required' => 'Nama harus di isi',
-                'dob.required' => 'Tgl Lahir harus di isi',
-                'phone.required' => 'No Telp harus di isi',
-                'pic.required' => 'No Input Japan harus di isi',
-            ]);
+                    'no_jp' => $row['no_input_jpn'],
+                    'name' => $row['nama'],
+                    'dob' => $row['tgl_lahir'],
+                    'phone' => $row['no_telp'],
+                    'raw_data' => $row,
+                    'facebook' => $row['nama_fb'],
+                    'instagram' => $row['nama_ig'],
+                    'pic' => $row['pic'],
+                    'lpk' => $row['lpk'],
+                    'note' => $row['note'],
+                ];
+                $validator = Validator::make($d, [
+                    'no_jp' => 'required',
+                    'name' => 'required',
+                    'dob' => 'required',
+                    'pic' => 'required',
+                ], [
+                    'no_jp.required' => 'No Input Japan harus di isi',
+                    'name.required' => 'Nama harus di isi',
+                    'dob.required' => 'Tgl Lahir harus di isi',
+                    'phone.required' => 'No Telp harus di isi',
+                    'pic.required' => 'No Input Japan harus di isi',
+                ]);
 
-            $this->previewBulkStatusRows[] = [
-                'data' => $d,
-                'error' => $validator->errors()->toArray()
-            ];
+                $this->previewBulkStatusRows[] = [
+                    'data' => $d,
+                    'error' => $validator->errors()->toArray()
+                ];
 
-            if ($validator->fails()) {
-                $this->errorBulkStatusRows[] = $index;
+                if ($validator->fails()) {
+                    $this->errorBulkStatusRows[] = $index;
+                }
             }
         }
     }
 
     public function closeImportBulkStatusModal()
     {
-        $this->reset('input_file');
+        $this->reset('input_file', 'fileName', 'storedDisk', 'storedPath', 'realPath');
         $this->previewBulkStatusRows = [];
         $this->errorBulkStatusRows = [];
     }
@@ -91,25 +122,12 @@ class ImportModal extends Component
         try {
             DB::beginTransaction();
 
-            $extension = $this->input_file
-                ->extension();
+            $fileName = $this->fileName;
+            $disk = $this->storedDisk;
+            $path = $this->storedPath;
 
-            $fileName = $this->input_file->getClientOriginalName() . '.' . $extension;
-            $disk = env('DEFAULT_STORE_DISK', 'pivate');
-
-            $storedName = Str::uuid() . '.' . $this->input_file->extension();
-            $filePath =   "import_excel_jp";
-
-            $path = Storage::disk($disk)->putFileAs(
-                $filePath,
-                $this->input_file,
-                $storedName,
-                [
-                    'visibility' => 'private',
-                ]
-            );
-
-            foreach ($this->previewBulkStatusRows as $key => $value) {
+            if ($this->previewBulkStatusRows) {
+                foreach ($this->previewBulkStatusRows as $key => $value) {
 
                 if (!$value['error']) {
                     $phone = trim((string) ($value['data']['phone'] ?? ''));
@@ -144,9 +162,11 @@ class ImportModal extends Component
                     );
                 }
             }
+            }
 
-            $path = $this->input_file->getRealPath();
-            unlink($path);
+            if ($this->realPath && file_exists($this->realPath)) {
+                unlink($this->realPath);
+            }
             DB::commit();
             $this->dispatch('datatable-refresh');
             $this->dispatch('onSuccessImportModal');
@@ -182,7 +202,7 @@ class ImportModal extends Component
 
     public function closeModal()
     {
-        $this->reset('input_file');
+        $this->reset('input_file', 'fileName', 'storedDisk', 'storedPath', 'realPath');
         $this->previewBulkStatusRows = [];
         $this->errorBulkStatusRows = [];
     }
