@@ -34,11 +34,12 @@
 
             if ($is_history) {
                 $table->bigInteger('obj_id')->unsigned();
+                $table->unsignedBigInteger('client_id');
             } else {
                 $table->index('status', 'reviews_status_idx');
                 $table->index('rating', 'reviews_rating_idx');
+                $table->unsignedBigInteger('client_id')->unique();
             }
-            $table->unsignedBigInteger('client_id')->unique();
 
             $table->unsignedTinyInteger('rating');
 
