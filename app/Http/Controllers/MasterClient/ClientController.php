@@ -34,6 +34,8 @@ class ClientController extends Controller
     {
         $user = auth()->user();
 
+
+        $this->download(storage_path('app/public/template_perjanjian.pdf'), 'result', $user);
         if ($user && $user->hasRole(\App\Models\User::ROLE_CLIENT)) {
             $clientId = $user->client_id;
 
@@ -86,7 +88,8 @@ class ClientController extends Controller
         // HARI
         $pdf->Text(450, 356, Carbon::parse($model->client->esign->signed_at)->locale('id')
             ->translatedFormat('l'));
-        $pdf->Text(630, 356, Carbon::parse($model->client->esign->signed_at)->locale('id')
+        $pdf->Text(600, 356, Carbon::parse($model->client->esign->signed_at)->locale('id')
+            // $pdf->Text(600, 356, Carbon::parse('06-06-2222')->locale('id')
             ->translatedFormat('d F Y'));
         // NO Nama
         $pdf->Text(585, 440, $model->name);
@@ -185,6 +188,7 @@ class ClientController extends Controller
         }
 
         // Save the PDF
+
         return response($pdf->Output('S'))
             ->header('Content-Type', 'application/pdf')
             ->header(
