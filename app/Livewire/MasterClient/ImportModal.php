@@ -171,6 +171,13 @@ class ImportModal extends Component
         }
     }
 
+    #[On('modal-filter')]
+    public function modalFilter($filter)
+    {
+        foreach ($filter as $key => $value) {
+            $this->$key = $value;
+        }
+    }
 
     #[On('export')]
     public function export($type)
@@ -179,7 +186,7 @@ class ImportModal extends Component
         return ExportHelper::export(
             $type,
             $fileName,
-            ClientRepository::getMagicLink(),
+            ClientRepository::getMagicLink($this->batch_name),
             'app.master-client.export',
             [
                 'title' => 'Data Client',

@@ -37,6 +37,9 @@ class Datatable extends Component
         $this->selectedBatch = $batchName;
         $this->resetPage();
 
+        $this->dispatch('modal-filter', [
+            'batch_name' => $batchName,
+        ]);
         if ($batchName !== 'all') {
             $this->dispatch('openBatchModal', batchName: $batchName);
         }
