@@ -49,6 +49,7 @@ return new class extends Migration
         $table->integer('estimated_return_month')->nullable();
         $table->integer('estimated_return_year')->nullable();
         $table->text('indonesia_address')->nullable();
+        $table->string('nik')->nullable();
 
         $table->bigInteger("created_by")->unsigned()->nullable();
         $table->bigInteger("updated_by")->unsigned()->nullable();

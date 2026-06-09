@@ -3,6 +3,7 @@
 namespace App\Models\Client;
 
 use App\Models\User;
+use App\Repositories\Service\SendEmailLogRepository;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,6 +26,7 @@ class ClientConfirmation extends Model
         'estimated_return_month',
         'estimated_return_year',
         'indonesia_address',
+        'nik',
     ];
 
     protected $guarded = ['id'];
@@ -59,8 +61,6 @@ class ClientConfirmation extends Model
     protected static function onBoot()
     {
         self::created(function ($model) {
-
-
             if (
                 $model->current_position === ClientConfirmation::CURRENT_POSITION_INDONESIA &&
                 $model->back_to_jp_type === ClientConfirmation::BACK_TO_JP_TYPE_YES

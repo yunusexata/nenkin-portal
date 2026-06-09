@@ -33,6 +33,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom([
             database_path('migrations'), // Default
+            database_path('migrations/service'),
             database_path('migrations/user'),
             database_path('migrations/main'),
         ]);

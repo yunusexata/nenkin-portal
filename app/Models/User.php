@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\Service\EmailLogStatus;
+use App\Mail\ClientCreateUserMail;
+use App\Repositories\Service\SendEmailLogRepository;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -49,6 +52,25 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    protected static function onBoot()
+    {
+        self::created(function ($model) {
+            SendEmailLogRepository::create(
+                [
+                    'subject_type' => self::class,
+                    'subject_id' => $model->id,
+                    'data' => json_encode([], true),
+                    'email' => $model->email,
+                    'mailable' => ClientCreateUserMail::class,
+                    'subject_line' => "Pembuatan Akun Berhasil",
+                    'status' => EmailLogStatus::PENDING,
+                    'queued_at' => now(),
+                ]
+            );
+        });
+    }
 
     const ROLE_SUPER_ADMIN = 'SUPERADMIN';
     const ROLE_HS = 'HS';

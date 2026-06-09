@@ -38,6 +38,8 @@ class FormConfirmation extends Component
     public $estimated_return_year;
     #[Validate('required', message: 'Alamat Indonesia Harus Diisi', onUpdate: false)]
     public $indonesia_address;
+    #[Validate('required', message: 'NIK Harus Diisi', onUpdate: false)]
+    public $nik;
 
     public function mount()
     {
@@ -153,6 +155,7 @@ class FormConfirmation extends Component
                 'estimated_return_month' => $this->estimated_return ? Carbon::createFromFormat('Y-m', $this->estimated_return)->format('m') : null,
                 'estimated_return_year' => $this->estimated_return ? Carbon::createFromFormat('Y-m', $this->estimated_return)->format('Y') : null,
                 'indonesia_address' => $this->indonesia_address,
+                'nik' => $this->nik,
             ]);
 
             $client_confirmation = ClientConfirmationRepository::create([
@@ -165,6 +168,7 @@ class FormConfirmation extends Component
                 'estimated_return_month' => $this->estimated_return ? Carbon::createFromFormat('Y-m', $this->estimated_return)->format('m') : null,
                 'estimated_return_year' => $this->estimated_return ? Carbon::createFromFormat('Y-m', $this->estimated_return)->format('Y') : null,
                 'indonesia_address' => $this->indonesia_address,
+                'nik' => $this->nik,
             ]);
 
             DB::commit();
