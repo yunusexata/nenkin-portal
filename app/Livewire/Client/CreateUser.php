@@ -86,7 +86,7 @@ class CreateUser extends Component
             $user->assignRole(User::ROLE_CLIENT);
 
             Auth::loginUsingId($user->id);
-            $this->redirectRoute('client_form_confirmation.index');
+            $this->redirectRoute('login');
 
             DB::commit();
 

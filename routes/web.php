@@ -29,6 +29,8 @@ Route::middleware(['auth', 'access_permission'])->group(function () {});
 // Client Routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/documents/{type}/download', [\App\Http\Controllers\Client\DocumentController::class, 'download'])->name('documents.download');
+    Route::get('/esign', [\App\Http\Controllers\Client\EsignController::class, 'show'])->name('client.esign.show');
+    Route::post('/esign', [\App\Http\Controllers\Client\EsignController::class, 'store'])->name('client.esign.store');
 });
 
 // Admin Routes (Upload & Resolve Documents)

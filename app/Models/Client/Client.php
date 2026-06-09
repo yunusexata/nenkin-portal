@@ -73,4 +73,8 @@ class Client extends Model
     {
         return $this->hasOne(ClientConfirmation::class);
     }
+    public function esign()
+    {
+        return $this->hasOne(ClientEsign::class);
+    }
 }
