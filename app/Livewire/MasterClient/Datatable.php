@@ -26,15 +26,47 @@ class Datatable extends Component
     public $isCanUpdateDetail;
 
     public $status;
+    public $selectedBatch = 'all';
+    public $batches = [];
 
     // Delete Dialog
     public $targetDeleteId;
+
+    public function selectBatch($batchName)
+    {
+        $this->selectedBatch = $batchName;
+        $this->resetPage();
+
+        if ($batchName !== 'all') {
+            $this->dispatch('openBatchModal', batchName: $batchName);
+        }
+    }
+
+    public function loadBatches()
+    {
+        $this->batches = \App\Models\Client\Client::select('source_file_name as name', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
+            ->whereNotNull('source_file_name')
+            ->groupBy('source_file_name')
+            ->orderByDesc(\Illuminate\Support\Facades\DB::raw('MAX(imported_at)'))
+            ->get()
+            ->toArray();
+    }
+
+    public function datatableGetData()
+    {
+        if (!$this->selectedBatch || $this->selectedBatch === 'all') {
+            return new \Illuminate\Pagination\LengthAwarePaginator([], 0, $this->length);
+        }
+
+        return $this->datatablePaginate($this->datatableGetProcessedQuery());
+    }
 
     public function onMount()
     {
         $authUser = UserRepository::authenticatedUser();
         $this->isCanUpdate = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_IMPORT_DATA_JEPANG, PermissionHelper::TYPE_UPDATE));
         $this->isCanDelete = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_IMPORT_DATA_JEPANG, PermissionHelper::TYPE_DELETE));
+        $this->loadBatches();
     }
 
     #[On('on-delete-dialog-confirm')]
@@ -73,6 +105,14 @@ class Datatable extends Component
     #[On('refresh-table')]
     public function refreshTable()
     {
+        $this->loadBatches();
+        $this->resetPage();
+    }
+
+    #[On('datatable-refresh')]
+    public function datatableRefresh()
+    {
+        $this->loadBatches();
         $this->resetPage();
     }
 
@@ -160,7 +200,7 @@ class Datatable extends Component
 
     public function getQuery(): Builder
     {
-        return ClientRepository::datatable();
+        return \App\Models\Client\Client::query()->where('source_file_name', $this->selectedBatch);
     }
 
     public function getView(): string

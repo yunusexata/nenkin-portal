@@ -22,6 +22,7 @@ class ImportModal extends Component
     use WithFileUploads;
 
     public $input_file;
+    public $batch_name;
 
     // Import Pipeline
     public $previewBulkStatusRows;
@@ -38,6 +39,10 @@ class ImportModal extends Component
         $this->previewBulkStatusRows = [];
         $this->errorBulkStatusRows = [];
 
+        if ($this->input_file) {
+            $originalName = $this->input_file->getClientOriginalName();
+            $this->batch_name = pathinfo($originalName, PATHINFO_FILENAME);
+        }
 
         $d = [];
         foreach ($import->rows as $index => $row) {
@@ -87,6 +92,13 @@ class ImportModal extends Component
 
     public function storeImport()
     {
+        $this->validate([
+            'batch_name' => 'required|string|max:100',
+        ], [
+            'batch_name.required' => 'Nama Batch wajib diisi',
+            'batch_name.string' => 'Nama Batch harus berupa teks',
+            'batch_name.max' => 'Nama Batch maksimal 100 karakter',
+        ]);
 
         try {
             DB::beginTransaction();
@@ -128,7 +140,7 @@ class ImportModal extends Component
                         'lpk' => $value['data']['lpk'],
                         'note' => $value['data']['note'],
 
-                        'source_file_name' => $fileName,
+                        'source_file_name' => $this->batch_name,
                         'source_file_disk' => $disk,
                         'source_file_path' => $path,
                         'imported_at' => now(),

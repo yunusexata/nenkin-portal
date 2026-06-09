@@ -54,6 +54,26 @@
 
             @if($previewBulkStatusRows)
 
+                {{-- Input Nama Batch --}}
+                <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-800/30 rounded-xl border border-gray-200 dark:border-gray-800">
+                    <label class="mb-2 block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                        Nama Batch <span class="text-red-500">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        wire:model="batch_name"
+                        class="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-brand-500 focus:ring-brand-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                        placeholder="Contoh: Batch Juni 2026 - Osaka"
+                        maxlength="100"
+                        required
+                    >
+                    @error('batch_name')
+                        <p class="mt-2 text-sm text-red-500">
+                            {{ $message }}
+                        </p>
+                    @enderror
+                </div>
+
                 <div x-data="{ tab: 'valid' }">
 
                     {{-- Tabs --}}
