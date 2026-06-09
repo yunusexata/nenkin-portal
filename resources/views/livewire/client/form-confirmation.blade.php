@@ -128,6 +128,17 @@
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>
+                 
+                <!-- NIK -->
+                <div>
+                    <input type="text" 
+                           id="nik" 
+                           name="nik" 
+                           wire:model="nik"
+                           class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-[#111827] uppercase placeholder-gray-400"
+                           placeholder="Masukkan NIK sesuai KTP">
+                    
+                </div>
 
                 <div class="pt-2">
                     <p class="w-full bg-[#465fff] text-white py-3 px-4 rounded-lg font-bold hover:bg-orange-600 focus:outline-none text-center transition-all cursor-pointer shadow-md">
