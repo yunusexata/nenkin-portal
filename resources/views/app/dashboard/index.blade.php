@@ -42,3 +42,21 @@
     @endif
 
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('livewire:init', () => {
+        Livewire.on('SwalInformation', (event) => {
+            // event[1] adalah title yang dikirim via Alert::information()
+            // Kita hanya reload jika judulnya "Data berhasil disimpan" (Konfirmasi Sukses)
+            const title = Array.isArray(event) ? event[1] : (event?.title || '');
+            
+            if (title === 'Data berhasil disimpan') {
+                setTimeout(() => {
+                    location.reload();
+                }, 1600); // Reload sedikit setelah swal tayang (timer swal 1500ms)
+            }
+        });
+    });
+</script>
+@endpush

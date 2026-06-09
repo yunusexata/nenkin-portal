@@ -19,6 +19,17 @@ class EsignController extends Controller
             return redirect()->route('dashboard.index')->with('error', 'Data klien tidak ditemukan.');
         }
 
+        // Klien harus sudah mengisi konfirmasi terlebih dahulu
+        if (!$client->confirmation) {
+            return redirect()->route('dashboard.index')->with('error', 'Silakan isi formulir konfirmasi terlebih dahulu.');
+        }
+
+        // Hanya tipe klaim SPEED atau ADJUSTMENT yang wajib E-Sign
+        $claimType = strtoupper($client->claim_type ?? '');
+        if (!in_array($claimType, ['SPEED', 'ADJUSTMENT', 'ADJUSMENT'])) {
+            return redirect()->route('dashboard.index');
+        }
+
         // Check if already signed
         if ($client->esign()->exists()) {
             return redirect()->route('dashboard.index')->with('info', 'Anda sudah menandatangani perjanjian.');
@@ -28,7 +39,11 @@ class EsignController extends Controller
         $dateFormatted = $now->translatedFormat('l, d F Y');
         $letterNumber = str_pad($client->id, 4, '0', STR_PAD_LEFT) . '/LSN/SREI/2026';
 
-        return view('client.esign', compact('client', 'dateFormatted', 'letterNumber'));
+        // Ambil NIK dan Alamat dari tabel client_confirmations
+        $nik = $client->confirmation->nik ?? '';
+        $address = $client->confirmation->indonesia_address ?? '';
+
+        return view('client.esign', compact('client', 'dateFormatted', 'letterNumber', 'nik', 'address'));
     }
 
     public function store(Request $request)
@@ -38,6 +53,12 @@ class EsignController extends Controller
 
         if (!$client) {
             return redirect()->route('dashboard.index')->with('error', 'Data klien tidak ditemukan.');
+        }
+
+        // Validasi tipe klaim
+        $claimType = strtoupper($client->claim_type ?? '');
+        if (!in_array($claimType, ['SPEED', 'ADJUSTMENT', 'ADJUSMENT'])) {
+            return redirect()->route('dashboard.index');
         }
 
         if ($client->esign()->exists()) {

@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'access_permission' => \App\Http\Middleware\AccessPermission::class,
             'role' => \App\Http\Middleware\Role::class,
+            'esign_required' => \App\Http\Middleware\EsignRequired::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
