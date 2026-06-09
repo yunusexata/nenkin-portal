@@ -101,9 +101,8 @@ class AdminDocumentController extends Controller
             // Cache for 30 minutes
             Cache::put("reference_clients_{$adminId}", $referenceClients, now()->addMinutes(30));
 
-            return redirect()->route('admin.documents.index')
+            return redirect()->route('admin_upload_document.index')
                 ->with('success', 'Excel referensi berhasil di-upload. Silakan tinjau daftar klien sebelum melanjutkannya.');
-
         } catch (\Throwable $e) {
             return redirect()->back()->withErrors(['error' => 'Gagal memproses file Excel: ' . $e->getMessage()]);
         }
@@ -117,7 +116,7 @@ class AdminDocumentController extends Controller
         $adminId = auth()->id();
         Cache::forget("reference_clients_{$adminId}");
 
-        return redirect()->route('admin.documents.index')
+        return redirect()->route('admin_upload_document.index')
             ->with('success', 'Referensi klien berhasil di-reset.');
     }
 
@@ -141,7 +140,7 @@ class AdminDocumentController extends Controller
         $referenceClients = Cache::get("reference_clients_{$adminId}");
 
         if (!$referenceClients) {
-            return redirect()->route('admin.documents.index')
+            return redirect()->route('admin_upload_document.index')
                 ->withErrors(['error' => 'Referensi klien dari Step 1 tidak ditemukan. Harap upload Excel terlebih dahulu.']);
         }
 
@@ -179,10 +178,10 @@ class AdminDocumentController extends Controller
             if ($request->hasFile($inputKey)) {
                 foreach ($request->file($inputKey) as $file) {
                     $originalName = $file->getClientOriginalName();
-                    
+
                     // Standardize local filename
                     $safeName = Str::slug(pathinfo($originalName, PATHINFO_FILENAME), '_') . '_' . time() . '.' . $file->getClientOriginalExtension();
-                    
+
                     // Save to local private temp folder
                     $tempPath = "tmp_uploads/pending_{$adminId}_{$tempBatchId}/{$type}/{$safeName}";
                     Storage::disk('local')->putFileAs("tmp_uploads/pending_{$adminId}_{$tempBatchId}/{$type}", $file, $safeName);
@@ -272,7 +271,7 @@ class AdminDocumentController extends Controller
         $previewData = Cache::get("matching_preview_{$adminId}_{$tempBatchId}");
 
         if (!$previewData) {
-            return redirect()->route('admin.documents.index')
+            return redirect()->route('admin_upload_document.index')
                 ->withErrors(['error' => 'Data preview tidak ditemukan atau telah kedaluwarsa. Harap ulangi upload dokumen.']);
         }
 
@@ -361,7 +360,7 @@ class AdminDocumentController extends Controller
         $previewData = Cache::get("matching_preview_{$adminId}_{$tempBatchId}");
 
         if (!$previewData) {
-            return redirect()->route('admin.documents.index')
+            return redirect()->route('admin_upload_document.index')
                 ->withErrors(['error' => 'Data preview tidak ditemukan atau telah kedaluwarsa. Harap ulangi pemrosesan.']);
         }
 
@@ -370,7 +369,7 @@ class AdminDocumentController extends Controller
         $totalFiles = count($matchedFiles) + count($failedFiles);
 
         if ($totalFiles === 0) {
-            return redirect()->route('admin.documents.index')
+            return redirect()->route('admin_upload_document.index')
                 ->withErrors(['error' => 'Tidak ada file untuk di-upload.']);
         }
 
@@ -453,7 +452,7 @@ class AdminDocumentController extends Controller
     public function batchDetail($id)
     {
         $batch = DocumentUploadBatch::with('uploader')->findOrFail($id);
-        
+
         $documents = Document::with('client')
             ->where('batch_id', $id)
             ->get();
@@ -471,7 +470,7 @@ class AdminDocumentController extends Controller
     public function searchClients(Request $request)
     {
         $query = $request->get('q', '');
-        
+
         if (strlen($query) < 2) {
             return response()->json([]);
         }
@@ -491,9 +490,9 @@ class AdminDocumentController extends Controller
             }
         }
 
-        $clientsQuery = Client::where(function($q) use ($query) {
+        $clientsQuery = Client::where(function ($q) use ($query) {
             $q->where('name', 'like', "%{$query}%")
-              ->orWhere('no_jp', 'like', "%{$query}%");
+                ->orWhere('no_jp', 'like', "%{$query}%");
         });
 
         if ($allowedClientIds !== null) {
@@ -572,7 +571,7 @@ class AdminDocumentController extends Controller
         $batch = DocumentUploadBatch::findOrFail($failure->batch_id);
         $matchedCount = $batch->matched_files + 1;
         $failedCount = max(0, $batch->failed_files - 1);
-        
+
         $status = 'completed';
         if ($failedCount > 0 && $matchedCount > 0) {
             $status = 'partial_failed';
@@ -603,9 +602,9 @@ class AdminDocumentController extends Controller
 
         $callback = function () use ($failures) {
             $file = fopen('php://output', 'w');
-            
+
             // Add UTF-8 BOM for Excel compatibility
-            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
             fputcsv($file, ['Original Filename', 'Folder Type', 'Failure Reason', 'Best Match Suggestion', 'Best Match Score', 'Status']);
 
@@ -642,7 +641,7 @@ class AdminDocumentController extends Controller
 
         foreach ($foundReferenceClients as $refClient) {
             $clientId = $refClient['client_id'];
-            
+
             // Check if there is any file inside matchedFiles for each category.
             // Under new requirements, $matchedFiles contains ONLY matched status files (auto-matched or manually assigned).
             $hasIchijikin = collect($matchedFiles)

@@ -15,6 +15,12 @@ Route::middleware(['auth', 'access_permission'])->group(function () {
     Route::group(["controller" => ClientController::class, "prefix" => "client_form_confirmation", "as" => "client_form_confirmation."], function () {
         Route::get('/', 'form_confirmation')->name('index');
     });
+    Route::group(["controller" => ClientController::class, "prefix" => "client_document", "as" => "client_document."], function () {
+        Route::get('/', 'document')->name('index');
+    });
+    Route::group(["controller" => ClientController::class, "prefix" => "client_agreement", "as" => "client_agreement."], function () {
+        Route::get('/', 'agreement')->name('index');
+    });
 });
 
 Route::group(["controller" => ClientController::class, "prefix" => "client", "as" => "client."], function () {

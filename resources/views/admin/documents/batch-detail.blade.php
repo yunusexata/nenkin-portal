@@ -5,7 +5,7 @@
     <!-- Header -->
     <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-            <a href="{{ route('admin.documents.index') }}" class="text-brand-600 dark:text-brand-400 hover:underline flex items-center text-sm font-semibold mb-2">
+            <a href="{{ route('admin_upload_document.index') }}" class="text-brand-600 dark:text-brand-400 hover:underline flex items-center text-sm font-semibold mb-2">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 Kembali ke Upload
             </a>
