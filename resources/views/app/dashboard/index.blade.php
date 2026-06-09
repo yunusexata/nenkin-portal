@@ -21,6 +21,10 @@
         </x-common.component-card>
     @endif
 
+    @if (Auth::user()->hasRole(\App\Models\User::ROLE_CLIENT))
+        <livewire:client.review-form />
+    @endif
+
 @endsection
 
 @push('scripts')

@@ -39,6 +39,7 @@ class PermissionHelper
     const ACCESS_CLIENT_DOCUMENT = 'client_document';
     const ACCESS_CLIENT_AGREEMENT = 'client_agreement';
     const ACCESS_ADMIN_UPLOAD_DOCUMENT = 'admin_upload_document';
+    const ACCESS_ADMIN_REVIEW = 'admin_review';
 
     const ACCESS_ALL = [
         self::ACCESS_DASHBOARD,
@@ -53,6 +54,7 @@ class PermissionHelper
         self::ACCESS_CLIENT_FORM_CONFIRMATION,
         self::ACCESS_CLIENT_DOCUMENT,
         self::ACCESS_ADMIN_UPLOAD_DOCUMENT,
+        self::ACCESS_ADMIN_REVIEW,
     ];
 
     const TRANSLATE_ACCESS = [
@@ -68,6 +70,7 @@ class PermissionHelper
         self::ACCESS_CLIENT_DOCUMENT => 'Document Klien',
         self::ACCESS_CLIENT_AGREEMENT => 'Surat Perjanjian Klien',
         self::ACCESS_ADMIN_UPLOAD_DOCUMENT => 'Admin Upload Dokumen',
+        self::ACCESS_ADMIN_REVIEW => 'Admin Review',
     ];
 
     const ACCESS_TYPE_ALL = [
@@ -83,6 +86,7 @@ class PermissionHelper
         self::ACCESS_CLIENT_AGREEMENT => [self::TYPE_READ],
         self::ACCESS_CLIENT_FORM_CONFIRMATION => self::TYPE_ALL,
         self::ACCESS_ADMIN_UPLOAD_DOCUMENT => self::TYPE_ALL,
+        self::ACCESS_ADMIN_REVIEW => self::TYPE_ALL,
     ];
 
     /*

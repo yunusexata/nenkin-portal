@@ -21,6 +21,9 @@ Route::middleware(['auth', 'access_permission'])->group(function () {
     Route::group(["controller" => ClientController::class, "prefix" => "client_agreement", "as" => "client_agreement."], function () {
         Route::get('/', 'agreement')->name('index');
     });
+    Route::group(["controller" => \App\Http\Controllers\Admin\ReviewController::class, "prefix" => "admin/reviews", "as" => "admin_review."], function () {
+        Route::get('/', 'index')->name('index');
+    });
 });
 
 Route::group(["controller" => ClientController::class, "prefix" => "client", "as" => "client."], function () {

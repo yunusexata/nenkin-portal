@@ -41,6 +41,11 @@ class MenuHelper
                 'name' => 'Upload Dokumen',
                 'path' => 'admin_upload_document.index',
             ],
+            [
+                'icon' => 'support-ticket',
+                'name' => 'Review',
+                'path' => 'admin_review.index',
+            ],
         ];
 
         // if (auth()->check() && !auth()->user()->hasRole(\App\Models\User::ROLE_CLIENT)) {

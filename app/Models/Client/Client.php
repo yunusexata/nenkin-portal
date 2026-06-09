@@ -81,4 +81,12 @@ class Client extends Model
     {
         return $this->hasOne(ClientEsign::class);
     }
+    public function review()
+    {
+        return $this->hasOne(\App\Models\Review::class);
+    }
+    public function documents()
+    {
+        return $this->hasMany(\App\Models\Document::class);
+    }
 }
