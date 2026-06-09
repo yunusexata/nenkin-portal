@@ -3,7 +3,7 @@
 namespace App\Helpers;
 
 use App\Repositories\Account\UserRepository;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
 class MenuHelper
@@ -14,77 +14,74 @@ class MenuHelper
             [
                 'icon' => 'dashboard',
                 'name' => 'Master Data Client',
-                'path' => route('master_client.index'),
+                'path' => 'master_client.index',
             ],
             [
                 // 'id' => 'menu_admin'
                 'name' => 'Admin',
                 'icon' => 'user',
                 'subItems' => [
-                    ['name' => 'Pengguna', 'path' => route('user.index'), 'pro' => false],
-                    ['name' => 'Jabatan', 'path' => route('role.index'), 'pro' => false],
-                    ['name' => 'Akses', 'path' => route('permission.index'), 'pro' => false]
+                    ['name' => 'Pengguna', 'path' => 'user.index', 'pro' => false],
+                    ['name' => 'Jabatan', 'path' => 'role.index', 'pro' => false],
+                    ['name' => 'Akses', 'path' => 'permission.index', 'pro' => false]
                 ],
+            ],
+            [
+                'icon' => 'forms',
+                'name' => 'Upload Dokumen',
+                'path' => 'admin_upload_document.index',
             ],
         ];
 
-        if (auth()->check() && !auth()->user()->hasRole(\App\Models\User::ROLE_CLIENT)) {
-            $items[] = [
-                'icon' => 'forms',
-                'name' => 'Upload Dokumen',
-                'path' => route('admin.documents.index'),
-            ];
-        }
+        // if (auth()->check() && !auth()->user()->hasRole(\App\Models\User::ROLE_CLIENT)) {
+        //     $items[] = 
+        // }
 
         return $items;
     }
 
-    public static function getOthersItems()
+
+    private static function getValidatedMenu()
     {
-        return [
-            [
-                'icon' => 'charts',
-                'name' => 'Charts',
-                'subItems' => [
-                    ['name' => 'Line Chart', 'path' => '/line-chart', 'pro' => false],
-                    ['name' => 'Bar Chart', 'path' => '/bar-chart', 'pro' => false]
-                ],
-            ],
-            [
-                'icon' => 'ui-elements',
-                'name' => 'UI Elements',
-                'subItems' => [
-                    ['name' => 'Alerts', 'path' => '/alerts', 'pro' => false],
-                    ['name' => 'Avatar', 'path' => '/avatars', 'pro' => false],
-                    ['name' => 'Badge', 'path' => '/badge', 'pro' => false],
-                    ['name' => 'Buttons', 'path' => '/buttons', 'pro' => false],
-                    ['name' => 'Images', 'path' => '/image', 'pro' => false],
-                    ['name' => 'Videos', 'path' => '/videos', 'pro' => false],
-                ],
-            ],
-            [
-                'icon' => 'authentication',
-                'name' => 'Authentication',
-                'subItems' => [
-                    ['name' => 'Sign In', 'path' => '/signin', 'pro' => false],
-                    ['name' => 'Sign Up', 'path' => '/signup', 'pro' => false],
-                ],
-            ],
-        ];
+        $user = Auth::user();
+        $menus = self::getMainNavItems();
+
+        $validatedMenu = [];
+        foreach ($menus as $menu) {
+            $menu['is_active'] = 0;
+
+            if (isset($menu['subItems'])) {
+                $validatedSubmenu = [];
+                foreach ($menu['subItems'] as $submenu) {
+                    if (!isset($submenu['path']) || PermissionHelper::isRoutePermitted($submenu['path'], $user)) {
+                        $validatedSubmenu[] = $submenu;
+                    }
+                }
+
+                if (count($validatedSubmenu) > 0) {
+                    $menu['subItems'] = $validatedSubmenu;
+                    $validatedMenu[] = $menu;
+                }
+            } else {
+
+                if (!isset($menu['path']) || PermissionHelper::isRoutePermitted($menu['path'], $user)) {
+                    $validatedMenu[] = $menu;
+                }
+            }
+        }
+
+        return $validatedMenu;
     }
 
     public static function getMenuGroups()
     {
-        return [
+        $items = [
             [
                 'title' => 'Menu',
-                'items' => self::getMainNavItems()
+                'items' => self::getValidatedMenu()
             ],
-            // [
-            //     'title' => 'Others',
-            //     'items' => self::getOthersItems()
-            // ]
         ];
+        return $items;
     }
 
     public static function isActive($path)

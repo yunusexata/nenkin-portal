@@ -36,6 +36,7 @@ class PermissionHelper
     const ACCESS_MASTER_CLIENT = 'master_client';
     const ACCESS_CLIENT = 'client';
     const ACCESS_CLIENT_FORM_CONFIRMATION = 'client_form_confirmation';
+    const ACCESS_ADMIN_UPLOAD_DOCUMENT = 'admin_upload_document';
 
     const ACCESS_ALL = [
         self::ACCESS_DASHBOARD,
@@ -48,6 +49,7 @@ class PermissionHelper
         self::ACCESS_MASTER_CLIENT,
         self::ACCESS_CLIENT,
         self::ACCESS_CLIENT_FORM_CONFIRMATION,
+        self::ACCESS_ADMIN_UPLOAD_DOCUMENT,
     ];
 
     const TRANSLATE_ACCESS = [
@@ -61,6 +63,7 @@ class PermissionHelper
         self::ACCESS_MASTER_CLIENT => 'Master Data Client',
         self::ACCESS_CLIENT => 'Master Data Client',
         self::ACCESS_CLIENT_FORM_CONFIRMATION => 'Formulir Konfirmasi',
+        self::ACCESS_ADMIN_UPLOAD_DOCUMENT => 'Admin Upload Dokumen',
     ];
 
     const ACCESS_TYPE_ALL = [
@@ -73,6 +76,7 @@ class PermissionHelper
         self::ACCESS_MASTER_CLIENT => self::TYPE_ALL,
         self::ACCESS_CLIENT => self::TYPE_ALL,
         self::ACCESS_CLIENT_FORM_CONFIRMATION => self::TYPE_ALL,
+        self::ACCESS_ADMIN_UPLOAD_DOCUMENT => self::TYPE_ALL,
     ];
 
     /*

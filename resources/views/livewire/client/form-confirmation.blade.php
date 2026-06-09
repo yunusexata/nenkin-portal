@@ -104,7 +104,7 @@
                         <label for="departure" class="block text-sm font-semibold text-gray-700 mb-1">Estimasi Bulan Kembali Ke Jepang</label>
                         <input type="month" 
                             id="departure" 
-                            wire:model="departure" 
+                            wire:model.live="departure" 
                             class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#F97316] focus:border-transparent transition">
                         <p class="text-gray-400 text-[10px] mt-0.5">Silakan pilih bulan & tahun perkiraan keberangkatan Anda.</p>
                         @error('departure')
@@ -131,7 +131,7 @@
 
                 <div class="pt-2">
                     <p class="w-full bg-[#465fff] text-white py-3 px-4 rounded-lg font-bold hover:bg-orange-600 focus:outline-none text-center transition-all cursor-pointer shadow-md">
-                        TIPE SERVIS {{ strtoupper($claim_type) }}
+                        TIPE PENCAIRAN {{ strtoupper($claim_type) }}
                     </p>
                 </div>
                 <!-- Submit Button -->

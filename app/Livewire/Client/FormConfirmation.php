@@ -77,10 +77,46 @@ class FormConfirmation extends Component
         }
     }
 
-    // public function updated($a, $b)
-    // {
-    //     consoleLog($this, [$a, $b]);
-    // }
+    public function updated($a, $b)
+    {
+
+        consoleLog($this, [
+            $this->current_position,
+            $this->back_to_jp_type,
+            $this->departure,
+
+        ]);
+        if (
+            $this->current_position === ClientConfirmation::CURRENT_POSITION_INDONESIA &&
+            $this->back_to_jp_type === ClientConfirmation::BACK_TO_JP_TYPE_YES &&
+            $this->departure
+        ) {
+            $departure = Carbon::createFromFormat('Y-m', $this->departure);
+            $is_less_then_7_month = $departure->greaterThanOrEqualTo(now()->addMonths(6));
+            if (
+                $is_less_then_7_month
+            ) {
+                $this->claim_type = 'ADJUSMENT';
+            }
+            if (
+                !$is_less_then_7_month
+            ) {
+                $this->claim_type = 'NORMAL';
+            }
+        }
+
+        if (
+            $this->current_position === ClientConfirmation::CURRENT_POSITION_INDONESIA &&
+            $this->back_to_jp_type === ClientConfirmation::BACK_TO_JP_TYPE_NO
+        ) {
+            $this->claim_type = 'SPEED';
+        }
+        if (
+            $this->current_position === ClientConfirmation::CURRENT_POSITION_JEPANG
+        ) {
+            $this->claim_type = 'NORMAL';
+        }
+    }
 
     public function store()
     {
@@ -118,27 +154,6 @@ class FormConfirmation extends Component
                 'estimated_return_year' => $this->estimated_return ? Carbon::createFromFormat('Y-m', $this->estimated_return)->format('Y') : null,
                 'indonesia_address' => $this->indonesia_address,
             ]);
-
-            // if (
-            //     $this->current_position === ClientConfirmation::CURRENT_POSITION_INDONESIA &&
-            //     $this->back_to_jp_type === ClientConfirmation::BACK_TO_JP_TYPE_YES &&
-            //     $is_less_then_7_month
-            // ) {
-            //     Alert::information($this, 'ADJUSMENT');
-            // }
-            // if (
-            //     $this->current_position === ClientConfirmation::CURRENT_POSITION_INDONESIA &&
-            //     $this->back_to_jp_type === ClientConfirmation::BACK_TO_JP_TYPE_YES &&
-            //     !$is_less_then_7_month
-            // ) {
-            //     Alert::information($this, 'NORMAL');
-            // }
-            // if (
-            //     $this->current_position === ClientConfirmation::CURRENT_POSITION_INDONESIA &&
-            //     $this->back_to_jp_type === ClientConfirmation::BACK_TO_JP_TYPE_NO
-            // ) {
-            //     Alert::information($this, 'SPEED');
-            // }
 
             $client_confirmation = ClientConfirmationRepository::create([
                 'client_id' => Auth::user()->client_id,

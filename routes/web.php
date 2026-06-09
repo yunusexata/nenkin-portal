@@ -33,7 +33,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Admin Routes (Upload & Resolve Documents)
 Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/documents', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'index'])->name('admin.documents.index');
+    Route::get('/admin/documents', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'index'])->name('admin_upload_document.index');
     Route::post('/admin/documents/reference', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'uploadExcelReference'])->name('admin.documents.uploadReference');
     Route::post('/admin/documents/clear-reference', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'clearReference'])->name('admin.documents.clearReference');
     Route::post('/admin/documents/upload', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'upload'])->name('admin.documents.upload');
