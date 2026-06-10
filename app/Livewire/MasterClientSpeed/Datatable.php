@@ -194,6 +194,7 @@ class Datatable extends Component
                 'name' => 'Jenis Pencairan',
             ],
             [
+                'searchable' => false,
                 'key' => 'esign_exists',
                 'name' => 'Tanda Tangan',
                 'render' => function ($item) {
@@ -206,7 +207,14 @@ class Datatable extends Component
     public function getQuery(): Builder
     {
         return \App\Models\Client\Client::query()
-            ->withExists('esign')
+            ->select('clients.*')
+            ->selectRaw("
+        EXISTS (
+            SELECT 1
+            FROM client_esigns
+            WHERE client_esigns.client_id = clients.id
+        ) as esign_exists
+    ")
             ->where('claim_type', Client::CLAIM_TYPE_SPEED)
             ->when($this->selectedBatch != 'all', function ($q) {
                 $q->where('source_file_name', $this->selectedBatch);
