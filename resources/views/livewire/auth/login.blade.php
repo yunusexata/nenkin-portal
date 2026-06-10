@@ -33,9 +33,14 @@
                                     </div>
                                     <!-- Password -->
                                     <div>
-                                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                            Password<span class="text-error-500">*</span>
-                                        </label>
+                                        <div class="flex items-center justify-between mb-1.5">
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                                Password<span class="text-error-500">*</span>
+                                            </label>
+                                            <a href="{{ route('password.request') }}" class="text-sm font-medium text-brand-500 hover:text-brand-600 dark:text-brand-400">
+                                                Lupa Password?
+                                            </a>
+                                        </div>
                                         <div x-data="{ showPassword: false }" class="relative">
                                             <input :type="showPassword ? 'text' : 'password'"
                                                 placeholder="Enter your password" wire:model="password"

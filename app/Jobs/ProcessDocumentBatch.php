@@ -41,7 +41,7 @@ class ProcessDocumentBatch implements ShouldQueue
         }
 
         $matchedCount = 0;
-        $failedCount = 0;
+        $failedCount = DocumentUploadFailure::where('batch_id', $this->batchId)->count();
 
         try {
             foreach ($this->filesData as $file) {
@@ -119,7 +119,7 @@ class ProcessDocumentBatch implements ShouldQueue
 
                         $matchedCount++;
                     } else {
-                        // Matching failed, log failure and upload file to failures folder
+                        // Matching failed, log failure and DO NOT upload to Supabase
                         $bestMatchName = $file['best_match_name'] ?? null;
                         $bestMatchScore = $file['best_match_score'] ?? null;
                         
@@ -135,10 +135,6 @@ class ProcessDocumentBatch implements ShouldQueue
                             'resolved_client_id' => null,
                             'resolved_at' => null,
                         ]);
-
-                        // Upload failed file to failures bucket so PIC can manually resolve
-                        $failuresPath = "failures/{$this->batchId}/{$originalName}";
-                        Storage::disk('supabase')->put($failuresPath, Storage::disk('local')->get($tempPath));
 
                         $failedCount++;
                     }

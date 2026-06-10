@@ -382,9 +382,36 @@ class AdminDocumentController extends Controller
             'status' => 'processing',
         ]);
 
+        // 2. Prepare failed/unassigned files data, write to DB directly, and delete local temp files immediately
+        foreach ($failedFiles as $file) {
+            $oldPath = $file['temp_path'];
+
+            // Delete the local temp file immediately
+            if (Storage::disk('local')->exists($oldPath)) {
+                Storage::disk('local')->delete($oldPath);
+            }
+
+            // Extract best suggestion details for database failures recording
+            $bestMatchName = $file['best_candidate']['name'] ?? null;
+            $bestMatchScore = $file['confidence'] ?? null;
+
+            $reason = "Nama tidak cocok. Kecocokan tertinggi: \"" . ($bestMatchName ?? 'N/A') . "\" dengan skor " . number_format($bestMatchScore ?? 0.0, 3) . " < 0.85";
+
+            DocumentUploadFailure::create([
+                'batch_id' => $batch->id,
+                'original_filename' => $file['original_filename'],
+                'folder_type' => $file['folder_type'],
+                'failure_reason' => $reason,
+                'best_match_name' => $bestMatchName,
+                'best_match_score' => $bestMatchScore,
+                'resolved_client_id' => null,
+                'resolved_at' => null,
+            ]);
+        }
+
         $filesDataForQueue = [];
 
-        // 2. Prepare matched files data and move temp local files to batch directory
+        // 3. Prepare matched files data and move temp local files to batch directory
         foreach ($matchedFiles as $file) {
             $oldPath = $file['temp_path'];
             $filename = basename($oldPath);
@@ -406,35 +433,7 @@ class AdminDocumentController extends Controller
             ];
         }
 
-        // 3. Prepare failed files data and move temp local files to batch failures directory
-        foreach ($failedFiles as $file) {
-            $oldPath = $file['temp_path'];
-            $filename = basename($oldPath);
-            $newPath = "tmp_uploads/{$batch->id}/{$file['folder_type']}/{$filename}";
-
-            // Move locally
-            if (Storage::disk('local')->exists($oldPath)) {
-                Storage::disk('local')->move($oldPath, $newPath);
-            }
-
-            // Extract best suggestion details for database failures recording
-            $bestMatchName = $file['best_candidate']['name'] ?? null;
-            $bestMatchScore = $file['confidence'] ?? null;
-
-            $filesDataForQueue[] = [
-                'original_name' => $file['original_filename'],
-                'temp_path' => $newPath,
-                'type' => $file['folder_type'],
-                'matched' => false,
-                'best_match_name' => $bestMatchName,
-                'best_match_score' => $bestMatchScore,
-                'client_id' => null,
-                'confidence' => $bestMatchScore ?? 0.0,
-                'manually_assigned' => false,
-            ];
-        }
-
-        // 4. Dispatch the updated ProcessDocumentBatch Job
+        // 4. Dispatch the updated ProcessDocumentBatch Job (only with matched/assigned files)
         ProcessDocumentBatch::dispatch($batch->id, $filesDataForQueue);
 
         // 5. Clean up local draft folders and Cache

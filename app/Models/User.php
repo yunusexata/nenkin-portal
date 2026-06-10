@@ -76,6 +76,22 @@ class User extends Authenticatable implements MustVerifyEmail
     const ROLE_HS = 'HS';
     const ROLE_CLIENT = 'CLIENT';
 
+    public function sendPasswordResetNotification($token)
+    {
+        \App\Repositories\Service\SendEmailLogRepository::create([
+            'subject_type' => self::class,
+            'subject_id' => $this->id,
+            'data' => json_encode([
+                'token' => $token,
+                'email' => $this->email,
+            ], true),
+            'email' => $this->email,
+            'mailable' => \App\Mail\ResetPasswordMail::class,
+            'subject_line' => "Reset Password Anda",
+            'status' => \App\Enums\Service\EmailLogStatus::PENDING,
+        ]);
+    }
+
     public function client()
     {
         return $this->belongsTo(\App\Models\Client\Client::class, 'client_id');
