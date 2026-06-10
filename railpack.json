@@ -1,19 +1,25 @@
 {
-  "php": {
-    "extensions": [
-      "pdo",
-      "pdo_pgsql",
-      "mbstring",
-      "tokenizer",
-      "xml",
-      "ctype",
-      "fileinfo",
-      "openssl",
-      "curl",
-      "gd",
-      "zip",
-      "bcmath",
-      "redis"
-    ]
+  "language": "php",
+  "packages": {
+    "php": {
+      "extensions": [
+        "ctype",
+        "curl",
+        "dom",
+        "fileinfo",
+        "filter",
+        "hash",
+        "mbstring",
+        "openssl",
+        "pcre",
+        "pdo",
+        "session",
+        "tokenizer",
+        "xml",
+        "pdo_pgsql",
+        "redis",
+        "gd"
+      ]
+    }
   }
 }
