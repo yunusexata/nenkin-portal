@@ -2,7 +2,7 @@
 builder = "railpack"
 
 [deploy]
-healthcheckPath = "/login"
+healthcheckPath = "/up"
 healthcheckTimeout = 60
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
