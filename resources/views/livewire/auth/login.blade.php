@@ -100,7 +100,7 @@
                 </div>
                 
                 <p class="text-white text-base leading-relaxed mb-12">
-                    "Platform resmi pencairan dana pensiun Jepang (Nenkin) untuk WNI"
+                    "Platform resmi pencairan dana pensiun Jepang (Nenkin) untuk Kenshusei"
                 </p>
                 
                 <div class="mt-auto pt-6 border-t border-white/10 w-full flex flex-col items-center">
