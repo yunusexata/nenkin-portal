@@ -16,7 +16,16 @@ return Application::configure(basePath: dirname(__DIR__))
             'access_permission' => \App\Http\Middleware\AccessPermission::class,
             'role' => \App\Http\Middleware\Role::class,
             'esign_required' => \App\Http\Middleware\EsignRequired::class,
-        ]);
+        ])
+
+        ->trustProxies(
+        at: '*',
+        headers: Request::HEADER_X_FORWARDED_FOR |
+                 Request::HEADER_X_FORWARDED_HOST |
+                 Request::HEADER_X_FORWARDED_PORT |
+                 Request::HEADER_X_FORWARDED_PROTO |
+                 Request::HEADER_X_FORWARDED_PREFIX
+        );
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
