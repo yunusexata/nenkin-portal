@@ -1,5 +1,6 @@
 [build]
 builder = "railpack"
+# Trigger rebuild comment
 
 [deploy]
 startCommand = "frankenphp run --config /app/Caddyfile"
