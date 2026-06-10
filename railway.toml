@@ -2,6 +2,7 @@
 builder = "railpack"
 
 [deploy]
+startCommand = "frankenphp run --config /app/Caddyfile"
 healthcheckPath = "/up"
 healthcheckTimeout = 60
 restartPolicyType = "on_failure"
