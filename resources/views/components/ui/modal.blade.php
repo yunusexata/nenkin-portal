@@ -1,7 +1,12 @@
 @props([
     'isOpen' => false,
     'showCloseButton' => true,
+    'modalId' => null,
 ])
+
+@php
+    $modalId = $modalId ?? 'modal-' . md5(uniqid());
+@endphp
 
 <div x-data="{
     open: @js($isOpen),
