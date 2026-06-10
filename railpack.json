@@ -1,5 +1,14 @@
 {
-    "php": {
-        "extensions": ["gd", "exif", "zip"]
+    "steps": {
+        "extensions": {
+            "commands": [
+                "install-php-extensions ctype curl dom fileinfo filter hash mbstring openssl pcre pdo session tokenizer xml pdo_pgsql redis gd exif zip"
+            ]
+        },
+        "install:composer": {
+            "commands": [
+                "composer install --optimize-autoloader --no-scripts --no-interaction --ignore-platform-req=ext-gd --ignore-platform-req=ext-exif --ignore-platform-req=ext-zip"
+            ]
+        }
     }
 }
