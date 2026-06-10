@@ -1,0 +1,19 @@
+{
+  "php": {
+    "extensions": [
+      "pdo",
+      "pdo_pgsql",
+      "mbstring",
+      "tokenizer",
+      "xml",
+      "ctype",
+      "fileinfo",
+      "openssl",
+      "curl",
+      "gd",
+      "zip",
+      "bcmath",
+      "redis"
+    ]
+  }
+}
