@@ -1,12 +1,7 @@
 [build]
 builder = "railpack"
 
-[build.railpackConfig]
-# Explicitly tell Railpack to use PHP + Node together
-buildCommand = "npm ci && npm run build && composer install --optimize-autoloader --no-interaction && mkdir -p storage/framework/{sessions,views,cache,testing} storage/logs bootstrap/cache && chmod -R a+rw storage bootstrap/cache"
-
 [deploy]
-startCommand = "/start-container.sh"
 healthcheckPath = "/login"
 healthcheckTimeout = 60
 restartPolicyType = "on_failure"
