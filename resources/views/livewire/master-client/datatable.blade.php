@@ -193,17 +193,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                            @if ($selectedBatch === 'all' || empty($selectedBatch))
-                                {{-- State 1 — Initial (belum pilih batch) --}}
-                                <tr>
-                                    <td colspan="{{ count($columns) }}" class="px-4 py-12 text-center text-sm text-gray-500 dark:text-gray-400">
-                                        <div class="flex flex-col items-center justify-center gap-2">
-                                            <span class="material-symbols-outlined text-4xl text-gray-400 dark:text-gray-500">info</span>
-                                            <span>Pilih batch dari daftar untuk memuat data klien</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @elseif ($data->isEmpty())
+                            @if ($data->isEmpty())
                                 {{-- State 4 — Batch dipilih tapi data kosong --}}
                                 <tr>
                                     <td colspan="{{ count($columns) }}" class="px-4 py-12 text-center text-sm text-gray-500 dark:text-gray-400">

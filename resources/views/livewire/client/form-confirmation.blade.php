@@ -131,6 +131,9 @@
                  
                 <!-- NIK -->
                 <div>
+                    
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">NIK sesuai KTP</label>
+                    
                     <input type="text" 
                            id="nik" 
                            name="nik" 

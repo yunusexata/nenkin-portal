@@ -18,6 +18,11 @@ class MenuHelper
             ],
             [
                 'icon' => 'dashboard',
+                'name' => 'Master Data Client Speed',
+                'path' => 'master_client_speed.index',
+            ],
+            [
+                'icon' => 'dashboard',
                 'name' => 'Dokumen Saya',
                 'path' => 'client_document.index',
             ],

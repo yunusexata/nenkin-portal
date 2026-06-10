@@ -2,12 +2,18 @@
 
 use App\Http\Controllers\MasterClient\ClientController;
 use App\Http\Controllers\MasterClient\MasterClientController;
+use App\Http\Controllers\MasterClient\MasterClientSpeedController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'access_permission'])->group(function () {
     Route::group(["controller" => MasterClientController::class, "prefix" => "master_client", "as" => "master_client."], function () {
         Route::get('/', 'index')->name('index');
         Route::get('create', 'create')->name('create');
+        Route::get('{id}/edit', 'edit')->name('edit');
+        Route::get('{id}/detail', 'detail')->name('detail');
+    });
+    Route::group(["controller" => MasterClientSpeedController::class, "prefix" => "master_client_speed", "as" => "master_client_speed."], function () {
+        Route::get('/', 'index')->name('index');
         Route::get('{id}/edit', 'edit')->name('edit');
         Route::get('{id}/detail', 'detail')->name('detail');
     });

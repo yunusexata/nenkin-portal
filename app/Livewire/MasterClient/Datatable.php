@@ -55,15 +55,6 @@ class Datatable extends Component
             ->toArray();
     }
 
-    public function datatableGetData()
-    {
-        if (!$this->selectedBatch || $this->selectedBatch === 'all') {
-            return new \Illuminate\Pagination\LengthAwarePaginator([], 0, $this->length);
-        }
-
-        return $this->datatablePaginate($this->datatableGetProcessedQuery());
-    }
-
     public function onMount()
     {
         $authUser = UserRepository::authenticatedUser();
@@ -197,13 +188,28 @@ class Datatable extends Component
                 'key' => 'note',
                 'name' => 'Note',
             ],
+            [
+                'key' => 'claim_type',
+                'name' => 'Jenis Pencairan',
+            ],
+            [
+                'key' => 'user_exists',
+                'name' => 'Buat Akun',
+                'render' => function ($item) {
+                    return $item->user_exists ? 'Sudah' : 'Belum';
+                }
+            ],
 
         ];
     }
 
     public function getQuery(): Builder
     {
-        return \App\Models\Client\Client::query()->where('source_file_name', $this->selectedBatch);
+        return \App\Models\Client\Client::query()
+            ->withExists('user')
+            ->when($this->selectedBatch != 'all', function ($q) {
+                $q->where('source_file_name', $this->selectedBatch);
+            });
     }
 
     public function getView(): string

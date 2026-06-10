@@ -13,7 +13,7 @@
     <livewire:master-client.import-modal />
     <livewire:master-client.batch-detail-modal />
     
-        @livewire('master-client.datatable')
+        <livewire:master-client.datatable lazy />
     </x-common.component-card>
  
 @endsection
