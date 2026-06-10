@@ -266,11 +266,16 @@ function esignApp(initialNik, initialAddress, clientName, letterNumber, dateForm
             // Deteksi scroll halaman untuk mobile di Step 1
             window.addEventListener('scroll', () => {
                 if (this.currentStep === 1 && window.innerWidth < 1024) {
-                    const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-                    const currentScroll = window.scrollY;
-                    if (scrollHeight > 0) {
-                        this.scrollPercent = Math.min(100, (currentScroll / scrollHeight) * 100);
-                        if (scrollHeight - currentScroll <= 60) { // Toleransi 60px
+                    const scrollTop = window.scrollY;
+                    const clientHeight = window.innerHeight;
+                    const scrollHeight = document.documentElement.scrollHeight;
+                    
+                    const isAtBottom = (scrollTop + clientHeight) >= (scrollHeight - 80);
+                    
+                    const maxScroll = scrollHeight - clientHeight;
+                    if (maxScroll > 0) {
+                        this.scrollPercent = Math.min(100, (scrollTop / maxScroll) * 100);
+                        if (isAtBottom) {
                             if (!this.hasScrolledToBottom) {
                                 this.hasScrolledToBottom = true;
                                 this.scrollPercent = 100;
@@ -308,6 +313,11 @@ function esignApp(initialNik, initialAddress, clientName, letterNumber, dateForm
             if (!rect || rect.width === 0 || rect.height === 0) {
                 return;
             }
+            
+            // Simpan image data sebelum resize
+            const imageData = this.canvas.toDataURL('image/png');
+            const hadSignature = !this.isCanvasEmpty;
+            
             const dpr = window.devicePixelRatio || 1;
             this.canvas.width = rect.width * dpr;
             this.canvas.height = rect.height * dpr;
@@ -315,7 +325,20 @@ function esignApp(initialNik, initialAddress, clientName, letterNumber, dateForm
                 this.ctx.scale(dpr, dpr);
             }
             this.setupCanvas();
-            this.checkIfCanvasEmpty();
+            
+            // Redraw signature setelah resize jika ada
+            if (hadSignature) {
+                this.isCanvasEmpty = false;
+                const img = new Image();
+                img.onload = () => {
+                    if (this.ctx) {
+                        this.ctx.drawImage(img, 0, 0, rect.width, rect.height);
+                    }
+                };
+                img.src = imageData;
+            } else {
+                this.checkIfCanvasEmpty();
+            }
         },
 
         checkScrollState() {

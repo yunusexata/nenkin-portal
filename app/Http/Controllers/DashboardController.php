@@ -21,6 +21,13 @@ class DashboardController extends Controller
             return view('app.dashboard.index', compact('documents'));
         }
 
-        return view('app.dashboard.index');
+        $stats = [
+            'total_clients'    => \App\Models\Client\Client::count(),
+            'speed_clients'    => \App\Models\Client\Client::whereIn('claim_type', ['speed', 'adjusment'])->count(),
+            'total_documents'  => \App\Models\Document::count(),
+            'pending_reviews'  => \App\Models\Review::where('status', 'intercepted')->count(),
+        ];
+
+        return view('app.dashboard.index', compact('stats'));
     }
 }

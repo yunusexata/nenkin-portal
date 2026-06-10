@@ -4,7 +4,7 @@
     <div class="grid grid-cols-12 gap-4 md:gap-6">
         @if(auth()->user()->hasRole(\App\Models\User::ROLE_CLIENT))
         <div class="col-span-12">
-            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">SUrat Perjanjian</h3>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Surat Perjanjian</h3>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-white dark:bg-gray-850 rounded-xl shadow border border-gray-200 dark:border-gray-800 p-6 flex flex-col justify-between h-full transition duration-200 hover:shadow-md">

@@ -50,8 +50,8 @@
 
             <!-- Logo (mobile only) -->
             <a href="/" class="xl:hidden">
-                <img class="dark:hidden" src="/images/logo/logo.svg" alt="Logo" />
-                <img class="hidden dark:block" src="/images/logo/logo-dark.svg" alt="Logo" />
+                <img class="h-8 w-auto dark:hidden" src="/images/logo/logo_exata_dark.svg" alt="Logo Exata" />
+                <img class="h-8 w-auto hidden dark:block" src="/images/logo/logo_exata.svg" alt="Logo Exata" />
             </a>
 
             <!-- Application Menu Toggle (mobile only) -->

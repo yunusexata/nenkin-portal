@@ -34,8 +34,6 @@ class ClientController extends Controller
     {
         $user = auth()->user();
 
-
-        $this->download(storage_path('app/public/template_perjanjian.pdf'), 'result', $user);
         if ($user && $user->hasRole(\App\Models\User::ROLE_CLIENT)) {
             $clientId = $user->client_id;
 
@@ -59,8 +57,12 @@ class ClientController extends Controller
     // $this->drawLabelPdf(, 'result', $user);
     public function download()
     {
-        $imagePath = storage_path('app/public/template_perjanjian.pdf');
         $model = auth()->user();
+        if (!$model || !$model->client || !$model->client->esign) {
+            abort(404, 'Dokumen Perjanjian belum ditandatangani.');
+        }
+
+        $imagePath = storage_path('app/public/template_perjanjian.pdf');
         $desPath = 'result';
         $pdf = new Fpdi();
 
@@ -99,14 +101,18 @@ class ClientController extends Controller
         $pdf->Text(585, 484, Carbon::parse($model->client->bod)->locale('id')
             ->translatedFormat('d F Y'));
         // Alamat
-        $address = 'Perumahan Grand Permata Blok B2 No. 12, RT 04 / RW 08, Kelurahan Sukamaju, Kecamatan Cibeureum, Kota Bandung, Jawa Barat, 40212 Perumahan Grand Permata Blok B2 No. 12, RT 04 / RW 08, Kelurahan Sukamaju, Kecamatan Cibeureum, Kota Bandung, Jawa Barat, 40212';
-        $split = str_split($address, 40);
-        $split2 = str_split($address, 50);
+        $clientModel = $model->client;
+        $address = $clientModel->esign?->address 
+            ?? $clientModel->confirmation?->indonesia_address 
+            ?? '-';
+        $line1 = (string) substr($address, 0, 40);
+        $line2 = strlen($address) > 40 ? (string) substr($address, 40, 50) : '';
+        $line3 = strlen($address) > 90 ? (string) substr($address, 90, 50) : '';
 
         $lines = [
-            $split[0],
-            $split2[1],
-            $split2[2],
+            $line1,
+            $line2,
+            $line3,
         ];
         $y = 506;
 

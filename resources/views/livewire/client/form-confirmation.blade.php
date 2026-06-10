@@ -17,13 +17,13 @@
 
                 <!-- Nama Lengkap -->
                 <div>
+                    <label for="name" class="block text-sm font-semibold text-gray-700 mb-1">Nama Lengkap</label>
                     <input type="text" 
                            id="name" 
                            name="name" 
                            value="{{ $name }}"
-                           class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-center text-[#111827] uppercase placeholder-gray-400"
+                           class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-gray-50 text-center text-[#111827] uppercase placeholder-gray-400"
                            readonly>
-                    
                 </div>
 
                 
@@ -34,14 +34,14 @@
                             name="nenkin_80_received_type"
                             wire:model="nenkin_80_received_type" 
                             required
-                            class="w-full px-4 py-2.5 bg-white rounded-lg border border-gray-300 text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#F97316] focus:border-transparent transition">
+                            class="w-full px-4 py-2.5 bg-white rounded-lg border text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#F97316] transition @error('nenkin_80_received_type') border-red-500 focus:ring-red-500 @else border-gray-300 @enderror">
                         <option value="">-- Pilih Status --</option>
                         @foreach (\App\Models\Client\ClientConfirmation::NENKIN_80_RECEIVED_TYPE_CHOICE as $key => $value)
                             <option value="{{ $key }}">{{ $value }}</option>
                         @endforeach
                     </select>
                     @error('nenkin_80_received_type')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -77,8 +77,11 @@
                             
                         </div>
                         <p class="text-gray-400 text-[10px] mt-0.5">Jawaban Ya, Hanya Untuk Yang Sudah Tanda Tangan Kontrak / Sudah di Telfon Oleh Pihak Kaisha/Kumiai.</p>
+                        @error('back_to_jp_type')
+                            <p class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</p>
+                        @enderror
                         @error('rencana_kembali')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            <p class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</p>
                         @enderror
                     </div>
                 @elseif ($current_position === \App\Models\Client\ClientConfirmation::CURRENT_POSITION_JEPANG)
@@ -123,24 +126,24 @@
                               wire:model="indonesia_address"
                               required 
                               placeholder="Masukkan alamat detail (Jalan, No. Rumah, RT/RW, Kecamatan, Kabupaten, Provinsi)"
-                              class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-[#111827] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#F97316] focus:border-transparent transition"></textarea>
+                              class="w-full px-4 py-2.5 rounded-lg border text-[#111827] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#F97316] transition @error('indonesia_address') border-red-500 focus:ring-red-500 @else border-gray-300 @enderror"></textarea>
                     @error('indonesia_address')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</p>
                     @enderror
                 </div>
                  
                 <!-- NIK -->
                 <div>
-                    
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">NIK sesuai KTP</label>
-                    
+                    <label for="nik" class="block text-sm font-semibold text-gray-700 mb-2">NIK sesuai KTP</label>
                     <input type="text" 
                            id="nik" 
                            name="nik" 
                            wire:model="nik"
-                           class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-[#111827] uppercase placeholder-gray-400"
+                           class="w-full px-4 py-2.5 rounded-lg border text-[#111827] uppercase placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#F97316] transition @error('nik') border-red-500 focus:ring-red-500 @else border-gray-300 @enderror"
                            placeholder="Masukkan NIK sesuai KTP">
-                    
+                    @error('nik')
+                        <p class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="pt-2">

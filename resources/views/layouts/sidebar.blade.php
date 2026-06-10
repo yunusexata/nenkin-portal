@@ -65,15 +65,18 @@
         :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
         'xl:justify-center' :
         'justify-start'">
-        <a href="/">
-            <img x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                class="dark:hidden" src="/images/logo/logo.svg" alt="Logo" width="150" height="40" />
-            <img x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                class="hidden dark:block" src="/images/logo/logo-dark.svg" alt="Logo" width="150"
-                height="40" />
-            <img x-show="!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen"
-                src="/images/logo/logo-icon.svg" alt="Logo" width="32" height="32" />
-
+        <a href="/" class="focus:outline-hidden">
+            <!-- Expanded Logo (Text Placeholder) -->
+            <div x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen" class="flex flex-col leading-tight">
+                <span class="text-brand-navy dark:text-white font-bold text-lg tracking-tight">Nenkin Portal</span>
+                <span class="text-gray-500 dark:text-brand-gray text-xs font-normal">by Exata Indonesia</span>
+            </div>
+            
+            <!-- Collapsed Logo (NP Badge) -->
+            <div x-show="!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen" 
+                 class="flex items-center justify-center bg-brand-navy text-white rounded-lg w-10 h-10 font-black text-lg shadow-sm">
+                NP
+            </div>
         </a>
     </div>
 
