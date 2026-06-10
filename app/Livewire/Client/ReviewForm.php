@@ -15,9 +15,12 @@ class ReviewForm extends Component
     public $hasSubmitted = false;
     public $submittedMessage = '';
     public $redirectUrl = null;
+    public bool $popupMode = false;
 
-    public function mount()
+    public function mount(bool $popupMode = false)
     {
+        $this->popupMode = $popupMode;
+
         $user = Auth::user();
         if ($user && $user->client_id) {
             $this->hasSubmitted = Review::where('client_id', $user->client_id)->exists();
@@ -108,8 +111,9 @@ class ReviewForm extends Component
         }
 
         return view('livewire.client.review-form', [
-            'showForm' => $showForm,
+            'showForm'       => $showForm,
             'hasAllDocuments' => $hasAllDocuments,
+            'popupMode'      => $this->popupMode,
         ]);
     }
 }

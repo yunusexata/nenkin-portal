@@ -2,34 +2,13 @@
 
 @section('content')
 
-    @if (Auth::user()->hasRole(\App\Models\User::ROLE_CLIENT))
-        @if (!Auth::user()->client->confirmation)
-            <x-common.component-card class="flex justify-center flex-nowrap">
-                <div class="w-full max-w-lg">
-                    <!-- Logo / Branding Header -->
-                    <div class="text-center mb-6">
-                        <h1 class="text-3xl font-extrabold text-[#111827] tracking-tight">EXATA <span class="text-[#F97316]">INDONESIA</span></h1>
-                        <p class="text-gray-600 text-sm mt-1 font-medium">Konfirmasi Status Layanan Pemrosesan Nenkin</p>
-                    </div>
+    <!-- Admin Dashboard Stats -->
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-white/90">Dashboard Ringkasan</h1>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Status dan statistik operasional saat ini.</p>
+    </div>
 
-                    @livewire('client.form-confirmation')
-
-                    <div class="text-center text-xs text-gray-500 mt-6">
-                        &copy; 2026 PT Exata Indonesia Group. Seluruh Hak Cipta Dilindungi.
-                    </div>
-                </div>
-            </x-common.component-card>
-        @endif
-
-        <livewire:client.review-form />
-    @else
-        <!-- Admin Dashboard Stats -->
-        <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-800 dark:text-white/90">Dashboard Ringkasan</h1>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Status dan statistik operasional saat ini.</p>
-        </div>
-
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4 md:gap-6">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4 md:gap-6">
             <!-- Card 1: Total Klien -->
             <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6 shadow-xs hover:shadow-md transition">
                 <div class="flex items-center justify-between">
@@ -89,8 +68,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-    @endif
+    </div>
 
 @endsection
 

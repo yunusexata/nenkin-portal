@@ -70,6 +70,14 @@
                                         Masuk
                                     </button>
                                 </div>
+                                <div class="mb-5 sm:mb-8">
+                                    <p class="text-sm text-center font-bold text-gray-800 dark:text-white/90">
+                                        PT SUMBER REZEKI EXATA INDONESIA
+                                    </p>
+                                    <p class="text-sm text-center text-gray-300">
+                                        KONSULTAN NENKIN NO 1 DI INDONESIA
+                                    </p>
+                                </div>
                             </div>
                         </form>
                     </div>
