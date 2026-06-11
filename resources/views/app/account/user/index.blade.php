@@ -34,9 +34,12 @@
 @stop
 
 @section('content')
-    <x-common.component-card title="">
+
+    <div class="card">
+        <div class="card-body">
             <livewire:account.user.filter lazy />
         
             <livewire:account.user.datatable lazy />
-    </x-common.component-card>
+        </div>
+    </div>
 @stop
