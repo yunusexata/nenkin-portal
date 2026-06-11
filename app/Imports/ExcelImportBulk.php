@@ -11,9 +11,14 @@ class ExcelImportBulk implements ToCollection, WithHeadingRow, WithChunkReading
 {
     public $rows;
 
+    public function __construct()
+    {
+        $this->rows = collect();
+    }
+
     public function collection(Collection $rows)
     {
-        $this->rows = $rows;
+        $this->rows = $this->rows->concat($rows);
     }
 
     public function chunkSize(): int

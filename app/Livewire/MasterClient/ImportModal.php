@@ -32,6 +32,9 @@ class ImportModal extends Component
     // IMPORT PIPELINE
     public function updatedInputFile()
     {
+        ini_set('memory_limit', '1024M');
+        set_time_limit(300); // 5 minutes
+
         consoleLog($this, 'con');
         $import = new ExcelImportBulk();
         Excel::import($import, $this->input_file);
@@ -92,6 +95,9 @@ class ImportModal extends Component
 
     public function storeImport()
     {
+        ini_set('memory_limit', '1024M');
+        set_time_limit(300); // 5 minutes
+
         $this->validate([
             'batch_name' => 'required|string|max:100',
         ], [

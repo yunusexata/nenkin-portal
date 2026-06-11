@@ -111,7 +111,7 @@
                         x-transition
                         class="mt-4"
                     >
-                        <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
+                        <div class="overflow-x-auto max-h-[450px] overflow-y-auto rounded-lg border border-gray-200 dark:border-gray-700">
                             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                                 <thead class="bg-gray-50 dark:bg-gray-800">
                                     <tr>
@@ -158,7 +158,7 @@
                         x-transition
                         class="mt-4"
                     >
-                        <div class="overflow-x-auto rounded-lg border border-red-200 dark:border-red-800">
+                        <div class="overflow-x-auto max-h-[450px] overflow-y-auto rounded-lg border border-red-200 dark:border-red-800">
                             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                                 <thead class="bg-red-50 dark:bg-red-900/20">
                                     <tr>
