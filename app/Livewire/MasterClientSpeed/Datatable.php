@@ -3,6 +3,7 @@
 namespace App\Livewire\MasterClientSpeed;
 
 use App\Helpers\Alert;
+use App\Helpers\ExportHelper;
 use App\Helpers\PermissionHelper;
 use App\Models\Client\Client;
 use App\Models\GensenForm\GensenFormLink;
@@ -11,6 +12,7 @@ use App\Repositories\Client\ClientRepository;
 use App\Repositories\Exata\ExataFormCandidateRepository;
 use App\Repositories\GensenForm\GensenFormLinkRepository;
 use App\Traits\Livewire\WithDatatable;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Crypt;
 use Livewire\Attributes\On;
@@ -29,6 +31,8 @@ class Datatable extends Component
     public $status;
     public $selectedBatch = 'all';
     public $batches = [];
+
+    public $batch_name;
 
     // Delete Dialog
     public $targetDeleteId;
@@ -257,6 +261,36 @@ class Datatable extends Component
             ->when($this->selectedBatch != 'all', function ($q) {
                 $q->where('source_file_name', $this->selectedBatch);
             });
+    }
+
+
+    #[On('modal-filter')]
+    public function modalFilter($filter)
+    {
+        foreach ($filter as $key => $value) {
+            $this->$key = $value;
+        }
+    }
+
+
+    #[On('export')]
+    public function export($type)
+    {
+        $fileName = "Data Client Speed " . Carbon::now()->format('Y-m-d H:i:s');
+        return ExportHelper::export(
+            $type,
+            $fileName,
+            ClientRepository::getClientSpeed($this->batch_name),
+            'app.master-client-speed.export',
+            [
+                'title' => 'Data Client',
+                'type' => $type,
+            ],
+            [
+                'size' => 'legal',
+                'orientation' => 'landscape',
+            ]
+        );
     }
 
     public function getView(): string
