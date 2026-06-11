@@ -37,7 +37,7 @@
 
     <div class="card">
         <div class="card-body">
-            <livewire:account.user.filter lazy />
+            <livewire:account.user.filter />
         
             <livewire:account.user.datatable lazy />
         </div>
