@@ -99,6 +99,12 @@
                     <p class="text-[#0049FF] font-bold text-lg mt-1">by Exata Indonesia</p>
                 </div>
                 
+        <input type="hidden" class="bg-primary-50 dark:bg-primary-500/15 text-primary-700 dark:text-primary-500
+        bg-warning-50 dark:bg-warning-500/15 text-warning-700 dark:text-warning-500
+        bg-success-50 dark:bg-success-500/15 text-success-700 dark:text-success-500
+        bg-danger-50 dark:bg-danger-500/15 text-danger-700 dark:text-danger-500
+        ">
+                
                 <p class="text-white text-base leading-relaxed mb-12">
                     "Platform resmi pencairan dana pensiun Jepang (Nenkin) untuk Kenshusei"
                 </p>

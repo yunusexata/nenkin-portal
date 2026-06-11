@@ -198,7 +198,23 @@ class Datatable extends Component
                 'key' => 'esign_exists',
                 'name' => 'Tanda Tangan',
                 'render' => function ($item) {
-                    return $item->esign_exists ? 'Sudah' : 'Belum';
+                    $style = 'primary';
+                    $text = 'belum';
+                    switch ($item->esign_exists) {
+                        case true:
+                            $style = 'success';
+                            $text = 'sudah';
+                            break;
+                        case false:
+                            $style = 'danger';
+                            $text = 'belum';
+                            break;
+
+                        default:
+                            # code...
+                            break;
+                    }
+                    return '<span class="bg-' . $style . '-50 dark:bg-' . $style . '-500/15 text-' . $style . '-700 dark:text-' . $style . '-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">' . strtoupper($text) . '</span>';
                 }
             ],
         ];

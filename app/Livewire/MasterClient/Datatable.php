@@ -4,6 +4,7 @@ namespace App\Livewire\MasterClient;
 
 use App\Helpers\Alert;
 use App\Helpers\PermissionHelper;
+use App\Models\Client\Client;
 use App\Models\GensenForm\GensenFormLink;
 use App\Repositories\Account\UserRepository;
 use App\Repositories\Client\ClientRepository;
@@ -191,13 +192,48 @@ class Datatable extends Component
             [
                 'key' => 'claim_type',
                 'name' => 'Jenis Pencairan',
+                'render' => function ($item) {
+                    $style = 'primary';
+                    switch ($item->claim_type) {
+                        case Client::CLAIM_TYPE_ADJUSTMENT:
+                            $style = 'warning';
+                            break;
+                        case Client::CLAIM_TYPE_NORMAL:
+                            $style = 'primary';
+                            break;
+                        case Client::CLAIM_TYPE_SPEED:
+                            $style = 'success';
+                            break;
+
+                        default:
+                            # code...
+                            break;
+                    }
+                    return '<span class="bg-' . $style . '-50 dark:bg-' . $style . '-500/15 text-' . $style . '-700 dark:text-' . $style . '-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">' . strtoupper($item->claim_type) . '</span>';
+                }
             ],
             [
                 'searchable' => false,
                 'key' => 'user_exists',
                 'name' => 'Buat Akun',
                 'render' => function ($item) {
-                    return $item->user_exists ? 'Sudah' : 'Belum';
+                    $style = 'primary';
+                    $text = 'belum';
+                    switch ($item->user_exists) {
+                        case true:
+                            $style = 'success';
+                            $text = 'sudah';
+                            break;
+                        case false:
+                            $style = 'danger';
+                            $text = 'belum';
+                            break;
+
+                        default:
+                            # code...
+                            break;
+                    }
+                    return '<span class="bg-' . $style . '-50 dark:bg-' . $style . '-500/15 text-' . $style . '-700 dark:text-' . $style . '-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">' . strtoupper($text) . '</span>';
                 }
             ],
 
