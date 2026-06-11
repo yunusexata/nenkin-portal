@@ -1,72 +1,101 @@
 <form wire:submit="store">
-    <div class='row'>
-        <div class="col-md-4 mb-4">
-            <label>Nama</label>
-            <input type="text" class="form-control @error('name') is-invalid @enderror" wire:model.blur="name" />
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+
+        {{-- Nama --}}
+        <div>
+            <label class="mb-2.5 block text-sm font-medium text-dark dark:text-white">
+                Nama
+            </label>
+
+            <input
+                type="text"
+                wire:model.blur="name"
+                class="w-full rounded-lg border border-stroke bg-transparent px-5 py-3 text-dark outline-none transition focus:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white @error('name') border-danger @enderror"
+            />
 
             @error('name')
-                <div class="invalid-feedback">
+                <p class="mt-1 text-sm text-danger">
                     {{ $message }}
-                </div>
+                </p>
             @enderror
         </div>
 
-        <div class="col-md-4 mb-4">
-            <label>Username</label>
-            <input type="text" class="form-control @error('username') is-invalid @enderror" wire:model.blur="username" />
+        {{-- Email --}}
+        <div>
+            <label class="mb-2.5 block text-sm font-medium text-dark dark:text-white">
+                Email
+            </label>
 
-            @error('username')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-            @enderror
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <label>Email</label>
-            <input type="email" class="form-control @error('email') is-invalid @enderror" wire:model.blur="email" />
+            <input
+                type="email"
+                wire:model.blur="email"
+                class="w-full rounded-lg border border-stroke bg-transparent px-5 py-3 text-dark outline-none transition focus:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white @error('email') border-danger @enderror"
+            />
 
             @error('email')
-                <div class="invalid-feedback">
+                <p class="mt-1 text-sm text-danger">
                     {{ $message }}
-                </div>
+                </p>
             @enderror
         </div>
 
-        <div class="col-md-12 mb-4">
-            <label>Jabatan</label>
-            <select class="form-select @error('role') is-invalid @enderror" wire:model.blur="role">
+        {{-- Role --}}
+        <div class="lg:col-span-3">
+            <label class="mb-2.5 block text-sm font-medium text-dark dark:text-white">
+                Jabatan
+            </label>
+
+            <select
+                wire:model.blur="role"
+                class="w-full rounded-lg border border-stroke bg-transparent px-5 py-3 text-dark outline-none transition focus:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white @error('role') border-danger @enderror"
+            >
                 @foreach ($roles as $role)
-                    <option value="{{ $role }}">{{ $role }}</option>
+                    <option value="{{ $role }}">
+                        {{ $role }}
+                    </option>
                 @endforeach
             </select>
 
-            @error('type')
-                <div class="invalid-feedback">
+            @error('role')
+                <p class="mt-1 text-sm text-danger">
                     {{ $message }}
-                </div>
+                </p>
             @enderror
         </div>
 
-        <div class="col-md-12 mb-4">
-            <label>Password</label>
+        {{-- Password --}}
+        <div class="lg:col-span-3">
+            <label class="mb-2.5 block text-sm font-medium text-dark dark:text-white">
+                Password
+            </label>
+
             @if ($objId)
-                <div class='fst-italic'>*Diisi jika ingin mengubah password</div>
+                <p class="mb-2 text-sm italic text-body">
+                    *Diisi jika ingin mengubah password
+                </p>
             @endif
-            <input type="password" class="form-control @error('password') is-invalid @enderror"
-                wire:model.blur="password" />
+
+            <input
+                type="password"
+                wire:model.blur="password"
+                class="w-full rounded-lg border border-stroke bg-transparent px-5 py-3 text-dark outline-none transition focus:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white @error('password') border-danger @enderror"
+            />
 
             @error('password')
-                <div class="invalid-feedback">
+                <p class="mt-1 text-sm text-danger">
                     {{ $message }}
-                </div>
+                </p>
             @enderror
         </div>
 
     </div>
 
-    <button type="submit" class="btn btn-success mt-3">
-        <i class='ki-duotone ki-check fs-1'></i>
-        Save
-    </button>
+    <div class="mt-6 flex justify-end">
+        <button
+            type="submit"
+            class="inline-flex items-center justify-center gap-2.5 rounded bg-meta-3 px-6 py-3 text-center bg-blue-500 rounded font-medium text-white hover:bg-opacity-90 lg:px-8"
+        >
+            Save
+        </button>
+    </div>
 </form>
