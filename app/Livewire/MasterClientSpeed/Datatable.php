@@ -231,7 +231,10 @@ class Datatable extends Component
             WHERE client_esigns.client_id = clients.id
         ) as esign_exists
     ")
-            ->where('claim_type', Client::CLAIM_TYPE_SPEED)
+            ->whereIn('claim_type', [
+                Client::CLAIM_TYPE_SPEED,
+                Client::CLAIM_TYPE_ADJUSTMENT,
+            ])
             ->when($this->selectedBatch != 'all', function ($q) {
                 $q->where('source_file_name', $this->selectedBatch);
             });
