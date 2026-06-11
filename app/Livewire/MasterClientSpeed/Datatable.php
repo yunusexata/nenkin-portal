@@ -206,7 +206,7 @@ class Datatable extends Component
                             $text = 'sudah';
                             break;
                         case false:
-                            $style = 'danger';
+                            $style = 'warning';
                             $text = 'belum';
                             break;
 

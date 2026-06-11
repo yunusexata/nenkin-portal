@@ -196,10 +196,10 @@ class Datatable extends Component
                     $style = 'primary';
                     switch ($item->claim_type) {
                         case Client::CLAIM_TYPE_ADJUSTMENT:
-                            $style = 'warning';
+                            $style = 'amber';
                             break;
                         case Client::CLAIM_TYPE_NORMAL:
-                            $style = 'primary';
+                            $style = 'blue';
                             break;
                         case Client::CLAIM_TYPE_SPEED:
                             $style = 'success';
@@ -209,7 +209,7 @@ class Datatable extends Component
                             # code...
                             break;
                     }
-                    return '<span class="bg-' . $style . '-50 dark:bg-' . $style . '-500/15 text-' . $style . '-700 dark:text-' . $style . '-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">' . strtoupper($item->claim_type) . '</span>';
+                    return '<span class="bg-' . $style . '-50 dark:bg-' . $style . '-500/15 text-' . $style . '-600 dark:text-' . $style . '-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">' . strtoupper($item->claim_type) . '</span>';
                 }
             ],
             [
@@ -217,7 +217,7 @@ class Datatable extends Component
                 'key' => 'user_exists',
                 'name' => 'Buat Akun',
                 'render' => function ($item) {
-                    $style = 'primary';
+                    $style = 'success';
                     $text = 'belum';
                     switch ($item->user_exists) {
                         case true:
@@ -225,7 +225,7 @@ class Datatable extends Component
                             $text = 'sudah';
                             break;
                         case false:
-                            $style = 'danger';
+                            $style = 'warning';
                             $text = 'belum';
                             break;
 
