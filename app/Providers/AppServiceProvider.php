@@ -24,6 +24,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+
+        \App\Models\Document::observe(\App\Observers\DocumentObserver::class);
     }
 
     /**

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'Nenkin Portal') | by Exata Indonesia</title>
+    <title>@yield('title', 'Nenkin Portal') | by PT Sumber Rezeki Exata Indonesia</title>
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])

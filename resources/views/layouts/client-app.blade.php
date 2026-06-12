@@ -70,7 +70,7 @@
             </a>
 
             {{-- Bantuan --}}
-            <a href="https://wa.me/6281312345678"
+            <a href="https://wa.me/{{ config('exata.admin_wa_number') }}"
                id="nav-bantuan"
                target="_blank"
                class="flex flex-col items-center gap-0.5 px-4 py-1 rounded-xl transition-all group text-gray-400 hover:text-[#0049FF]">
