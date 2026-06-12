@@ -29,7 +29,10 @@
                 
                 <!-- Status Penerimaan Nenkin 80% -->
                 <div>
-                    <label for="nenkin_80_received_type" class="block text-sm font-semibold text-gray-700 mb-1">Status Penerimaan Nenkin 80%</label>
+                    <label for="nenkin_80_received_type" class="block text-sm font-semibold text-gray-700 mb-1">
+                        Status Penerimaan Nenkin 80% 
+                    <span class="text-red-500">*</span>
+                    </label>
                     <select id="nenkin_80_received_type" 
                             name="nenkin_80_received_type"
                             wire:model="nenkin_80_received_type" 
@@ -47,7 +50,10 @@
 
                 <!-- Posisi Saat Ini -->
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Posisi Saat Ini</label>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Posisi Saat Ini
+                        <span class="text-red-500">*</span>
+                    </label>
                     <div class="grid grid-cols-2 gap-3">
 
                         @foreach (\App\Models\Client\ClientConfirmation::CURRENT_POSITION_CHOICE as $key => $value)
@@ -65,7 +71,10 @@
                 <!-- Rencana Kembali ke Jepang (6 Bulan) -->
                 @if ($current_position === \App\Models\Client\ClientConfirmation::CURRENT_POSITION_INDONESIA)
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Rencana Kembali ke Jepang dalam 6 Bulan?</label>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Rencana Kembali ke Jepang dalam 6 Bulan?
+                            <span class="text-red-500">*</span>
+                        </label>
                         <div class="grid grid-cols-2 gap-3">
                             
                             @foreach (\App\Models\Client\ClientConfirmation::BACK_TO_JP_TYPE_CHOICE as $key => $value)
@@ -76,7 +85,10 @@
                             @endForeach
                             
                         </div>
-                        <p class="text-gray-400 text-[10px] mt-0.5">Jawaban Ya, Hanya Untuk Yang Sudah Tanda Tangan Kontrak / Sudah di Telfon Oleh Pihak Kaisha/Kumiai.</p>
+                        <p class="text-gray-400 text-[10px] mt-0.5">
+                            Jawaban Ya, Hanya Untuk Yang Sudah Tanda Tangan Kontrak / Sudah di Telfon Oleh Pihak Kaisha/Kumiai.
+                            <span class="text-red-500">*</span>
+                        </p>
                         @error('back_to_jp_type')
                             <p class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</p>
                         @enderror
@@ -87,12 +99,16 @@
                 @elseif ($current_position === \App\Models\Client\ClientConfirmation::CURRENT_POSITION_JEPANG)
                 
                     <div id="container_estimasi" class="transition duration-300">
-                        <label for="estimated_return" class="block text-sm font-semibold text-gray-700 mb-1">Buat Kamu Yang Posisi Sudah Ada Di Jepang, Estimasi Kepulangan</label>
+                        <label for="estimated_return" class="block text-sm font-semibold text-gray-700 mb-1">
+                            Buat Kamu Yang Posisi Sudah Ada Di Jepang, Estimasi Kepulangan
+                            <span class="text-red-500">*</span>
+                        </label>
                         <input type="month" 
                             id="estimated_return" 
                             wire:model="estimated_return" 
+                            required
                             class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#F97316] focus:border-transparent transition">
-                        <p class="text-gray-400 text-[10px] mt-0.5">Silakan pilih bulan & tahun perkiraan Kepulangan Anda.</p>
+                            <p class="text-gray-400 text-[10px] mt-0.5">Silakan pilih bulan & tahun perkiraan Kepulangan Anda.</p>
                         @error('estimated_return')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
@@ -104,12 +120,17 @@
                 $current_position === \App\Models\Client\ClientConfirmation::CURRENT_POSITION_INDONESIA )
                     
                     <div id="container_estimasi" class="transition duration-300">
-                        <label for="departure" class="block text-sm font-semibold text-gray-700 mb-1">Estimasi Bulan Kembali Ke Jepang</label>
+                        <label for="departure" class="block text-sm font-semibold text-gray-700 mb-1">
+                                Estimasi Bulan Kembali Ke Jepang
+                                <span class="text-red-500">*</span>
+                        </label>
                         <input type="month" 
                             id="departure" 
                             wire:model.live="departure" 
                             class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#F97316] focus:border-transparent transition">
-                        <p class="text-gray-400 text-[10px] mt-0.5">Silakan pilih bulan & tahun perkiraan keberangkatan Anda.</p>
+                        <p class="text-gray-400 text-[10px] mt-0.5">
+                            Silakan pilih bulan & tahun perkiraan keberangkatan Anda.
+                        </p>
                         @error('departure')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
@@ -119,7 +140,10 @@
 
                 <!-- Alamat Indonesia -->
                 <div>
-                    <label for="indonesia_address" class="block text-sm font-semibold text-gray-700 mb-1">Alamat Lengkap Indonesia</label>
+                    <label for="indonesia_address" class="block text-sm font-semibold text-gray-700 mb-1">
+                        Alamat Lengkap Indonesia
+                        <span class="text-red-500">*</span>
+                    </label>
                     <textarea id="indonesia_address" 
                               name="indonesia_address" 
                               rows="3" 
@@ -134,11 +158,15 @@
                  
                 <!-- NIK -->
                 <div>
-                    <label for="nik" class="block text-sm font-semibold text-gray-700 mb-2">NIK sesuai KTP</label>
+                    <label for="nik" class="block text-sm font-semibold text-gray-700 mb-2">
+                        NIK sesuai KTP
+                        <span class="text-red-500">*</span>
+                    </label>
                     <input type="text" 
                            id="nik" 
                            name="nik" 
                            wire:model="nik"
+                           required
                            class="w-full px-4 py-2.5 rounded-lg border text-[#111827] uppercase placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#F97316] transition @error('nik') border-red-500 focus:ring-red-500 @else border-gray-300 @enderror"
                            placeholder="Masukkan NIK sesuai KTP">
                     @error('nik')
