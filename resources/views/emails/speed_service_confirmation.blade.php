@@ -34,6 +34,7 @@
                 <strong>Status E‑Sign:</strong> Selesai ✓<br>
                 <strong>Estimasi Transfer:</strong> 2 minggu sejak tanggal konfirmasi ({{ $signedAtFormatted }})
             </div>
+            <p style="margin-bottom: 20px; font-size: 14px; color: #555555;">📎 Dokumen perjanjian yang sudah ditandatangani terlampir dalam email ini. Simpan dokumen ini sebagai bukti layanan kamu.</p>
             <table class="btn-table" border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                     <td align="center"><a href="{{ $dashboardUrl }}" class="btn-primary" target="_blank">Pantau Status di Dashboard</a></td>

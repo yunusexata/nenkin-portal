@@ -62,6 +62,18 @@ class ClientConfirmation extends Model
 
     protected static function onBoot()
     {
+        self::created(function ($model) {
+            if ($model->client) {
+                $model->client->update(['claim_type' => $model->claim_type]);
+            }
+        });
+
+        self::updated(function ($model) {
+            if ($model->client) {
+                $model->client->update(['claim_type' => $model->claim_type]);
+            }
+        });
+
         self::creating(function ($model) {
             if (
                 $model->current_position === ClientConfirmation::CURRENT_POSITION_INDONESIA &&

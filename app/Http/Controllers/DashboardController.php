@@ -25,25 +25,19 @@ class DashboardController extends Controller
             $steps = [
                 [
                     'key'    => 'confirmation',
-                    'label'  => 'Konfirmasi Data',
+                    'label'  => 'Konfirmasi',
                     'done'   => (bool) $client->confirmation,
                     'icon'   => 'check_circle',
                 ],
                 [
-                    'key'    => 'esign',
-                    'label'  => 'Tanda Tangan',
-                    'done'   => (bool) $client->esign,
-                    'icon'   => 'edit',
-                ],
-                [
-                    'key'    => 'documents',
-                    'label'  => 'Dokumen Diterima',
+                    'key'    => 'claim_process',
+                    'label'  => 'Proses Klaim',
                     'done'   => $documents->isNotEmpty(),
                     'icon'   => 'folder',
                 ],
                 [
                     'key'    => 'review',
-                    'label'  => 'Proses Selesai',
+                    'label'  => 'Dokumen Tersedia',
                     'done'   => (bool) $client->review,
                     'icon'   => 'star',
                 ],

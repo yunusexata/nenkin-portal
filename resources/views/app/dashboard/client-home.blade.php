@@ -3,7 +3,7 @@
 @section('title', 'Dashboard Saya')
 
 @php
-    $hasConfirmation = (bool) ($client->confirmation?->claim_type === App\Models\Client\Client::CLAIM_TYPE_SPEED || $client->confirmation?->claim_type === App\Models\Client\Client::CLAIM_TYPE_ADJUSTMENT);
+    $hasConfirmation = (bool) $client->confirmation;
     $hasEsign        = (bool) $client->esign;
     $hasDocuments    = $documents->isNotEmpty();
     $hasReview       = (bool) $client->review;
@@ -210,9 +210,17 @@
                 </div>
 
                 {{-- Progress Track --}}
+                @php
+                    $progressWidth = 0;
+                    if ($completedSteps === 1) {
+                        $progressWidth = 50;
+                    } elseif ($completedSteps >= 2) {
+                        $progressWidth = 100;
+                    }
+                @endphp
                 <div class="w-full h-2 bg-white/20 rounded-full overflow-hidden mb-4">
                     <div class="h-full bg-gradient-to-r from-[#FF4800] to-[#FF7A00] rounded-full transition-all duration-700"
-                         style="width: {{ ($completedSteps / $totalSteps) * 100 }}%">
+                         style="width: {{ $progressWidth }}%">
                     </div>
                 </div>
 
@@ -262,27 +270,68 @@
         </div>
         @endunless
 
-        {{-- === STEP 2: Sudah konfirmasi, belum esign → tombol ke esign === --}}
+        {{-- === STEP 2: Sudah konfirmasi, belum esign → tombol ke esign ATAU status "Proses Klaim" untuk tipe NORMAL === --}}
         @if ($hasConfirmation && !$hasEsign)
-        <div class="bg-white rounded-2xl shadow-md border border-[#FF4800]/30 overflow-hidden">
-            <div class="bg-gradient-to-r from-[#FF4800] to-[#FF6A00] px-4 py-3 flex items-center gap-2">
-                <svg class="w-5 h-5 fill-white flex-shrink-0" viewBox="0 0 24 24">
-                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-                </svg>
-                <span class="text-white font-bold text-sm">Tanda Tangan Diperlukan</span>
+            @if ($client->claim_type === \App\Models\Client\Client::CLAIM_TYPE_NORMAL)
+                @if (!$hasDocuments)
+                <div class="bg-white rounded-2xl shadow-md border border-blue-200 overflow-hidden">
+                    <div class="bg-gradient-to-r from-[#001B5E] to-[#0049FF] px-4 py-3 flex items-center gap-2">
+                        <svg class="w-5 h-5 fill-white flex-shrink-0" viewBox="0 0 24 24">
+                            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"/>
+                        </svg>
+                        <span class="text-white font-bold text-sm">Proses Klaim</span>
+                    </div>
+                    <div class="p-4 flex flex-col items-center text-center gap-3">
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            Dokumen kamu sedang dalam proses verifikasi dan klaim oleh tim PT Sumber Rezeki Exata Indonesia. Kamu akan mendapatkan notifikasi ketika dokumen sudah siap.
+                        </p>
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            Sedang Diproses
+                        </span>
+                    </div>
+                </div>
+                @endif
+            @else
+                <div class="bg-white rounded-2xl shadow-md border border-[#FF4800]/30 overflow-hidden">
+                    <div class="bg-gradient-to-r from-[#FF4800] to-[#FF6A00] px-4 py-3 flex items-center gap-2">
+                        <svg class="w-5 h-5 fill-white flex-shrink-0" viewBox="0 0 24 24">
+                            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                        </svg>
+                        <span class="text-white font-bold text-sm">Tanda Tangan Diperlukan</span>
+                    </div>
+                    <div class="p-4 flex flex-col items-center text-center gap-3">
+                        <p class="text-gray-600 text-sm leading-relaxed">
+                            Data konfirmasi Anda sudah kami terima. Langkah berikutnya adalah membaca surat perjanjian dan menandatanganinya secara digital.
+                        </p>
+                        <a href="{{ route('client.esign.show') }}"
+                           id="btn-goto-esign"
+                           class="inline-flex items-center gap-2 px-6 py-3 bg-[#FF4800] hover:bg-[#e03e00] text-white font-bold rounded-xl shadow-lg shadow-orange-500/30 transition-all active:scale-95 text-sm">
+                            <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24">
+                                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/>
+                            </svg>
+                            Tanda Tangan Sekarang
+                        </a>
+                    </div>
+                </div>
+            @endif
+        @endif
+
+        {{-- === STEP 2: Sudah konfirmasi AND sudah esign, belum ada dokumen === --}}
+        @if ($hasConfirmation && $hasEsign && !$hasDocuments)
+        <div class="bg-white rounded-2xl shadow-md border border-green-200 overflow-hidden">
+            <div class="bg-gradient-to-r from-[#001B5E] to-[#0049FF] px-4 py-3 flex items-center gap-2">
+                    <svg class="w-5 h-5 fill-white flex-shrink-0" viewBox="0 0 24 24">
+                        <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"/>
+                    </svg>
+                <span class="text-white font-bold text-sm">Nenkin 20% sedang dalam proses transfer.</span>
             </div>
             <div class="p-4 flex flex-col items-center text-center gap-3">
                 <p class="text-gray-600 text-sm leading-relaxed">
-                    Data konfirmasi Anda sudah kami terima. Langkah berikutnya adalah membaca surat perjanjian dan menandatanganinya secara digital.
+                    Estimasi proses pencairan Nenkin adalah 2 minggu dari tanggal konfirmasi. Kami akan menghubungi dan memberikan pemberitahuan jika uang Nenkin 20% kamu sudah ditransfer.
                 </p>
-                <a href="{{ route('client.esign.show') }}"
-                   id="btn-goto-esign"
-                   class="inline-flex items-center gap-2 px-6 py-3 bg-[#FF4800] hover:bg-[#e03e00] text-white font-bold rounded-xl shadow-lg shadow-orange-500/30 transition-all active:scale-95 text-sm">
-                    <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24">
-                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/>
-                    </svg>
-                    Tanda Tangan Sekarang
-                </a>
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    Sedang Diproses
+                </span>
             </div>
         </div>
         @endif
@@ -322,6 +371,7 @@
                 </div>
 
                 {{-- Tanda Tangan --}}
+                @if ($client->claim_type !== \App\Models\Client\Client::CLAIM_TYPE_NORMAL)
                 <div class="flex items-center gap-3 p-3 rounded-xl {{ $hasEsign ? 'bg-green-50 border border-green-200' : ($hasConfirmation ? 'bg-blue-50 border border-[#0049FF]/30' : 'bg-gray-50 border border-gray-200') }}">
                     <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0
                                 {{ $hasEsign ? 'bg-green-500' : ($hasConfirmation ? 'bg-[#0049FF]' : 'bg-gray-300') }}">
@@ -351,6 +401,7 @@
                     </a>
                     @endif
                 </div>
+                @endif
 
                 {{-- Dokumen --}}
                 <div class="flex items-center gap-3 p-3 rounded-xl {{ $hasDocuments ? 'bg-green-50 border border-green-200' : 'bg-gray-50 border border-gray-200' }}">
@@ -437,7 +488,7 @@
                         </svg>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <div class="font-semibold text-sm text-orange-800">Surat Perjanjian</div>
+                        <div class="font-semibold text-sm text-orange-800">Dokumen Perjanjian — Sudah Ditandatangani</div>
                         <div class="text-xs text-orange-500">Ditandatangani</div>
                     </div>
                     <a href="{{ route('agreement.download') }}"

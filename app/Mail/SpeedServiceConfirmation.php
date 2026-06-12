@@ -76,6 +76,33 @@ class SpeedServiceConfirmation extends Mailable
 
     public function attachments(): array
     {
+        $esign = $this->log->subject;
+        if ($esign && $esign->path) {
+            try {
+                if (\Illuminate\Support\Facades\Storage::disk('local')->exists($esign->path)) {
+                    $fullPath = \Illuminate\Support\Facades\Storage::disk('local')->path($esign->path);
+                    return [
+                        \Illuminate\Mail\Mailables\Attachment::fromPath($fullPath)
+                            ->as('Dokumen_Perjanjian_Exata_Indonesia.pdf')
+                            ->withMime('application/pdf'),
+                    ];
+                } else {
+                    logger()->error("Attachment file not found on local disk", ['path' => $esign->path]);
+                    // Flag the missing file in SendEmailLog
+                    $this->log->update([
+                        'error_message' => trim(($this->log->error_message ?? '') . ' | Attachment file not found: ' . $esign->path, ' | ')
+                    ]);
+                }
+            } catch (\Throwable $e) {
+                logger()->error("Failed to attach file to email", [
+                    'exception' => $e->getMessage(),
+                    'path' => $esign->path,
+                ]);
+                $this->log->update([
+                    'error_message' => trim(($this->log->error_message ?? '') . ' | Failed to attach: ' . $e->getMessage(), ' | ')
+                ]);
+            }
+        }
         return [];
     }
 }

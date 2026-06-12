@@ -88,8 +88,8 @@ class EsignController extends Controller
 
         $documentHash = hash('sha256', $agreementHtml);
 
-        // Save to Database
-        ClientEsign::create([
+        // Save to Database with signed_at initially null to prevent observer race condition
+        $esign = ClientEsign::create([
             'client_id' => $client->id,
             'nik' => $request->nik,
             'address' => $request->address,
@@ -98,8 +98,39 @@ class EsignController extends Controller
             'user_agent' => $request->userAgent(),
             'document_hash' => $documentHash,
             'signature_data' => $request->signature_data,
-            'signed_at' => Carbon::now('Asia/Jakarta'),
+            'signed_at' => null,
         ]);
+
+        $pdfStored = false;
+        $pdfPath = 'esigns/' . $client->id . '_agreement.pdf';
+
+        try {
+            // Generate and save the PDF file
+            $pdfContent = ClientEsign::generatePdfForUser($user);
+            \Illuminate\Support\Facades\Storage::disk('local')->put($pdfPath, $pdfContent);
+            $pdfStored = true;
+        } catch (\Throwable $e) {
+            logger()->error("Failed to generate and store agreement PDF during sign store", [
+                'exception' => $e->getMessage(),
+                'client_id' => $client->id,
+            ]);
+        }
+
+        if ($pdfStored) {
+            $esign->update([
+                'disk' => 'local',
+                'path' => $pdfPath,
+                'stored_name' => basename($pdfPath),
+                'extension' => 'pdf',
+                'mime_type' => 'application/pdf',
+                'file_size' => \Illuminate\Support\Facades\Storage::disk('local')->size($pdfPath),
+                'signed_at' => Carbon::now('Asia/Jakarta'),
+            ]);
+        } else {
+            $esign->update([
+                'signed_at' => Carbon::now('Asia/Jakarta'),
+            ]);
+        }
 
         return redirect()->route('dashboard.index')->with('success', 'Perjanjian berhasil ditandatangani.');
     }
