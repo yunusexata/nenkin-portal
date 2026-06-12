@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -43,7 +44,8 @@ return new class extends Migration
         $table->string('password');
         $table->string('no_whatsapp')->nullable();
         $table->string('pic')->nullable();
-        $table->boolean('is_active')->default(false);
+        $table->boolean('is_active')->default(true);
+        $table->string('review_type')->default(User::REVIEW_TYPE_GOOGLE)->nullable();
         $table->datetime('email_verified_at')->nullable()->default(null);
         $table->rememberToken();
 

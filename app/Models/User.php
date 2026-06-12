@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\Service\EmailLogStatus;
 use App\Mail\ClientCreateUserMail;
 use App\Repositories\Service\SendEmailLogRepository;
+use App\Traits\Models\LowercaseAttributes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -16,7 +17,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, SoftDeletes, HasTrackHistory;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, SoftDeletes, HasTrackHistory, LowercaseAttributes;
 
     /**
      * The attributes that are mass assignable.
@@ -26,11 +27,12 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'client_id',
         'name',
-        'n_whatsapp',
+        'no_whatsapp',
         'email',
         'password',
         'pic',
-        'is_active'
+        'is_active',
+        'review_type',
 
     ];
 
@@ -53,6 +55,32 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+    protected array $lowercase = [
+        'pic',
+    ];
+
+    const PIC_AINUL = 'ainul';
+    const PIC_KIM = 'kim';
+    const PIC_SLAMET = 'slamet';
+
+    const PIC_CHOICE = [
+        self::PIC_AINUL => 'AINUL',
+        self::PIC_KIM => 'KIM',
+        self::PIC_SLAMET => 'SLAMET',
+    ];
+
+    const ROLE_SUPER_ADMIN = 'SUPERADMIN';
+    const ROLE_HS = 'HS';
+    const ROLE_SALES = 'SALES';
+    const ROLE_CLIENT = 'CLIENT';
+
+    const REVIEW_TYPE_RISET = 'riset';
+    const REVIEW_TYPE_GOOGLE = 'google';
+
+    const REVIEW_TYPE_CHOICE = [
+        self::REVIEW_TYPE_RISET => 'Pertanyaan Riset',
+        self::REVIEW_TYPE_GOOGLE => 'Google Review',
+    ];
 
     protected static function onBoot()
     {
@@ -71,10 +99,6 @@ class User extends Authenticatable implements MustVerifyEmail
             );
         });
     }
-
-    const ROLE_SUPER_ADMIN = 'SUPERADMIN';
-    const ROLE_HS = 'HS';
-    const ROLE_CLIENT = 'CLIENT';
 
     public function sendPasswordResetNotification($token)
     {

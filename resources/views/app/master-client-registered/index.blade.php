@@ -7,7 +7,7 @@
             <x-ui.button size="sm" variant="success" @click="$dispatch('export', { type: '{{ App\Helpers\ExportHelper::TYPE_EXCEL }}' })">Export Excel
             </x-ui.button>
         </div>
-        <livewire:master-client-speed.datatable />
+        <livewire:master-client-registered.datatable />
     </x-common.component-card>
  
 @endsection

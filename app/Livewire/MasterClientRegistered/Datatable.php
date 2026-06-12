@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\MasterClientSpeed;
+namespace App\Livewire\MasterClientRegistered;
 
 use App\Helpers\Alert;
 use App\Helpers\ExportHelper;
@@ -33,6 +33,7 @@ class Datatable extends Component
     public $batches = [];
 
     public $batch_name;
+    public $filter_claim_type;
 
     // Delete Dialog
     public $targetDeleteId;
@@ -254,12 +255,11 @@ class Datatable extends Component
             WHERE client_esigns.client_id = clients.id
         ) as esign_exists
     ")
-            ->whereIn('claim_type', [
-                Client::CLAIM_TYPE_SPEED,
-                Client::CLAIM_TYPE_ADJUSTMENT,
-            ])
             ->when($this->selectedBatch != 'all', function ($q) {
                 $q->where('source_file_name', $this->selectedBatch);
+            })
+            ->when($this->filter_claim_type, function ($q) {
+                $q->where('clients.claim_type', $this->filter_claim_type);
             });
     }
 
@@ -272,18 +272,17 @@ class Datatable extends Component
         }
     }
 
-
     #[On('export')]
     public function export($type)
     {
-        $fileName = "Data Client Speed " . Carbon::now()->format('Y-m-d H:i:s');
+        $fileName = "Data Client Registered " . Carbon::now()->format('Y-m-d H:i:s');
         return ExportHelper::export(
             $type,
             $fileName,
-            ClientRepository::getClientSpeed($this->batch_name),
-            'app.master-client-speed.export',
+            ClientRepository::getClientRegistered($this->batch_name, $this->filter_claim_type),
+            'app.master-client-registered.export',
             [
-                'title' => 'Data Client',
+                'title' => 'Data Client Registered',
                 'type' => $type,
             ],
             [
@@ -295,6 +294,6 @@ class Datatable extends Component
 
     public function getView(): string
     {
-        return 'livewire.master-client-speed.datatable';
+        return 'livewire.master-client-registered.datatable';
     }
 }

@@ -17,7 +17,7 @@ class ClientRepository extends MasterDataRepository
         return Client::query();
     }
 
-    public static function getMagicLink($batchName = null)
+    public static function getMagicLink($batchName = null, $claimType = null)
     {
         return Client::query()
             ->join('client_magic_links', 'client_magic_links.client_id', '=', 'clients.id')
@@ -26,18 +26,20 @@ class ClientRepository extends MasterDataRepository
             ->when($batchName, function ($q) use ($batchName) {
                 $q->where('clients.source_file_name', $batchName);
             })
+            ->when($claimType, function ($q) use ($claimType) {
+                $q->where('clients.claim_type', $claimType);
+            })
             ->select('clients.*');
     }
 
-    public static function getClientSpeed($batchName = null)
+    public static function getClientRegistered($batchName = null, $claimType = null)
     {
         return Client::query()
-            ->whereIn('claim_type', [
-                Client::CLAIM_TYPE_SPEED,
-                Client::CLAIM_TYPE_ADJUSTMENT,
-            ])
             ->when($batchName, function ($q) use ($batchName) {
                 $q->where('clients.source_file_name', $batchName);
+            })
+            ->when($claimType, function ($q) use ($claimType) {
+                $q->where('clients.claim_type', $claimType);
             })
             ->select('clients.*')
             ->selectRaw("

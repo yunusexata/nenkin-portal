@@ -18,8 +18,8 @@ class MenuHelper
             ],
             [
                 'icon' => 'dashboard',
-                'name' => 'Master Data Client Speed',
-                'path' => 'master_client_speed.index',
+                'name' => 'Master Client Registered',
+                'path' => 'master_client_registered.index',
             ],
             [
                 'icon' => 'dashboard',

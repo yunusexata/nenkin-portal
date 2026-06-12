@@ -4,6 +4,7 @@ namespace App\Livewire\Account\User;
 
 use Exception;
 use App\Helpers\Alert;
+use App\Models\User;
 use App\Repositories\Account\RoleRepository;
 use App\Repositories\Account\UserRepository;
 use Livewire\Component;
@@ -30,11 +31,13 @@ class Detail extends Component
 
     public $password;
 
+    public $review_type;
 
     public function mount()
     {
         $this->roles = RoleRepository::getIdAndNames()->pluck('name');
         $this->role = $this->roles[0];
+        $this->review_type = User::REVIEW_TYPE_GOOGLE;
 
         if ($this->objId) {
             $user = UserRepository::find($this->objId);
@@ -42,6 +45,7 @@ class Detail extends Component
             $this->name = $user->name;
             $this->email = $user->email;
             $this->role = $user->roles[0]->name;
+            $this->review_type = $user->review_type;
         }
     }
 
@@ -54,6 +58,7 @@ class Detail extends Component
 
         $this->name = "";
         $this->email = "";
+        $this->review_type = User::REVIEW_TYPE_GOOGLE;
         $this->role = $this->roles[0];
         $this->password = "";
     }
@@ -83,6 +88,11 @@ class Detail extends Component
             'name' => $this->name,
             'email' => $this->email,
         ];
+
+        if ($this->role === User::ROLE_SALES) {
+            $validatedData['review_type'] = $this->review_type;
+        }
+
         if (!empty($this->password)) {
             $validatedData['password'] = Hash::make($this->password);
         }

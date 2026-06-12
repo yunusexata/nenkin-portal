@@ -40,7 +40,7 @@
         </div>
 
         {{-- Role --}}
-        <div class="lg:col-span-3">
+        <div>
             <label class="mb-2.5 block text-sm font-medium text-dark dark:text-white">
                 Jabatan
             </label>
@@ -49,9 +49,9 @@
                 wire:model.blur="role"
                 class="w-full rounded-lg border border-stroke bg-transparent px-5 py-3 text-dark outline-none transition focus:border-primary dark:border-dark-3 dark:bg-dark-2 dark:text-white @error('role') border-danger @enderror"
             >
-                @foreach ($roles as $role)
-                    <option value="{{ $role }}">
-                        {{ $role }}
+                @foreach ($roles as $role_name)
+                    <option value="{{ $role_name }}">
+                        {{ $role_name }}
                     </option>
                 @endforeach
             </select>
@@ -87,6 +87,57 @@
                 </p>
             @enderror
         </div>
+        
+        @if ($role === App\Models\User::ROLE_SALES)
+            {{-- REVIEW TYPE --}}
+            <div>
+                <p class="mb-2.5 block text-sm font-medium text-dark dark:text-white">
+                    Jenis Review
+                </p>
+
+                <div class="space-y-3">
+                    <label class="flex cursor-pointer items-center text-sm font-medium text-gray-700 dark:text-gray-400">
+                        <input
+                            wire:model.live="review_type"
+                            type="radio"
+                            name="review_type"
+                            value="{{ App\Models\User::REVIEW_TYPE_GOOGLE }}"
+                            class="sr-only peer"
+                        >
+
+                        <div
+                            class="mr-3 flex h-5 w-5 items-center justify-center rounded-full border-[1.25px] border-gray-300 dark:border-gray-700 peer-checked:border-brand-500 peer-checked:bg-brand-500"
+                        >
+                            <div
+                                class="h-2 w-2 rounded-full bg-white opacity-0 peer-checked:opacity-100"
+                            ></div>
+                        </div>
+
+                        Google Review
+                    </label>
+
+                    <label class="flex cursor-pointer items-center text-sm font-medium text-gray-700 dark:text-gray-400">
+                        <input
+                            wire:model.live="review_type"
+                            type="radio"
+                            name="review_type"
+                            value="{{ App\Models\User::REVIEW_TYPE_RISET }}"
+                            class="sr-only peer"
+                        >
+
+                        <div
+                            class="mr-3 flex h-5 w-5 items-center justify-center rounded-full border-[1.25px] border-gray-300 dark:border-gray-700 peer-checked:border-brand-500 peer-checked:bg-brand-500"
+                        >
+                            <div
+                                class="h-2 w-2 rounded-full bg-white opacity-0 peer-checked:opacity-100"
+                            ></div>
+                        </div>
+
+                        Pertanyaan Riset
+                    </label>
+                </div>
+            </div>
+        @endif
 
     </div>
 

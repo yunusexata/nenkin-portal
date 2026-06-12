@@ -23,6 +23,7 @@ class ImportModal extends Component
 
     public $input_file;
     public $batch_name;
+    public $filter_claim_type;
 
     // Import Pipeline
     public $previewBulkStatusRows;
@@ -192,7 +193,7 @@ class ImportModal extends Component
         return ExportHelper::export(
             $type,
             $fileName,
-            ClientRepository::getMagicLink($this->batch_name),
+            ClientRepository::getMagicLink($this->batch_name, $this->filter_claim_type),
             'app.master-client.export',
             [
                 'title' => 'Data Client',

@@ -30,14 +30,17 @@
                 <th class="text-center">NO INPUT JPN</th>
                 <th class="text-center">NAMA</th>
                 <th class="text-center">TGL LAHIR</th>
-                <th class="text-center">Nama FB</th>
-                <th class="text-center">Nama IG</th>
+                <th class="text-center">NAMA FB</th>
+                <th class="text-center">NAMA IG</th>
                 <th class="text-center">NO TELP</th>
                 <th class="text-center">PIC</th>
                 <th class="text-center">LPK</th>
                 <th class="text-center">NOTE</th>
                 <th class="text-center">JENIS PENCAIRAN</th>
                 <th class="text-center">TANDA TANGAN</th>
+                <th class="text-center">POSISI SAAT INI</th>
+                <th class="text-center">BULAN RE ENTRY</th>
+                <th class="text-center">ALASAN RE ENTRY</th>
             </tr>
         </thead>
         <tbody>

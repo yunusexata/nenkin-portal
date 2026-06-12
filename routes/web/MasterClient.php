@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\MasterClient\ClientController;
 use App\Http\Controllers\MasterClient\MasterClientController;
-use App\Http\Controllers\MasterClient\MasterClientSpeedController;
+use App\Http\Controllers\MasterClient\MasterClientRegisteredController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'access_permission'])->group(function () {
@@ -12,7 +12,7 @@ Route::middleware(['auth', 'access_permission'])->group(function () {
         Route::get('{id}/edit', 'edit')->name('edit');
         Route::get('{id}/detail', 'detail')->name('detail');
     });
-    Route::group(["controller" => MasterClientSpeedController::class, "prefix" => "master_client_speed", "as" => "master_client_speed."], function () {
+    Route::group(["controller" => MasterClientRegisteredController::class, "prefix" => "master_client_registered", "as" => "master_client_registered."], function () {
         Route::get('/', 'index')->name('index');
         Route::get('{id}/edit', 'edit')->name('edit');
         Route::get('{id}/detail', 'detail')->name('detail');

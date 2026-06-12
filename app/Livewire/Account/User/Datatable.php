@@ -4,6 +4,7 @@ namespace App\Livewire\Account\User;
 
 use App\Helpers\Alert;
 use App\Helpers\PermissionHelper;
+use App\Models\User;
 use App\Repositories\Account\UserRepository;
 use App\Traits\Livewire\WithDatatable;
 use Carbon\Carbon;

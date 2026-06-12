@@ -34,7 +34,7 @@ class PermissionHelper
     // Form Gensen
     const ACCESS_IMPORT_DATA_JEPANG = 'import_data_jepang';
     const ACCESS_MASTER_CLIENT = 'master_client';
-    const ACCESS_MASTER_CLIENT_SPEED = 'master_client_speed';
+    const ACCESS_MASTER_CLIENT_REGISTERED = 'master_client_registered';
     const ACCESS_CLIENT = 'client';
     const ACCESS_CLIENT_FORM_CONFIRMATION = 'client_form_confirmation';
     const ACCESS_CLIENT_DOCUMENT = 'client_document';
@@ -51,7 +51,7 @@ class PermissionHelper
         // 
         self::ACCESS_IMPORT_DATA_JEPANG,
         self::ACCESS_MASTER_CLIENT,
-        self::ACCESS_MASTER_CLIENT_SPEED,
+        self::ACCESS_MASTER_CLIENT_REGISTERED,
         self::ACCESS_CLIENT,
         self::ACCESS_CLIENT_FORM_CONFIRMATION,
         self::ACCESS_CLIENT_DOCUMENT,
@@ -68,7 +68,7 @@ class PermissionHelper
         // 
         self::ACCESS_IMPORT_DATA_JEPANG => 'Import Data Jepang',
         self::ACCESS_MASTER_CLIENT => 'Master Data Klien',
-        self::ACCESS_MASTER_CLIENT_SPEED => 'Master Data Klien - Speed',
+        self::ACCESS_MASTER_CLIENT_REGISTERED => 'Master Klien - Registered',
         self::ACCESS_CLIENT => 'Master Data Klien',
         self::ACCESS_CLIENT_DOCUMENT => 'Document Klien',
         self::ACCESS_CLIENT_AGREEMENT => 'Surat Perjanjian Klien',
@@ -84,7 +84,7 @@ class PermissionHelper
 
         self::ACCESS_IMPORT_DATA_JEPANG => self::TYPE_ALL,
         self::ACCESS_MASTER_CLIENT => self::TYPE_ALL,
-        self::ACCESS_MASTER_CLIENT_SPEED => self::TYPE_ALL,
+        self::ACCESS_MASTER_CLIENT_REGISTERED => self::TYPE_ALL,
         self::ACCESS_CLIENT => self::TYPE_ALL,
         self::ACCESS_CLIENT_DOCUMENT => [self::TYPE_READ],
         self::ACCESS_CLIENT_AGREEMENT => [self::TYPE_READ],

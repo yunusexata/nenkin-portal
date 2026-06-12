@@ -28,6 +28,7 @@ class Datatable extends Component
 
     public $status;
     public $selectedBatch = 'all';
+    public $filter_claim_type;
     public $batches = [];
 
     // Delete Dialog
@@ -240,6 +241,13 @@ class Datatable extends Component
         ];
     }
 
+    public function updatedFilterClaimType($value)
+    {
+        $this->dispatch('modal-filter', [
+            'filter_claim_type' => $value,
+        ]);
+    }
+
     public function getQuery(): Builder
     {
         return \App\Models\Client\Client::query()
@@ -253,6 +261,9 @@ class Datatable extends Component
     ")
             ->when($this->selectedBatch != 'all', function ($q) {
                 $q->where('source_file_name', $this->selectedBatch);
+            })
+            ->when($this->filter_claim_type, function ($q) {
+                $q->where('clients.claim_type', $this->filter_claim_type);
             });
     }
 
