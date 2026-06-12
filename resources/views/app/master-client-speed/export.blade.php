@@ -30,9 +30,14 @@
                 <th class="text-center">NO INPUT JPN</th>
                 <th class="text-center">NAMA</th>
                 <th class="text-center">TGL LAHIR</th>
+                <th class="text-center">Nama FB</th>
+                <th class="text-center">Nama IG</th>
                 <th class="text-center">NO TELP</th>
                 <th class="text-center">PIC</th>
-                <th class="text-center">LINK</th>
+                <th class="text-center">LPK</th>
+                <th class="text-center">NOTE</th>
+                <th class="text-center">JENIS PENCAIRAN</th>
+                <th class="text-center">TANDA TANGAN</th>
             </tr>
         </thead>
         <tbody>
@@ -46,9 +51,14 @@
                         <td>{{ $data['no_jp'] }}</td>
                         <td>{{ $data['name'] }}</td>
                         <td>{{ $data['dob'] ? Carbon\Carbon::parse($data['dob'])->format('Ymd') : '' }}</td>
+                        <td>{{ $data['facebook'] }}</td>
+                        <td>{{ $data['instagram'] }}</td>
                         <td>{{ $data['phone'] }}</td>
                         <td>{{ $data['pic'] }}</td>
-                        <td>{{ route('client.create', $data->magicLink['token']) }}</td>
+                        <td>{{ $data['lpk'] }}</td>
+                        <td>{{ $data['note'] }}</td>
+                        <td>{{ $data['claim_type'] }}</td>
+                        <td>{{ $data['esign_exists'] ? 'Sudah' : 'Belum' }}</td>
                     </tr>
                 @endforeach
             @endif
