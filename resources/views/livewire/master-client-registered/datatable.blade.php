@@ -19,8 +19,8 @@
             </div>
         </div>
 
-        <div class="row flex justify-start">
-            <div class="w-auto">
+        <div class="row flex justify-start flex-wrap">
+            <div class="w-1/3">
                 <!-- Filter by Batch Dropdown Select -->
                 <div class="px-5 mb-5 sm:px-6">
                     <div class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Batch:</div>
@@ -35,7 +35,7 @@
                                 b.name.toLowerCase().includes(this.search.toLowerCase())
                             )
                         }
-                    }" @click.away="open = false" class="relative inline-block text-left w-full md:w-[350px]">
+                    }" @click.away="open = false" class="relative inline-block text-left w-full">
                         
                         {{-- Dropdown Trigger Button --}}
                         <div class="relative">
@@ -113,12 +113,12 @@
                     </div>
                 </div>
             </div>
-            <div class="w-auto">
+            <div class="w-1/3">
                 <!-- Filter by Batch Dropdown Select -->
                 <div class="px-5 mb-5 sm:px-6">
                     <div class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Jenis Pencairan</div>
                     
-                    <div class="w-full md:w-[350px]">
+                    <div class="w-full">
                         <select
                             wire:model.live="filter_claim_type"
                             class="h-[42px] w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 shadow-theme-xs focus:border-brand-500 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white"
@@ -129,6 +129,20 @@
                                 <option value="{{ $value }}">
                                     {{ $name }}
                                 </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="w-1/3">
+                <div class="px-5 mb-5 sm:px-6">
+                    <div class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Pilih PIC (Sales Agent)</div>
+                    
+                    <div class="w-full md:w-auto">
+                            <select wire:model.live="bulkPic" class="h-[42px] w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 shadow-theme-xs focus:border-brand-500 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white">
+                            <option value="">Select PIC...</option>
+                            @foreach(App\Models\User::PIC_CHOICE as $value => $name)
+                                <option value="{{ $value }}">{{ ucfirst($name) }}</option>
                             @endforeach
                         </select>
                     </div>

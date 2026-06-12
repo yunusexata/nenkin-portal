@@ -36,6 +36,14 @@ class ClientEsign extends Model
         'signed_at' => 'datetime',
     ];
 
+
+    protected static function onBoot()
+    {
+        self::created(function ($model) {
+            $model->client->update(['claim_type' => $model->client->confirmation->claim_type]);
+        });
+    }
+
     public function client()
     {
         return $this->belongsTo(Client::class);

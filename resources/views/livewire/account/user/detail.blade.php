@@ -98,10 +98,10 @@
                 <div class="space-y-3">
                     <label class="flex cursor-pointer items-center text-sm font-medium text-gray-700 dark:text-gray-400">
                         <input
-                            wire:model.live="review_type"
+                            wire:model.live="upod_type"
                             type="radio"
-                            name="review_type"
-                            value="{{ App\Models\User::REVIEW_TYPE_GOOGLE }}"
+                            name="upod_type"
+                            value="{{ App\Models\User::UPOD_TYPE_GOOGLE }}"
                             class="sr-only peer"
                         >
 
@@ -118,10 +118,10 @@
 
                     <label class="flex cursor-pointer items-center text-sm font-medium text-gray-700 dark:text-gray-400">
                         <input
-                            wire:model.live="review_type"
+                            wire:model.live="upod_type"
                             type="radio"
-                            name="review_type"
-                            value="{{ App\Models\User::REVIEW_TYPE_RISET }}"
+                            name="upod_type"
+                            value="{{ App\Models\User::UPOD_TYPE_RISET }}"
                             class="sr-only peer"
                         >
 

@@ -15,7 +15,7 @@
                 <p class="text-sm text-gray-500">Atur status target UPOD untuk masing-masing klien</p>
             </div>
             
-            <livewire:master-client.datatable :upodMode="true" />
+            <livewire:admin.review.datatable :upodMode="true" />
         </div>
     </div>
 @endsection

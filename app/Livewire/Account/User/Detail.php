@@ -31,13 +31,13 @@ class Detail extends Component
 
     public $password;
 
-    public $review_type;
+    public $upod_type;
 
     public function mount()
     {
         $this->roles = RoleRepository::getIdAndNames()->pluck('name');
         $this->role = $this->roles[0];
-        $this->review_type = User::REVIEW_TYPE_GOOGLE;
+        $this->upod_type = User::UPOD_TYPE_GOOGLE;
 
         if ($this->objId) {
             $user = UserRepository::find($this->objId);
@@ -45,7 +45,7 @@ class Detail extends Component
             $this->name = $user->name;
             $this->email = $user->email;
             $this->role = $user->roles[0]->name;
-            $this->review_type = $user->review_type;
+            $this->upod_type = $user->upod_type;
         }
     }
 
@@ -58,7 +58,7 @@ class Detail extends Component
 
         $this->name = "";
         $this->email = "";
-        $this->review_type = User::REVIEW_TYPE_GOOGLE;
+        $this->upod_type = User::UPOD_TYPE_GOOGLE;
         $this->role = $this->roles[0];
         $this->password = "";
     }
@@ -90,7 +90,7 @@ class Detail extends Component
         ];
 
         if ($this->role === User::ROLE_SALES) {
-            $validatedData['review_type'] = $this->review_type;
+            $validatedData['upod_type'] = $this->upod_type;
         }
 
         if (!empty($this->password)) {

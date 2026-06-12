@@ -197,7 +197,9 @@ class FormConfirmation extends Component
                 'nik' => $this->nik,
             ]);
 
-            $client_confirmation = ClientConfirmationRepository::create([
+            $client_confirmation = ClientConfirmation::firstOrCreate([
+                'client_id' => Auth::user()->client_id,
+            ], [
                 'client_id' => Auth::user()->client_id,
                 'nenkin_80_received_type' => $this->nenkin_80_received_type,
                 'current_position' => $this->current_position,

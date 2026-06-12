@@ -32,8 +32,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'pic',
         'is_active',
-        'review_type',
-        'upod_default_type',
+        'upod_type',
     ];
 
     /**
@@ -74,12 +73,12 @@ class User extends Authenticatable implements MustVerifyEmail
     const ROLE_SALES = 'SALES';
     const ROLE_CLIENT = 'CLIENT';
 
-    const REVIEW_TYPE_RISET = 'riset';
-    const REVIEW_TYPE_GOOGLE = 'google';
+    const UPOD_TYPE_RISET = 'riset';
+    const UPOD_TYPE_GOOGLE = 'google';
 
-    const REVIEW_TYPE_CHOICE = [
-        self::REVIEW_TYPE_RISET => 'Pertanyaan Riset',
-        self::REVIEW_TYPE_GOOGLE => 'Google Review',
+    const UPOD_TYPE_CHOICE = [
+        self::UPOD_TYPE_RISET => 'Riset Kepuasan',
+        self::UPOD_TYPE_GOOGLE => 'Google Review',
     ];
 
     protected static function onBoot()

@@ -45,7 +45,7 @@ return new class extends Migration
         $table->string('no_whatsapp')->nullable();
         $table->string('pic')->nullable();
         $table->boolean('is_active')->default(true);
-        $table->string('review_type')->default(User::REVIEW_TYPE_GOOGLE)->nullable();
+        $table->string('upod_type')->default(User::UPOD_TYPE_GOOGLE)->nullable();
         $table->datetime('email_verified_at')->nullable()->default(null);
         $table->rememberToken();
 

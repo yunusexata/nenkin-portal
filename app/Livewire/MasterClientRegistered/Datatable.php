@@ -31,6 +31,7 @@ class Datatable extends Component
     public $status;
     public $selectedBatch = 'all';
     public $batches = [];
+    public $bulkPic;
 
     public $batch_name;
     public $filter_claim_type;
@@ -241,6 +242,92 @@ class Datatable extends Component
                     return '<span class="bg-' . $style . '-50 dark:bg-' . $style . '-500/15 text-' . $style . '-700 dark:text-' . $style . '-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">' . strtoupper($text) . '</span>';
                 }
             ],
+            [
+                'searchable' => false,
+                'key' => 'confirmation_exists',
+                'name' => 'Form Konfirmasi',
+                'render' => function ($item) {
+                    $style = 'primary';
+                    $text = 'belum';
+                    switch ($item->confirmation_exists) {
+                        case true:
+                            $style = 'success';
+                            $text = 'sudah';
+                            break;
+                        case false:
+                            $style = 'warning';
+                            $text = 'belum';
+                            break;
+
+                        default:
+                            # code...
+                            break;
+                    }
+                    return '<span class="bg-' . $style . '-50 dark:bg-' . $style . '-500/15 text-' . $style . '-700 dark:text-' . $style . '-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">' . strtoupper($text) . '</span>';
+                }
+            ],
+            [
+                'key' => 'nenkin_80_received_type',
+                'name' => 'Status Penerimaan Nenkin 80%',
+            ],
+            [
+                'key' => 'current_position',
+                'name' => 'Posisi Saat Ini',
+            ],
+            [
+                'key' => 'back_typ_jp_type',
+                'name' => 'Rencana Kembali Ke Jepang',
+            ],
+            [
+                'key' => 'departure_type',
+                'name' => 'Estimasi Bulan Kembali Ke Jepang',
+            ],
+            [
+                'key' => 'departure_month',
+                'name' => 'Bulan Kembali Ke Jepang',
+                'render' => function ($item) {
+                    if (blank($item->departure_month)) {
+                        return '';
+                    }
+
+                    return Carbon::create()
+                        ->month((int) $item->departure_month)
+                        ->locale('id')
+                        ->translatedFormat('F');
+                }
+            ],
+            [
+                'key' => 'departure_year',
+                'name' => 'Tahun Kembali Ke Jepang',
+                'render' => fn($item) => $item->departure_year ?: '',
+            ],
+            [
+                'key' => 'estimated_return_month',
+                'name' => 'Bulan Kepulangan',
+                'render' => function ($item) {
+                    if (blank($item->estimated_return_month)) {
+                        return '';
+                    }
+
+                    return Carbon::create()
+                        ->month((int) $item->estimated_return_month)
+                        ->locale('id')
+                        ->translatedFormat('F');
+                }
+            ],
+            [
+                'key' => 'estimated_return_year',
+                'name' => 'Tahun Kepulangan',
+                'render' => fn($item) => $item->estimated_return_year ?: '',
+            ],
+            [
+                'key' => 'nik',
+                'name' => 'NIK',
+            ],
+            [
+                'key' => 'indonesia_address',
+                'name' => 'Alamat Indonesia',
+            ],
         ];
     }
 
@@ -253,10 +340,19 @@ class Datatable extends Component
             SELECT 1
             FROM client_esigns
             WHERE client_esigns.client_id = clients.id
-        ) as esign_exists
+        ) as esign_exists,
+        EXISTS (
+            SELECT 1
+            FROM client_confirmations
+            WHERE client_confirmations.client_id = clients.id
+        ) as confirmation_exists
     ")
+            ->whereHas('user')
             ->when($this->selectedBatch != 'all', function ($q) {
                 $q->where('source_file_name', $this->selectedBatch);
+            })
+            ->when($this->bulkPic, function ($q) {
+                $q->where('pic', strtolower($this->bulkPic));
             })
             ->when($this->filter_claim_type, function ($q) {
                 $q->where('clients.claim_type', $this->filter_claim_type);

@@ -4,6 +4,7 @@ namespace App\Models\Client;
 
 use App\Models\User;
 use App\Repositories\Client\ClientMagicLinkRepository;
+use App\Traits\Models\LowercaseAttributes;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,7 @@ use Muhammadyunus1072\TrackHistory\HasTrackHistory;
 class Client extends Model
 {
     // php artisan reverb:start
-    use HasFactory, SoftDeletes, HasTrackHistory;
+    use HasFactory, SoftDeletes, HasTrackHistory, LowercaseAttributes;
 
     protected $fillable = [
 
@@ -39,6 +40,13 @@ class Client extends Model
     ];
 
     protected $guarded = ['id'];
+
+    protected array $lowercase = [
+        'pic',
+    ];
+    protected array $uppercase = [
+        'name',
+    ];
 
     const STATUS_PENDING = 'pending';
     const STATUS_ACTIVE = 'active';
@@ -66,11 +74,22 @@ class Client extends Model
 
             ClientMagicLinkRepository::create($vlaidatedData);
         });
+        self::creating(function ($model) {
+            $pic = User::query()
+                ->where('pic', $model->pic)
+                ->role(User::ROLE_SALES)
+                ->first();
+            $model->upod_type = $pic->upod_type;
+        });
     }
 
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+    public function pic()
+    {
+        return $this->belongsTo(User::class, 'pic', 'pic')->role(User::ROLE_SALES);
     }
     public function magicLink()
     {

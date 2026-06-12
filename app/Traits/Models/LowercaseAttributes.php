@@ -11,7 +11,7 @@ trait LowercaseAttributes
             foreach ($model->lowercase ?? [] as $attribute) {
 
                 if (! is_null($model->{$attribute})) {
-                    $model->{$attribute} = mb_strtoupper($model->{$attribute});
+                    $model->{$attribute} = mb_strtolower($model->{$attribute});
                 }
             }
         });
