@@ -2,6 +2,7 @@
 
 namespace App\Models\Client;
 
+use App\Enums\Gensen\EmailLogStatus;
 use App\Models\User;
 use App\Repositories\Service\SendEmailLogRepository;
 use Carbon\Carbon;
@@ -27,6 +28,7 @@ class ClientConfirmation extends Model
         'estimated_return_year',
         'indonesia_address',
         'nik',
+        'claim_type',
     ];
 
     protected $guarded = ['id'];
@@ -60,7 +62,7 @@ class ClientConfirmation extends Model
 
     protected static function onBoot()
     {
-        self::created(function ($model) {
+        self::creating(function ($model) {
             if (
                 $model->current_position === ClientConfirmation::CURRENT_POSITION_INDONESIA &&
                 $model->back_to_jp_type === ClientConfirmation::BACK_TO_JP_TYPE_YES
@@ -71,9 +73,10 @@ class ClientConfirmation extends Model
                     $is_less_then_7_month
                 ) {
                     // if ($model->client) {
-                    $model->client()->update([
-                        'claim_type' => Client::CLAIM_TYPE_ADJUSTMENT
-                    ]);
+                    // $model->client()->update([
+                    //     'claim_type' => Client::CLAIM_TYPE_ADJUSTMENT
+                    // ]);
+                    $model->claim_type = Client::CLAIM_TYPE_ADJUSTMENT;
                     // }
                     // Alert::information($model, 'ADJUSMENT');
                 }
@@ -81,9 +84,11 @@ class ClientConfirmation extends Model
                     !$is_less_then_7_month
                 ) {
                     // if ($model->client) {
-                    $model->client()->update([
-                        'claim_type' => Client::CLAIM_TYPE_NORMAL
-                    ]);
+                    // $model->client()->update([
+                    //     'claim_type' => Client::CLAIM_TYPE_NORMAL
+                    // ]);
+
+                    $model->claim_type = Client::CLAIM_TYPE_NORMAL;
                     // }
                     // Alert::information($model, 'NORMAL');
                 }
@@ -94,9 +99,11 @@ class ClientConfirmation extends Model
                 $model->back_to_jp_type === ClientConfirmation::BACK_TO_JP_TYPE_NO
             ) {
                 // if ($model->client) {
-                $model->client()->update([
-                    'claim_type' => Client::CLAIM_TYPE_SPEED
-                ]);
+                // $model->client()->update([
+                //     'claim_type' => Client::CLAIM_TYPE_SPEED
+                // ]);
+
+                $model->claim_type = Client::CLAIM_TYPE_SPEED;
                 // }
                 // Alert::information($model, 'SPEED');
             }
@@ -104,13 +111,30 @@ class ClientConfirmation extends Model
                 $model->current_position === ClientConfirmation::CURRENT_POSITION_JEPANG
             ) {
                 // if ($model->client) {
-                $model->client()->update([
-                    'claim_type' => Client::CLAIM_TYPE_NORMAL
-                ]);
+                // $model->client()->update([
+                //     'claim_type' => Client::CLAIM_TYPE_NORMAL
+                // ]);
+
+                $model->claim_type = Client::CLAIM_TYPE_NORMAL;
                 // }
                 // Alert::information($model, 'SPEED');
             }
         });
+
+        // self::created(function ($model) {
+        //     SendEmailLogRepository::create(
+        //         [
+        //             'subject_type' => self::class,
+        //             'subject_id' => $model->id,
+        //             'data' => json_encode([], true),
+        //             'email' => $model->email,
+        //             'mailable' => ClientSubmitConfirmation::class,
+        //             'subject_line' => "Pembuatan Akun Berhasil",
+        //             'status' => EmailLogStatus::PENDING,
+        //             'queued_at' => now(),
+        //         ]
+        //     );
+        // });
     }
 
     public function client()

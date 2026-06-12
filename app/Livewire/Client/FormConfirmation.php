@@ -98,7 +98,7 @@ class FormConfirmation extends Component
             if (
                 $is_less_then_7_month
             ) {
-                $this->claim_type = 'ADJUSMENT';
+                $this->claim_type = 'NORMAL';
             }
             if (
                 !$is_less_then_7_month
@@ -111,7 +111,7 @@ class FormConfirmation extends Component
             $this->current_position === ClientConfirmation::CURRENT_POSITION_INDONESIA &&
             $this->back_to_jp_type === ClientConfirmation::BACK_TO_JP_TYPE_NO
         ) {
-            $this->claim_type = 'SPEED';
+            $this->claim_type = 'NORMAL';
         }
         if (
             $this->current_position === ClientConfirmation::CURRENT_POSITION_JEPANG
@@ -124,14 +124,53 @@ class FormConfirmation extends Component
     {
         $this->validate();
         try {
-            if ($this->current_position === ClientConfirmation::CURRENT_POSITION_JEPANG && !$this->estimated_return) {
-                throw new \Exception('Estimasi Kepulangan Harus Di isi');
+            if (
+                !$this->current_position
+            ) {
+                // throw new \Exception('Estimasi Kepulangan Harus Di isi');
+                $this->addError(
+                    'current_position',
+                    'Posisi Saat Ini Harus Diisi.'
+                );
+
+                return;
             }
-            if ($this->current_position === ClientConfirmation::CURRENT_POSITION_INDONESIA && !$this->back_to_jp_type) {
-                throw new \Exception('Rencara Kembali Harus Di isi');
+            if (
+                $this->current_position === ClientConfirmation::CURRENT_POSITION_JEPANG &&
+                !$this->estimated_return
+            ) {
+                // throw new \Exception('Estimasi Kepulangan Harus Di isi');
+                $this->addError(
+                    'estimated_return',
+                    'Estimasi Kepulangan Harus Diisi.'
+                );
+
+                return;
             }
-            if ($this->current_position === ClientConfirmation::CURRENT_POSITION_INDONESIA && $this->back_to_jp_type === ClientConfirmation::BACK_TO_JP_TYPE_YES && !$this->departure) {
-                throw new \Exception('Estimasi Kembali Ke Jepang Harus Di isi');
+            if (
+                $this->current_position === ClientConfirmation::CURRENT_POSITION_INDONESIA &&
+                !$this->back_to_jp_type
+            ) {
+                // throw new \Exception('Rencara Kembali Harus Di isi');
+                $this->addError(
+                    'back_to_jp_type',
+                    'Rencana Kembali Harus Diisi.'
+                );
+
+                return;
+            }
+            if (
+                $this->current_position === ClientConfirmation::CURRENT_POSITION_INDONESIA &&
+                $this->back_to_jp_type === ClientConfirmation::BACK_TO_JP_TYPE_YES &&
+                !$this->departure
+            ) {
+                // throw new \Exception('Estimasi Kembali Ke Jepang Harus Di isi');
+                $this->addError(
+                    'departure',
+                    'Estimasi Kembali Ke Jepang Harus Diisi.'
+                );
+
+                return;
             }
             DB::beginTransaction();
 
@@ -173,7 +212,11 @@ class FormConfirmation extends Component
 
             DB::commit();
 
-            Alert::information($this, 'Data berhasil disimpan');
+            if ($this->claim_type === Client::CLAIM_TYPE_NORMAL) {
+                Alert::success($this, 'Berhasil', 'Tipe Pencairan Nenkin Anda Adalah ' . strtoupper($this->claim_type));
+            } else {
+                Alert::information($this, 'Data Berhasil Disimpan');
+            }
         } catch (\Exception $e) {
             DB::rollBack();
             Alert::fail($this, "Gagal", $e->getMessage());

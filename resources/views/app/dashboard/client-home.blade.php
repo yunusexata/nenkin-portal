@@ -3,7 +3,7 @@
 @section('title', 'Dashboard Saya')
 
 @php
-    $hasConfirmation = (bool) $client->confirmation;
+    $hasConfirmation = (bool) ($client->confirmation?->claim_type === App\Models\Client\Client::CLAIM_TYPE_SPEED || $client->confirmation?->claim_type === App\Models\Client\Client::CLAIM_TYPE_ADJUSTMENT);
     $hasEsign        = (bool) $client->esign;
     $hasDocuments    = $documents->isNotEmpty();
     $hasReview       = (bool) $client->review;
