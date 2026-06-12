@@ -52,3 +52,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/documents/clients/search', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'searchClients'])->name('admin.documents.clients.search');
 });
 
+
+
+
