@@ -6,6 +6,7 @@ use App\Helpers\Alert;
 use App\Helpers\ExportHelper;
 use App\Helpers\PermissionHelper;
 use App\Models\Client\Client;
+use App\Models\Client\ClientConfirmation;
 use App\Models\GensenForm\GensenFormLink;
 use App\Repositories\Account\UserRepository;
 use App\Repositories\Client\ClientRepository;
@@ -269,14 +270,20 @@ class Datatable extends Component
             [
                 'key' => 'nenkin_80_received_type',
                 'name' => 'Status Penerimaan Nenkin 80%',
+                'render' => function ($item) {
+                    return ClientConfirmation::NENKIN_80_RECEIVED_TYPE_CHOICE[$item->nenkin_80_received_type];
+                }
             ],
             [
                 'key' => 'current_position',
                 'name' => 'Posisi Saat Ini',
             ],
             [
-                'key' => 'back_typ_jp_type',
+                'key' => 'back_to_jp_type',
                 'name' => 'Rencana Kembali Ke Jepang',
+                'render' => function ($item) {
+                    return ClientConfirmation::BACK_TO_JP_TYPE_CHOICE[$item->back_to_jp_type];
+                }
             ],
             [
                 'key' => 'departure_type',
@@ -334,7 +341,19 @@ class Datatable extends Component
     public function getQuery(): Builder
     {
         return \App\Models\Client\Client::query()
-            ->select('clients.*')
+            ->select(
+                'clients.*',
+                'cc.nenkin_80_received_type',
+                'cc.current_position',
+                'cc.back_to_jp_type',
+                'cc.departure_type',
+                'cc.departure_month',
+                'cc.departure_year',
+                'cc.estimated_return_month',
+                'cc.estimated_return_year',
+                'cc.nik',
+                'cc.indonesia_address',
+            )
             ->selectRaw("
         EXISTS (
             SELECT 1
@@ -347,6 +366,10 @@ class Datatable extends Component
             WHERE client_confirmations.client_id = clients.id
         ) as confirmation_exists
     ")
+            ->join('client_confirmations as cc', function ($j) {
+                $j->on('cc.client_id', '=', 'clients.id')
+                    ->whereNull('cc.deleted_at');
+            })
             ->whereHas('user')
             ->when($this->selectedBatch != 'all', function ($q) {
                 $q->where('source_file_name', $this->selectedBatch);
@@ -375,7 +398,7 @@ class Datatable extends Component
         return ExportHelper::export(
             $type,
             $fileName,
-            ClientRepository::getClientRegistered($this->batch_name, $this->filter_claim_type),
+            ClientRepository::getClientRegistered($this->batch_name, $this->filter_claim_type, $this->bulkPic),
             'app.master-client-registered.export',
             [
                 'title' => 'Data Client Registered',

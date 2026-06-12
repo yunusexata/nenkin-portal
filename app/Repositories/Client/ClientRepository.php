@@ -32,7 +32,7 @@ class ClientRepository extends MasterDataRepository
             ->select('clients.*');
     }
 
-    public static function getClientRegistered($batchName = null, $claimType = null)
+    public static function getClientRegistered($batchName = null, $claimType = null, $pic = null)
     {
         return Client::query()
             ->when($batchName, function ($q) use ($batchName) {
@@ -40,6 +40,9 @@ class ClientRepository extends MasterDataRepository
             })
             ->when($claimType, function ($q) use ($claimType) {
                 $q->where('clients.claim_type', $claimType);
+            })
+            ->when($pic, function ($q) use ($pic) {
+                $q->where('clients.pic', $pic);
             })
             ->select('clients.*')
             ->selectRaw("
