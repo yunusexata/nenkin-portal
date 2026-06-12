@@ -74,6 +74,15 @@ class ReviewForm extends Component
         // Submit review using Service
         $result = $reviewService->submitReview($client, $this->rating, $this->message);
 
+        // Record UPOD submission guard
+        \App\Models\UpodSubmission::updateOrCreate(
+            ['client_id' => $client->id],
+            [
+                'upod_type' => 'google_review',
+                'submitted_at' => now(),
+            ]
+        );
+
         $this->hasSubmitted = true;
         $this->submittedMessage = $result['message'];
         $this->redirectUrl = $result['redirect_url'];

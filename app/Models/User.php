@@ -33,7 +33,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'pic',
         'is_active',
         'review_type',
-
+        'upod_default_type',
     ];
 
     /**

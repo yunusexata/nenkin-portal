@@ -8,12 +8,22 @@
     $hasDocuments    = $documents->isNotEmpty();
     $hasReview       = (bool) $client->review;
 
-    // Popup trigger condition: all 3 required doc types present & no review yet
+    // Check resolved UPOD Type
+    $resolvedUpodType = $client->resolvedUpodType();
+
+    // Check submission guard
+    $hasSubmittedUpod = \App\Models\UpodSubmission::where('client_id', $client->id)->exists();
+
+    // Popup trigger condition: all 3 required doc types present
     $hasAllDocuments = $documents->has('ichijikin')
                     && $documents->has('resi')
                     && $documents->has('kwitansi');
 
-    $showReviewPopup = $hasAllDocuments && !$hasReview;
+    // Show Google Review Popup only if: has all docs, type is google_review, and not submitted yet
+    $showReviewPopup = $hasAllDocuments && !$hasSubmittedUpod && ($resolvedUpodType === 'google_review');
+
+    // Show Satisfaction Survey Popup only if: has all docs, type is satisfaction_survey, and not submitted yet
+    $showSurveyPopup = $hasAllDocuments && !$hasSubmittedUpod && ($resolvedUpodType === 'satisfaction_survey');
 @endphp
 
 @section('content')
@@ -142,6 +152,10 @@
     </div>
     {{-- /POPUP --}}
 
+    @if ($showSurveyPopup)
+        @livewire('client.satisfaction-survey')
+    @endif
+
     {{-- ═══════════════════════════════════════
          HEADER BAR
     ═══════════════════════════════════════ --}}
@@ -155,6 +169,7 @@
                 <div>
                     <div class="text-white font-bold text-sm leading-tight">Nenkin Portal</div>
                     <div class="text-[#D7D7D7] text-[10px] leading-tight">by Exata Indonesia</div>
+                    {{-- Brand shortform: legal name is PT Sumber Rezeki Exata Indonesia --}}
                 </div>
             </div>
 
@@ -469,7 +484,7 @@
                 </div>
                 <div>
                     <h3 class="font-extrabold text-[#001B5E] text-base">Proses Selesai!</h3>
-                    <p class="text-gray-500 text-xs mt-1">Terima kasih telah menggunakan layanan Nenkin Portal by Exata Indonesia.</p>
+                    <p class="text-gray-500 text-xs mt-1">Terima kasih telah menggunakan layanan Nenkin Portal by PT Sumber Rezeki Exata Indonesia.</p>
                 </div>
 
                 {{-- Stars --}}
@@ -489,7 +504,7 @@
 
         {{-- ═══════════════════════════════════════
              INFO BOX – Kontak CS
-        ═══════════════════════════════════════ --}}
+         ═══════════════════════════════════════ --}}
         <div class="bg-gradient-to-r from-[#001B5E] to-[#0049FF] rounded-2xl p-4 flex items-center gap-4 shadow-lg shadow-[#001B5E]/20">
             <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center flex-shrink-0">
                 <svg class="w-6 h-6 fill-white" viewBox="0 0 24 24">
@@ -500,7 +515,7 @@
                 <div class="text-white font-bold text-sm">Butuh Bantuan?</div>
                 <div class="text-white/70 text-xs">Hubungi CS kami via WhatsApp</div>
             </div>
-            <a href="https://wa.me/6281312345678"
+            <a href="https://wa.me/{{ config('exata.admin_wa_number') }}"
                id="btn-wa-cs"
                target="_blank"
                class="flex-shrink-0 flex items-center gap-1.5 bg-[#FF4800] hover:bg-[#e03e00] text-white text-xs font-bold px-3 py-2 rounded-xl transition-all active:scale-95">
@@ -513,7 +528,7 @@
 
         {{-- Footer --}}
         <div class="text-center text-xs text-gray-400 py-4">
-            &copy; {{ date('Y') }} PT Exata Indonesia Group. Seluruh hak dilindungi.
+            &copy; {{ date('Y') }} PT Sumber Rezeki Exata Indonesia. Seluruh hak dilindungi.
         </div>
 
     </div>{{-- /max-w-lg --}}
@@ -535,7 +550,7 @@
             }
 
             // Reload after confirmation save
-            if (title === 'Data berhasil disimpan') {
+            if (title === 'Data berhasil disimpan' || title === 'Survei Terkirim') {
                 setTimeout(() => { location.reload(); }, 1600);
             }
         });

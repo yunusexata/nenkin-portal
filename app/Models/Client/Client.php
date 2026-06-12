@@ -35,6 +35,7 @@ class Client extends Model
         'pic',
         'lpk',
         'note',
+        'upod_type',
     ];
 
     protected $guarded = ['id'];
@@ -94,5 +95,32 @@ class Client extends Model
     public function documents()
     {
         return $this->hasMany(\App\Models\Document::class);
+    }
+    public function upodSubmission()
+    {
+        return $this->hasOne(\App\Models\UpodSubmission::class);
+    }
+    public function upodSurveyResponse()
+    {
+        return $this->hasOne(\App\Models\UpodSurveyResponse::class);
+    }
+    public function resolvedUpodType(?array $picMappings = null): string
+    {
+        if ($this->upod_type) {
+            return $this->upod_type;
+        }
+
+        if ($this->pic) {
+            $picKey = strtolower($this->pic);
+            if ($picMappings && array_key_exists($picKey, $picMappings)) {
+                return $picMappings[$picKey] ?? 'google_review';
+            }
+            $sales = User::where('pic', $picKey)->first();
+            if ($sales && $sales->upod_default_type) {
+                return $sales->upod_default_type;
+            }
+        }
+
+        return 'google_review';
     }
 }

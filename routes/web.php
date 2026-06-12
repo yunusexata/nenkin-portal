@@ -51,3 +51,4 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/documents/failures/{id}/resolve', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'resolveFailure'])->name('admin.documents.failures.resolve');
     Route::get('/admin/documents/clients/search', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'searchClients'])->name('admin.documents.clients.search');
 });
+

@@ -34,6 +34,12 @@ class Datatable extends Component
     // Delete Dialog
     public $targetDeleteId;
 
+    // UPOD Control Panel fields
+    public bool $upodMode = false;
+    public $bulkPic;
+    public $bulkUpodType;
+    public $pics = [];
+
     public function selectBatch($batchName)
     {
         $this->selectedBatch = $batchName;
@@ -63,6 +69,59 @@ class Datatable extends Component
         $this->isCanUpdate = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_IMPORT_DATA_JEPANG, PermissionHelper::TYPE_UPDATE));
         $this->isCanDelete = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_IMPORT_DATA_JEPANG, PermissionHelper::TYPE_DELETE));
         $this->loadBatches();
+
+        $this->pics = \App\Models\User::whereNotNull('pic')
+            ->where('pic', '!=', '')
+            ->distinct()
+            ->pluck('pic')
+            ->map(fn($item) => strtolower($item))
+            ->unique()
+            ->toArray();
+    }
+
+    public function changeClientOverride($clientId, $type)
+    {
+        $client = Client::findOrFail($clientId);
+        $client->upod_type = $type === 'default' ? null : $type;
+        $client->save();
+
+        Alert::success($this, 'Berhasil', 'Override UPOD klien berhasil diperbarui.');
+    }
+
+    public function applyBulkUpodType()
+    {
+        if (empty($this->bulkPic) || empty($this->bulkUpodType)) {
+            Alert::fail($this, 'Gagal', 'Silakan pilih PIC dan tipe UPOD terlebih dahulu.');
+            return;
+        }
+
+        $pic = strtolower($this->bulkPic);
+        $users = \App\Models\User::where('pic', $pic)->get();
+        
+        if ($users->isEmpty()) {
+            Alert::fail($this, 'Gagal', 'Tidak ada user dengan PIC: ' . $this->bulkPic);
+            return;
+        }
+
+        foreach ($users as $user) {
+            $user->upod_default_type = $this->bulkUpodType;
+            $user->save(); // maintains track history
+        }
+
+        Alert::success($this, 'Berhasil', 'Default UPOD untuk PIC ' . $this->bulkPic . ' berhasil diperbarui.');
+    }
+
+    public function resetUpodSubmission($clientId)
+    {
+        $client = Client::findOrFail($clientId);
+        
+        // Delete submission guard
+        \App\Models\UpodSubmission::where('client_id', $clientId)->delete();
+        
+        // Delete survey response if any
+        \App\Models\UpodSurveyResponse::where('client_id', $clientId)->delete();
+
+        Alert::success($this, 'Berhasil', 'Status pengisian UPOD untuk klien ' . $client->name . ' berhasil direset.');
     }
 
     #[On('on-delete-dialog-confirm')]
@@ -115,6 +174,106 @@ class Datatable extends Component
 
     public function getColumns(): array
     {
+        if ($this->upodMode) {
+            return [
+                [
+                    'key' => 'no_jp',
+                    'name' => 'No Input JPN',
+                    'render' => function ($item) {
+                        return '<span class="font-mono text-gray-900 dark:text-white">' . $item->no_jp . '</span>';
+                    }
+                ],
+                [
+                    'key' => 'name',
+                    'name' => 'Nama',
+                    'render' => function ($item) {
+                        return '<span class="font-semibold text-gray-900 dark:text-white">' . $item->name . '</span>';
+                    }
+                ],
+                [
+                    'key' => 'pic',
+                    'name' => 'PIC',
+                    'render' => function ($item) {
+                        return '<span class="text-gray-600 dark:text-gray-400">' . ($item->pic ? ucfirst($item->pic) : '-') . '</span>';
+                    }
+                ],
+                [
+                    'key' => 'upod_resolved',
+                    'name' => 'UPOD Terpilih',
+                    'searchable' => false,
+                    'render' => function ($item) {
+                        static $picMappings = null;
+                        if ($picMappings === null) {
+                            $picMappings = \App\Models\User::whereNotNull('pic')
+                                ->where('pic', '!=', '')
+                                ->pluck('upod_default_type', 'pic')
+                                ->mapWithKeys(fn($val, $key) => [strtolower($key) => $val])
+                                ->toArray();
+                        }
+                        $resolved = $item->resolvedUpodType($picMappings);
+                        $style = $resolved === 'google_review' ? 'indigo' : 'purple';
+                        $label = $resolved === 'google_review' ? 'Google Review' : 'Riset Kepuasan';
+                        return '<span class="px-2 py-1 bg-' . $style . '-50 text-' . $style . '-700 text-[11px] font-bold rounded-md border border-' . $style . '-100 dark:bg-' . $style . '-500/15 dark:text-' . $style . '-400 dark:border-' . $style . '-500/30">' . $label . '</span>';
+                    }
+                ],
+                [
+                    'key' => 'upod_type',
+                    'name' => 'Override Klien',
+                    'render' => function ($item) {
+                        $selectedDefault = is_null($item->upod_type) ? 'selected' : '';
+                        $selectedGoogle = $item->upod_type === 'google_review' ? 'selected' : '';
+                        $selectedSurvey = $item->upod_type === 'satisfaction_survey' ? 'selected' : '';
+                        return '
+                            <select wire:change="changeClientOverride(' . $item->id . ', $event.target.value)" class="text-[12px] border-slate-200 rounded py-1 pl-2 pr-6 bg-transparent focus:ring-primary focus:border-primary dark:border-gray-700 dark:bg-gray-900 dark:text-white">
+                                <option value="default" ' . $selectedDefault . '>Default</option>
+                                <option value="google_review" ' . $selectedGoogle . '>Google Review</option>
+                                <option value="satisfaction_survey" ' . $selectedSurvey . '>Riset Kepuasan</option>
+                            </select>
+                        ';
+                    }
+                ],
+                [
+                    'key' => 'upod_submitted',
+                    'name' => 'Status',
+                    'searchable' => false,
+                    'class' => 'text-center',
+                    'render' => function ($item) {
+                        if ($item->upod_submitted) {
+                            return '
+                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100 dark:bg-emerald-500/15 dark:text-emerald-400 dark:border-emerald-500/30">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                    COMPLETED
+                                </span>
+                            ';
+                        }
+                        return '
+                            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-100 dark:bg-amber-500/15 dark:text-amber-400 dark:border-amber-500/30">
+                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                                PENDING
+                            </span>
+                        ';
+                    }
+                ],
+                [
+                    'key' => 'action',
+                    'name' => 'Aksi',
+                    'searchable' => false,
+                    'class' => 'text-right',
+                    'render' => function ($item) {
+                        if ($item->upod_submitted) {
+                            return '
+                                <button wire:click="resetUpodSubmission(' . $item->id . ')" class="text-rose-500 hover:text-rose-700 font-bold text-label-md transition-colors flex items-center gap-1 ml-auto">
+                                    <span class="material-symbols-outlined text-[16px]">restart_alt</span>
+                                    Reset UPOD
+                                </button>
+                            ';
+                        }
+                        return '<span class="text-slate-300 text-label-md dark:text-gray-600">None</span>';
+                    }
+                ],
+            ];
+        }
+
         return [
             // [
             //     'name' => 'Action',
@@ -253,12 +412,17 @@ class Datatable extends Component
         return \App\Models\Client\Client::query()
             ->select('clients.*')
             ->selectRaw("
-        EXISTS (
-            SELECT 1
-            FROM users
-            WHERE users.client_id = clients.id
-        ) as user_exists
-    ")
+                EXISTS (
+                    SELECT 1
+                    FROM users
+                    WHERE users.client_id = clients.id
+                ) as user_exists,
+                EXISTS (
+                    SELECT 1
+                    FROM upod_submissions
+                    WHERE upod_submissions.client_id = clients.id
+                ) as upod_submitted
+            ")
             ->when($this->selectedBatch != 'all', function ($q) {
                 $q->where('source_file_name', $this->selectedBatch);
             })

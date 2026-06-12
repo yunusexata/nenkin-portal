@@ -99,7 +99,7 @@
         <div class="content">
             <div class="greeting">Halo {{ $user->name }},</div>
 
-            <p>Kami menerima permintaan untuk mereset password akun Anda di <strong>Exata Indonesia</strong>. Silakan klik tombol di bawah ini untuk melanjutkan proses reset password:</p>
+            <p>Kami menerima permintaan untuk mereset password akun Anda di <strong>PT Sumber Rezeki Exata Indonesia</strong>. Silakan klik tombol di bawah ini untuk melanjutkan proses reset password:</p>
 
             <div class="btn-container">
                 <a target="_blank"
@@ -119,13 +119,13 @@
             <div class="signature">
                 Terima kasih atas kerja sama Anda.<br><br>
                 Best Regards,<br>
-                <strong>Tim Exata Indonesia</strong>
+                <strong>Tim PT Sumber Rezeki Exata Indonesia</strong>
             </div>
         </div>
 
         <!-- Footer -->
         <div class="footer">
-            &copy; {{ date('Y') }} Exata Indonesia. All Rights Reserved.
+            &copy; {{ date('Y') }} PT Sumber Rezeki Exata Indonesia. All Rights Reserved.
         </div>
     </div>
 </body>

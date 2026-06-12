@@ -36,7 +36,7 @@ class ReviewService
         ];
 
         if ($status === 'intercepted') {
-            $adminWaNumber = env('ADMIN_WA_NUMBER', '');
+            $adminWaNumber = config('exata.admin_wa_number');
             
             // Format: Review dari {nama_klien} | Rating: {rating}/5 | Pesan: {pesan}
             $text = "Review dari {$client->name} | Rating: {$rating}/5 | Pesan: " . ($message ?? '-');
