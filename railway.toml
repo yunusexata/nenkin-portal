@@ -3,7 +3,7 @@ builder = "railpack"
 # Trigger rebuild comment
 
 [deploy]
-startCommand = "cp /app/bootstrap/public-index.php /app/public/index.php && php artisan config:cache && php artisan route:cache && php artisan view:cache && frankenphp run --config /app/Caddyfile"
+startCommand = "chmod +x /app/railway/run-worker.sh && /app/railway/run-worker.sh & cp /app/bootstrap/public-index.php /app/public/index.php && php artisan config:cache && php artisan route:cache && php artisan view:cache && frankenphp run --config /app/Caddyfile"
 healthcheckPath = "/up"
 healthcheckTimeout = 60
 restartPolicyType = "on_failure"
