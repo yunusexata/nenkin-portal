@@ -26,7 +26,7 @@
             </tr>
             <tr>
                 <td>Jabatan</td>
-                <td>: Pimpinan Exata Indonesia</td>
+                <td>: Pimpinan PT Sumber Rezeki Exata Indonesia</td>
             </tr>
         </table>
         <p>(selanjutnya disebut “Pihak Pertama”)</p>
@@ -93,7 +93,7 @@
             <h4 class="font-bold uppercase mb-16 text-xs sm:text-base">PIHAK PERTAMA</h4>
             <div class="mt-2">
                 <p class="font-bold underline">Novi Prayitno Setiawan</p>
-                <p class="text-sm">Pimpinan Exata Indonesia</p>
+                <p class="text-sm">Pimpinan PT Sumber Rezeki Exata Indonesia</p>
             </div>
         </div>
         <div class="text-center">

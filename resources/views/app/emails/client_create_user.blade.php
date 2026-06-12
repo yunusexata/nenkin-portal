@@ -99,7 +99,7 @@
         <div class="content">
             <div class="greeting">Halo {{ $form->name }},</div>
 
-            <p>Terima kasih telah mempercayakan pengajuan Nenkin Anda kepada <strong>Exata Indonesia</strong>. Kami menginformasikan bahwa data Anda telah berhasil kami terima dalam sistem kami.</p>
+            <p>Terima kasih telah mempercayakan pengajuan Nenkin Anda kepada <strong>PT Sumber Rezeki Exata Indonesia</strong>. Kami menginformasikan bahwa data Anda telah berhasil kami terima dalam sistem kami.</p>
 
             <div class="success-box">
                 <strong>Apa langkah selanjutnya?</strong><br>
@@ -121,13 +121,13 @@
             <div class="signature">
                 Terima kasih atas kerja sama Anda.<br><br>
                 Best Regards,<br>
-                <strong>Tim Exata Indonesia</strong>
+                <strong>Tim PT Sumber Rezeki Exata Indonesia</strong>
             </div>
         </div>
 
         <!-- Footer -->
         <div class="footer">
-            &copy; {{ date('Y') }} Exata Indonesia. All Rights Reserved.
+            &copy; {{ date('Y') }} PT Sumber Rezeki Exata Indonesia. All Rights Reserved.
         </div>
     </div>
 </body>

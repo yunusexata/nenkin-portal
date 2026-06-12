@@ -70,6 +70,7 @@
             <div x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen" class="flex flex-col leading-tight">
                 <span class="text-brand-navy dark:text-white font-bold text-lg tracking-tight">Nenkin Portal</span>
                 <span class="text-gray-500 dark:text-brand-gray text-xs font-normal">by Exata Indonesia</span>
+                {{-- Brand shortform: legal name is PT Sumber Rezeki Exata Indonesia --}}
             </div>
             
             <!-- Collapsed Logo (NP Badge) -->

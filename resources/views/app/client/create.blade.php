@@ -14,7 +14,7 @@
         @livewire('client.create-user', ['token' => $token])
 
         <div class="text-center text-xs text-gray-500 mt-6">
-            &copy; 2026 PT Exata Indonesia Group. Seluruh Hak Cipta Dilindungi.
+            &copy; 2026 PT Sumber Rezeki Exata Indonesia. Seluruh Hak Cipta Dilindungi.
         </div>
     </div>
     </x-common.component-card>

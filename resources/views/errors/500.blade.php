@@ -30,7 +30,7 @@
       
       <!-- Footer -->
       <p class="absolute text-xs text-center text-gray-500 -translate-x-1/2 bottom-6 left-1/2 dark:text-gray-400">
-          &copy; {{ $currentYear }} PT Exata Indonesia Group. Seluruh hak dilindungi.
+          &copy; {{ $currentYear }} PT Sumber Rezeki Exata Indonesia. Seluruh hak dilindungi.
       </p>
   </div>
 @endsection

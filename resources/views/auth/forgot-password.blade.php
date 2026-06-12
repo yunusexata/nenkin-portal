@@ -61,7 +61,7 @@
              </div>
 
              @php
-                 $waNumber = env('ADMIN_WA_NUMBER', '0812-2841-7051');
+                 $waNumber = config('exata.admin_wa_number');
                  $waLink = preg_replace('/[^0-9]/', '', $waNumber);
                  if (strpos($waLink, '0') === 0) {
                      $waLink = '62' . substr($waLink, 1);
@@ -72,6 +72,7 @@
                      <div class="mb-6">
                          <h1 class="text-white font-black text-5xl tracking-tight uppercase">Nenkin Portal</h1>
                          <p class="text-[#0049FF] font-bold text-lg mt-1">by Exata Indonesia</p>
+                         {{-- Brand shortform: legal name is PT Sumber Rezeki Exata Indonesia --}}
                      </div>
                      
                      <p class="text-white text-base leading-relaxed mb-12">
