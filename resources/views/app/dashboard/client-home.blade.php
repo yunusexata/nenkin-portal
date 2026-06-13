@@ -530,7 +530,7 @@
                 <h2 class="font-bold text-[#001B5E] text-sm">Berikan Ulasan</h2>
             </div>
             <div class="p-4">
-                @if ($client->upod_type === App\Models\USER::UPOD_TYPE_GOOLE)
+                @if ($client->upod_type === App\Models\USER::UPOD_TYPE_GOOGLE)
                     <livewire:client.review-form />
                 @else
                     <livewire:client.satisfaction-survey />
