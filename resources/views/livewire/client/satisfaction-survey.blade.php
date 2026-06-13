@@ -1,4 +1,5 @@
 <div x-data="{ open: @entangle('showSurvey') }" x-show="open" class="fixed inset-0 z-50 overflow-y-auto" style="display: none;">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <!-- Backdrop -->
     <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"></div>
 
@@ -37,14 +38,14 @@
 
                 <!-- Step 1: Kecepatan Layanan -->
                 @if ($step === 1)
-                    <div>
+                    <div wire:key="step-container-1">
                         <h4 class="text-base font-bold text-slate-900 dark:text-white mb-4 leading-snug">
                             1. Seberapa puas Anda dengan kecepatan layanan kami?
                         </h4>
                         <div class="space-y-2">
-                            @foreach(['Sangat Puas', 'Puas', 'Cukup Puas', 'Tidak Puas'] as $option)
-                                <label class="flex items-center p-3 rounded-xl border border-gray-200 dark:border-slate-800 cursor-pointer transition hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                                    <input type="radio" wire:model="responses.q1" value="{{ $option }}" class="text-brand-500 focus:ring-brand-500 mr-3 border-gray-300 dark:border-slate-700 dark:bg-slate-900">
+                            @foreach(['Sangat Puas', 'Puas', 'Cukup Puas', 'Tidak Puas'] as $index => $option)
+                                <label wire:key="step-1-option-{{ $index }}" class="flex items-center p-3 rounded-xl border border-gray-200 dark:border-slate-800 cursor-pointer transition hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="radio" name="q1" wire:model.live="responses.q1" value="{{ $option }}" class="text-brand-500 focus:ring-brand-500 mr-3 border-gray-300 dark:border-slate-700 dark:bg-slate-900">
                                     <span class="text-sm text-slate-700 dark:text-slate-300 font-medium">{{ $option }}</span>
                                 </label>
                             @endforeach
@@ -54,14 +55,14 @@
 
                 <!-- Step 2: Keramahan Staff -->
                 @if ($step === 2)
-                    <div>
+                    <div wire:key="step-container-2">
                         <h4 class="text-base font-bold text-slate-900 dark:text-white mb-4 leading-snug">
                             2. Seberapa puas Anda dengan keramahan dan responsifitas staff kami?
                         </h4>
                         <div class="space-y-2">
-                            @foreach(['Sangat Puas', 'Puas', 'Cukup Puas', 'Tidak Puas'] as $option)
-                                <label class="flex items-center p-3 rounded-xl border border-gray-200 dark:border-slate-800 cursor-pointer transition hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                                    <input type="radio" wire:model="responses.q2" value="{{ $option }}" class="text-brand-500 focus:ring-brand-500 mr-3 border-gray-300 dark:border-slate-700 dark:bg-slate-900">
+                            @foreach(['Sangat Puas', 'Puas', 'Cukup Puas', 'Tidak Puas'] as $index => $option)
+                                <label wire:key="step-2-option-{{ $index }}" class="flex items-center p-3 rounded-xl border border-gray-200 dark:border-slate-800 cursor-pointer transition hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="radio" name="q2" wire:model.live="responses.q2" value="{{ $option }}" class="text-brand-500 focus:ring-brand-500 mr-3 border-gray-300 dark:border-slate-700 dark:bg-slate-900">
                                     <span class="text-sm text-slate-700 dark:text-slate-300 font-medium">{{ $option }}</span>
                                 </label>
                             @endforeach
@@ -71,14 +72,14 @@
 
                 <!-- Step 3: Kejelasan Informasi -->
                 @if ($step === 3)
-                    <div>
+                    <div wire:key="step-container-3">
                         <h4 class="text-base font-bold text-slate-900 dark:text-white mb-4 leading-snug">
                             3. Apakah informasi yang kami berikan cukup jelas dan mudah dipahami?
                         </h4>
                         <div class="space-y-2">
-                            @foreach(['Sangat Jelas', 'Jelas', 'Cukup Jelas', 'Tidak Jelas'] as $option)
-                                <label class="flex items-center p-3 rounded-xl border border-gray-200 dark:border-slate-800 cursor-pointer transition hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                                    <input type="radio" wire:model="responses.q3" value="{{ $option }}" class="text-brand-500 focus:ring-brand-500 mr-3 border-gray-300 dark:border-slate-700 dark:bg-slate-900">
+                            @foreach(['Sangat Jelas', 'Jelas', 'Cukup Jelas', 'Tidak Jelas'] as $index => $option)
+                                <label wire:key="step-3-option-{{ $index }}" class="flex items-center p-3 rounded-xl border border-gray-200 dark:border-slate-800 cursor-pointer transition hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="radio" name="q3" wire:model.live="responses.q3" value="{{ $option }}" class="text-brand-500 focus:ring-brand-500 mr-3 border-gray-300 dark:border-slate-700 dark:bg-slate-900">
                                     <span class="text-sm text-slate-700 dark:text-slate-300 font-medium">{{ $option }}</span>
                                 </label>
                             @endforeach
@@ -88,17 +89,17 @@
 
                 <!-- Step 4: Rekomendasi (Q4) -->
                 @if ($step === 4)
-                    <div>
+                    <div wire:key="step-container-4">
                         <h4 class="text-base font-bold text-slate-900 dark:text-white mb-4 leading-snug">
                             4. Apakah Anda bersedia merekomendasikan layanan kami kepada rekan atau keluarga Anda?
                         </h4>
                         <div class="grid grid-cols-2 gap-3">
-                            <label class="flex flex-col items-center justify-center p-4 rounded-xl border-2 border-gray-200 dark:border-slate-800 cursor-pointer transition hover:border-brand-500">
-                                <input type="radio" wire:model="responses.q4" value="Ya" class="text-brand-500 focus:ring-brand-500 mb-2 border-gray-300 dark:border-slate-700 dark:bg-slate-900">
+                            <label wire:key="step-4-option-ya" class="flex flex-col items-center justify-center p-4 rounded-xl border-2 border-gray-200 dark:border-slate-800 cursor-pointer transition hover:border-brand-500">
+                                <input type="radio" name="q4" wire:model.live="responses.q4" value="Ya" class="text-brand-500 focus:ring-brand-500 mb-2 border-gray-300 dark:border-slate-700 dark:bg-slate-900">
                                 <span class="text-sm text-slate-700 dark:text-slate-300 font-bold">Ya</span>
                             </label>
-                            <label class="flex flex-col items-center justify-center p-4 rounded-xl border-2 border-gray-200 dark:border-slate-800 cursor-pointer transition hover:border-brand-500">
-                                <input type="radio" wire:model="responses.q4" value="Tidak" class="text-brand-500 focus:ring-brand-500 mb-2 border-gray-300 dark:border-slate-700 dark:bg-slate-900">
+                            <label wire:key="step-4-option-tidak" class="flex flex-col items-center justify-center p-4 rounded-xl border-2 border-gray-200 dark:border-slate-800 cursor-pointer transition hover:border-brand-500">
+                                <input type="radio" name="q4" wire:model.live="responses.q4" value="Tidak" class="text-brand-500 focus:ring-brand-500 mb-2 border-gray-300 dark:border-slate-700 dark:bg-slate-900">
                                 <span class="text-sm text-slate-700 dark:text-slate-300 font-bold">Tidak</span>
                             </label>
                         </div>
@@ -107,7 +108,7 @@
 
                 <!-- Step 5: Alasan Rekomendasi (Q5 - Kondisional jika Q4 = Ya) -->
                 @if ($step === 5)
-                    <div>
+                    <div wire:key="step-container-5">
                         <h4 class="text-base font-bold text-slate-900 dark:text-white mb-2 leading-snug">
                             5. Apa alasan utama Anda bersedia merekomendasikan kami?
                         </h4>
@@ -118,7 +119,7 @@
 
                 <!-- Step 6: Saran Perbaikan (Q6 - Kondisional jika Q4 = Ya) -->
                 @if ($step === 6)
-                    <div>
+                    <div wire:key="step-container-6">
                         <h4 class="text-base font-bold text-slate-900 dark:text-white mb-2 leading-snug">
                             6. Apakah ada saran agar layanan kami bisa lebih baik lagi?
                         </h4>
@@ -129,14 +130,14 @@
 
                 <!-- Step 7: Kualitas Portal Nenkin -->
                 @if ($step === 7)
-                    <div>
+                    <div wire:key="step-container-7">
                         <h4 class="text-base font-bold text-slate-900 dark:text-white mb-4 leading-snug">
                             7. Bagaimana pengalaman Anda menggunakan Portal Online Nenkin ini?
                         </h4>
                         <div class="space-y-2">
-                            @foreach(['Sangat Baik', 'Baik', 'Cukup', 'Kurang Baik'] as $option)
-                                <label class="flex items-center p-3 rounded-xl border border-gray-200 dark:border-slate-800 cursor-pointer transition hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                                    <input type="radio" wire:model="responses.q7" value="{{ $option }}" class="text-brand-500 focus:ring-brand-500 mr-3 border-gray-300 dark:border-slate-700 dark:bg-slate-900">
+                            @foreach(['Sangat Baik', 'Baik', 'Cukup', 'Kurang Baik'] as $index => $option)
+                                <label wire:key="step-7-option-{{ $index }}" class="flex items-center p-3 rounded-xl border border-gray-200 dark:border-slate-800 cursor-pointer transition hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="radio" name="q7" wire:model.live="responses.q7" value="{{ $option }}" class="text-brand-500 focus:ring-brand-500 mr-3 border-gray-300 dark:border-slate-700 dark:bg-slate-900">
                                     <span class="text-sm text-slate-700 dark:text-slate-300 font-medium">{{ $option }}</span>
                                 </label>
                             @endforeach
@@ -146,14 +147,14 @@
 
                 <!-- Step 8: Transparansi Biaya/Proses -->
                 @if ($step === 8)
-                    <div>
+                    <div wire:key="step-container-8">
                         <h4 class="text-base font-bold text-slate-900 dark:text-white mb-4 leading-snug">
                             8. Apakah Anda merasa proses pencairan dana Nenkin kami transparan?
                         </h4>
                         <div class="space-y-2">
-                            @foreach(['Sangat Transparan', 'Transparan', 'Cukup Transparan', 'Tidak Transparan'] as $option)
-                                <label class="flex items-center p-3 rounded-xl border border-gray-200 dark:border-slate-800 cursor-pointer transition hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                                    <input type="radio" wire:model="responses.q8" value="{{ $option }}" class="text-brand-500 focus:ring-brand-500 mr-3 border-gray-300 dark:border-slate-700 dark:bg-slate-900">
+                            @foreach(['Sangat Transparan', 'Transparan', 'Cukup Transparan', 'Tidak Transparan'] as $index => $option)
+                                <label wire:key="step-8-option-{{ $index }}" class="flex items-center p-3 rounded-xl border border-gray-200 dark:border-slate-800 cursor-pointer transition hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="radio" name="q8" wire:model.live="responses.q8" value="{{ $option }}" class="text-brand-500 focus:ring-brand-500 mr-3 border-gray-300 dark:border-slate-700 dark:bg-slate-900">
                                     <span class="text-sm text-slate-700 dark:text-slate-300 font-medium">{{ $option }}</span>
                                 </label>
                             @endforeach
@@ -163,14 +164,14 @@
 
                 <!-- Step 9: Kepercayaan -->
                 @if ($step === 9)
-                    <div>
+                    <div wire:key="step-container-9">
                         <h4 class="text-base font-bold text-slate-900 dark:text-white mb-4 leading-snug">
                             9. Seberapa besar tingkat kepercayaan Anda terhadap PT Sumber Rezeki Exata Indonesia?
                         </h4>
                         <div class="space-y-2">
-                            @foreach(['Sangat Tinggi', 'Tinggi', 'Cukup', 'Rendah'] as $option)
-                                <label class="flex items-center p-3 rounded-xl border border-gray-200 dark:border-slate-800 cursor-pointer transition hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                                    <input type="radio" wire:model="responses.q9" value="{{ $option }}" class="text-brand-500 focus:ring-brand-500 mr-3 border-gray-300 dark:border-slate-700 dark:bg-slate-900">
+                            @foreach(['Sangat Tinggi', 'Tinggi', 'Cukup', 'Rendah'] as $index => $option)
+                                <label wire:key="step-9-option-{{ $index }}" class="flex items-center p-3 rounded-xl border border-gray-200 dark:border-slate-800 cursor-pointer transition hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="radio" name="q9" wire:model.live="responses.q9" value="{{ $option }}" class="text-brand-500 focus:ring-brand-500 mr-3 border-gray-300 dark:border-slate-700 dark:bg-slate-900">
                                     <span class="text-sm text-slate-700 dark:text-slate-300 font-medium">{{ $option }}</span>
                                 </label>
                             @endforeach
@@ -180,14 +181,14 @@
 
                 <!-- Step 10: Kepuasan Keseluruhan -->
                 @if ($step === 10)
-                    <div>
+                    <div wire:key="step-container-10">
                         <h4 class="text-base font-bold text-slate-900 dark:text-white mb-4 leading-snug">
                             10. Secara keseluruhan, seberapa puas Anda dengan seluruh rangkaian layanan kami?
                         </h4>
                         <div class="space-y-2">
-                            @foreach(['Sangat Puas', 'Puas', 'Cukup Puas', 'Tidak Puas'] as $option)
-                                <label class="flex items-center p-3 rounded-xl border border-gray-200 dark:border-slate-800 cursor-pointer transition hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                                    <input type="radio" wire:model="responses.q10" value="{{ $option }}" class="text-brand-500 focus:ring-brand-500 mr-3 border-gray-300 dark:border-slate-700 dark:bg-slate-900">
+                            @foreach(['Sangat Puas', 'Puas', 'Cukup Puas', 'Tidak Puas'] as $index => $option)
+                                <label wire:key="step-10-option-{{ $index }}" class="flex items-center p-3 rounded-xl border border-gray-200 dark:border-slate-800 cursor-pointer transition hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                                    <input type="radio" name="q10" wire:model.live="responses.q10" value="{{ $option }}" class="text-brand-500 focus:ring-brand-500 mr-3 border-gray-300 dark:border-slate-700 dark:bg-slate-900">
                                     <span class="text-sm text-slate-700 dark:text-slate-300 font-medium">{{ $option }}</span>
                                 </label>
                             @endforeach

@@ -12,14 +12,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // 1. Drop constraints first
-        // In PostgreSQL, constraints must be dropped before dropping the underlying unique index.
-        DB::statement('ALTER TABLE _history_client_magic_links DROP CONSTRAINT IF EXISTS _history_client_magic_links_token_unique');
-        DB::statement('ALTER TABLE _history_reviews DROP CONSTRAINT IF EXISTS _history_reviews_client_id_unique');
+        if (DB::getDriverName() === 'pgsql') {
+            // 1. Drop constraints first
+            // In PostgreSQL, constraints must be dropped before dropping the underlying unique index.
+            DB::statement('ALTER TABLE _history_client_magic_links DROP CONSTRAINT IF EXISTS _history_client_magic_links_token_unique');
+            DB::statement('ALTER TABLE _history_reviews DROP CONSTRAINT IF EXISTS _history_reviews_client_id_unique');
 
-        // 2. Drop indexes second (in case they were created as index-only, or left over)
-        DB::statement('DROP INDEX IF EXISTS _history_client_magic_links_token_unique');
-        DB::statement('DROP INDEX IF EXISTS _history_reviews_client_id_unique');
+            // 2. Drop indexes second (in case they were created as index-only, or left over)
+            DB::statement('DROP INDEX IF EXISTS _history_client_magic_links_token_unique');
+            DB::statement('DROP INDEX IF EXISTS _history_reviews_client_id_unique');
+        }
     }
 
     /**

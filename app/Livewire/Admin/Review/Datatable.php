@@ -204,8 +204,12 @@ class Datatable extends Component
                     'name' => 'UPOD Terpilih',
                     'searchable' => false,
                     'render' => function ($item) {
-                        $style = $item->upod_type === User::UPOD_TYPE_GOOGLE ? 'indigo' : 'purple';
-                        $label = $item->upod_type === User::UPOD_TYPE_GOOGLE ? 'Google Review' : 'Riset Kepuasan';
+                        $resolved = $item->resolvedUpodType();
+                        $style = $resolved === 'google_review' ? 'indigo' : 'purple';
+                        $label = $resolved === 'google_review' ? 'Google Review' : 'Riset Kepuasan';
+                        if (is_null($item->upod_type)) {
+                            $label .= ' (Default)';
+                        }
                         return '<span class="px-2 py-1 bg-' . $style . '-50 text-' . $style . '-700 text-[11px] font-bold rounded-md border border-' . $style . '-100 dark:bg-' . $style . '-500/15 dark:text-' . $style . '-400 dark:border-' . $style . '-500/30">' . $label . '</span>';
                     }
                 ],
@@ -215,10 +219,10 @@ class Datatable extends Component
                     'render' => function ($item) {
                         $selectedDefault = is_null($item->upod_type) ? 'selected' : '';
                         $selectedGoogle = $item->upod_type === User::UPOD_TYPE_GOOGLE ? 'selected' : '';
-                        $selectedSurvey = $item->upod_type === 'satisfaction_survey' ? 'selected' : '';
+                        $selectedSurvey = $item->upod_type === User::UPOD_TYPE_RISET ? 'selected' : '';
                         return '
                             <select wire:change="changeClientOverride(' . $item->id . ', $event.target.value)" class="text-[12px] border-slate-200 rounded py-1 pl-2 pr-6 bg-transparent focus:ring-primary focus:border-primary dark:border-gray-700 dark:bg-gray-900 dark:text-white">
-                                <option value="' . User::UPOD_TYPE_GOOGLE . '" ' . $selectedDefault . '>Default</option>
+                                <option value="default" ' . $selectedDefault . '>Default</option>
                                 <option value="' . User::UPOD_TYPE_GOOGLE . '" ' . $selectedGoogle . '>Google Review</option>
                                 <option value="' . User::UPOD_TYPE_RISET . '" ' . $selectedSurvey . '>Riset Kepuasan</option>
                             </select>

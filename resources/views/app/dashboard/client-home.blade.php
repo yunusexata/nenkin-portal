@@ -225,9 +225,9 @@
                 {{-- Progress Track --}}
                 @php
                     $progressWidth = 0;
-                    if ($completedSteps === 1) {
+                    if ($completedSteps === 2) {
                         $progressWidth = 50;
-                    } elseif ($completedSteps >= 2) {
+                    } elseif ($completedSteps >= 3) {
                         $progressWidth = 100;
                     }
                 @endphp
@@ -433,17 +433,17 @@
                 </div>
 
                 {{-- Proses Selesai --}}
-                <div class="flex items-center gap-3 p-3 rounded-xl {{ $hasReview ? 'bg-green-50 border border-green-200' : 'bg-gray-50 border border-gray-200' }}">
+                <div class="flex items-center gap-3 p-3 rounded-xl {{ $hasDocuments ? 'bg-green-50 border border-green-200' : 'bg-gray-50 border border-gray-200' }}">
                     <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0
-                                {{ $hasReview ? 'bg-green-500' : 'bg-gray-300' }}">
+                                {{ $hasDocuments ? 'bg-green-500' : 'bg-gray-300' }}">
                         <svg class="w-5 h-5 fill-white" viewBox="0 0 24 24">
                             <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                         </svg>
                     </div>
                     <div class="flex-1">
-                        <div class="font-semibold text-sm {{ $hasReview ? 'text-green-700' : 'text-gray-400' }}">Proses Selesai</div>
-                        <div class="text-xs {{ $hasReview ? 'text-green-600' : 'text-gray-400' }}">
-                            {{ $hasReview ? 'Proses klaim Nenkin telah selesai' : 'Masih dalam proses' }}
+                        <div class="font-semibold text-sm {{ $hasDocuments ? 'text-green-700' : 'text-gray-400' }}">Proses Selesai</div>
+                        <div class="text-xs {{ $hasDocuments ? 'text-green-600' : 'text-gray-400' }}">
+                            {{ $hasDocuments ? $documents->count() . ' Proses Nenkin Selesai' : 'Masih Dalam Proses' }}
                         </div>
                     </div>
                 </div>
@@ -521,7 +521,7 @@
              SECTION: REVIEW FORM – inline fallback di bawah halaman
              (tetap ada sebagai fallback, popup adalah primary UX)
         ═══════════════════════════════════════ --}}
-        @if ($hasDocuments && !$hasReview)
+        @if ($hasDocuments && !$hasReview && $resolvedUpodType === 'google_review' && !$hasSubmittedUpod)
         <div class="bg-white rounded-2xl shadow-md overflow-hidden">
             <div class="px-4 py-3 border-b border-gray-100 flex items-center gap-2">
                 <svg class="w-5 h-5 fill-[#FF4800]" viewBox="0 0 24 24">
@@ -530,11 +530,7 @@
                 <h2 class="font-bold text-[#001B5E] text-sm">Berikan Ulasan</h2>
             </div>
             <div class="p-4">
-                @if ($client->upod_type === App\Models\USER::UPOD_TYPE_GOOGLE)
-                    <livewire:client.review-form />
-                @else
-                    <livewire:client.satisfaction-survey />
-                @endif
+                <livewire:client.review-form />
             </div>
         </div>
         @endif
@@ -542,7 +538,7 @@
         {{-- ═══════════════════════════════════════
              SECTION: SUDAH ADA REVIEW – Tampilkan bintang
         ═══════════════════════════════════════ --}}
-        @if ($hasReview)
+        @if ($hasReview || ($resolvedUpodType === 'satisfaction_survey' && $hasSubmittedUpod))
         <div class="bg-white rounded-2xl shadow-md overflow-hidden">
             <div class="p-5 flex flex-col items-center text-center gap-3">
                 <div class="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center">
@@ -555,6 +551,7 @@
                     <p class="text-gray-500 text-xs mt-1">Terima kasih telah menggunakan layanan Nenkin Portal by PT Sumber Rezeki Exata Indonesia.</p>
                 </div>
 
+                @if ($hasReview)
                 {{-- Stars --}}
                 <div class="flex items-center gap-1 mt-1">
                     @for ($i = 1; $i <= 5; $i++)
@@ -565,6 +562,7 @@
                 </div>
                 @if ($client->review->message)
                 <p class="text-gray-600 text-sm italic">"{{ $client->review->message }}"</p>
+                @endif
                 @endif
             </div>
         </div>

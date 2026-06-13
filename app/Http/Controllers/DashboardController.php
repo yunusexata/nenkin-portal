@@ -37,8 +37,8 @@ class DashboardController extends Controller
                 ],
                 [
                     'key'    => 'review',
-                    'label'  => 'Dokumen Tersedia',
-                    'done'   => (bool) $client->review,
+                    'label'  => 'Uang Ditransfer',
+                    'done'   => $documents->has('ichijikin') && $documents->has('resi') && $documents->has('kwitansi'),
                     'icon'   => 'star',
                 ],
             ];

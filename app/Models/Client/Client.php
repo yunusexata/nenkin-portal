@@ -125,19 +125,36 @@ class Client extends Model
     }
     public function resolvedUpodType(?array $picMappings = null): string
     {
-        if ($this->upod_type) {
-            return $this->upod_type;
-        }
+        $type = null;
 
-        if ($this->pic) {
+        if ($this->upod_type) {
+            $type = $this->upod_type;
+        } elseif ($this->pic) {
             $picKey = strtolower($this->pic);
             if ($picMappings && array_key_exists($picKey, $picMappings)) {
-                return $picMappings[$picKey] ?? 'google_review';
+                $type = $picMappings[$picKey] ?? 'google_review';
+            } else {
+                $sales = User::query()
+                    ->where('pic', $picKey)
+                    ->role(User::ROLE_SALES)
+                    ->first();
+                if ($sales && $sales->upod_type) {
+                    $type = $sales->upod_type;
+                }
             }
-            $sales = User::where('pic', $picKey)->first();
-            if ($sales && $sales->upod_default_type) {
-                return $sales->upod_default_type;
-            }
+        }
+
+        if (!$type) {
+            $type = 'google_review';
+        }
+
+        // Normalize values to either 'google_review' or 'satisfaction_survey'
+        if ($type === 'google' || $type === 'google_review') {
+            return 'google_review';
+        }
+
+        if ($type === 'riset' || $type === 'satisfaction_survey') {
+            return 'satisfaction_survey';
         }
 
         return 'google_review';

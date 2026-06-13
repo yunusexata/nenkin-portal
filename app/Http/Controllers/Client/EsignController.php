@@ -132,6 +132,6 @@ class EsignController extends Controller
             ]);
         }
 
-        return redirect()->route('dashboard.index')->with('success', 'Perjanjian berhasil ditandatangani.');
+        return redirect()->route('dashboard.index');
     }
 }

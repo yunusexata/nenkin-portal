@@ -31,6 +31,15 @@ class DocumentObserver
             return;
         }
 
+        // We only notify the client when all 3 required documents are available
+        $documentTypes = $client->documents()->pluck('type')->toArray();
+        $requiredTypes = ['ichijikin', 'resi', 'kwitansi'];
+        foreach ($requiredTypes as $type) {
+            if (!in_array($type, $documentTypes)) {
+                return;
+            }
+        }
+
         $user = User::where('client_id', $client->id)->first();
         if (!$user || !$user->email) {
             logger()->warning("Cannot notify client of document: client user or email not found", [
@@ -38,9 +47,10 @@ class DocumentObserver
             ]);
             return;
         }
-        // Fallback to original DocumentAvailableNotification
-        $exists = SendEmailLog::where('subject_type', Document::class)
-            ->where('subject_id', $document->id)
+
+        // Use Client class and client ID as the subject to prevent duplicate logs/emails
+        $exists = SendEmailLog::where('subject_type', Client::class)
+            ->where('subject_id', $client->id)
             ->where('mailable', DocumentAvailableNotification::class)
             ->whereIn('status', [
                 EmailLogStatus::PENDING,
@@ -54,11 +64,10 @@ class DocumentObserver
         }
 
         SendEmailLogRepository::create([
-            'subject_type' => Document::class,
-            'subject_id' => $document->id,
+            'subject_type' => Client::class,
+            'subject_id' => $client->id,
             'data' => json_encode([
                 'client_name' => $client->name,
-                'document_type' => $document->type,
             ]),
             'email' => $user->email,
             'mailable' => DocumentAvailableNotification::class,
