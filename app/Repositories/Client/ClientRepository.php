@@ -35,7 +35,7 @@ class ClientRepository extends MasterDataRepository
     public static function getClientRegistered($batchName = null, $claimType = null, $pic = null)
     {
         return Client::query()
-            ->when($batchName, function ($q) use ($batchName) {
+            ->when($batchName || $batchName != 'all', function ($q) use ($batchName) {
                 $q->where('clients.source_file_name', $batchName);
             })
             ->when($claimType, function ($q) use ($claimType) {
