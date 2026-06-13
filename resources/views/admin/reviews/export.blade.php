@@ -54,16 +54,16 @@
                         <td>{{ $data['name'] }}</td>
                         <td>{{ $data['pic'] }}</td>
                         <td>{{ $data['claim_type'] }}</td>
-                        <td>{{ $data->upodSurveyResponse->responses->q1 }}</td>
-                        <td>{{ $data->upodSurveyResponse->responses->q2 }}</td>
-                        <td>{{ $data->upodSurveyResponse->responses->q3 }}</td>
-                        <td>{{ $data->upodSurveyResponse->responses->q4 }}</td>
-                        <td>{{ $data->upodSurveyResponse->responses->q5 }}</td>
-                        <td>{{ $data->upodSurveyResponse->responses->q6 }}</td>
-                        <td>{{ $data->upodSurveyResponse->responses->q7 }}</td>
-                        <td>{{ $data->upodSurveyResponse->responses->q8 }}</td>
-                        <td>{{ $data->upodSurveyResponse->responses->q9 }}</td>
-                        <td>{{ $data->upodSurveyResponse->responses->q10 }}</td>
+                        <td>{{ $data->upodSurveyResponse->responses['q1'] }}</td>
+                        <td>{{ $data->upodSurveyResponse->responses['q2'] }}</td>
+                        <td>{{ $data->upodSurveyResponse->responses['q3'] }}</td>
+                        <td>{{ $data->upodSurveyResponse->responses['q4'] }}</td>
+                        <td>{{ $data->upodSurveyResponse->responses['q5'] }}</td>
+                        <td>{{ $data->upodSurveyResponse->responses['q6'] }}</td>
+                        <td>{{ $data->upodSurveyResponse->responses['q7'] }}</td>
+                        <td>{{ $data->upodSurveyResponse->responses['q8'] }}</td>
+                        <td>{{ $data->upodSurveyResponse->responses['q9'] }}</td>
+                        <td>{{ $data->upodSurveyResponse->responses['q10'] }}</td>
 
                     </tr>
                 @endforeach
