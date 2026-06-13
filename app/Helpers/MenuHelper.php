@@ -22,16 +22,6 @@ class MenuHelper
                 'path' => 'master_client_registered.index',
             ],
             [
-                'icon' => 'dashboard',
-                'name' => 'Dokumen Saya',
-                'path' => 'client_document.index',
-            ],
-            [
-                'icon' => 'dashboard',
-                'name' => 'Surat Perjanjian',
-                'path' => 'client_agreement.index',
-            ],
-            [
                 // 'id' => 'menu_admin'
                 'name' => 'Admin',
                 'icon' => 'user',
