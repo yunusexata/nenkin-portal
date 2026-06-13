@@ -191,8 +191,21 @@
                     </button>
                 </form>
             </div>
-        </div>
     </header>
+
+    @if(session('success'))
+        <div class="max-w-lg mx-auto px-4 mt-4">
+            <div x-data="{ show: true }" 
+                 x-show="show" 
+                 x-init="setTimeout(() => show = false, 3000)"
+                 class="bg-green-50 border-l-4 border-green-500 p-4 text-green-700 text-sm rounded-r-lg font-semibold flex items-center justify-between transition-opacity duration-300">
+                <span>✅ {{ session('success') }}</span>
+                <button @click="show = false" class="text-green-500 hover:text-green-700 ml-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+        </div>
+    @endif
 
     {{-- ═══════════════════════════════════════
          HERO BANNER – Progress Overview
@@ -330,7 +343,7 @@
                     Estimasi proses pencairan Nenkin adalah 2 minggu dari tanggal konfirmasi. Kami akan menghubungi dan memberikan pemberitahuan jika uang Nenkin 20% kamu sudah ditransfer.
                 </p>
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                    Sedang Diproses
+                    Sedang Ditransfer
                 </span>
             </div>
         </div>

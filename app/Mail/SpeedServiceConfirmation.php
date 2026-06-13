@@ -50,7 +50,7 @@ class SpeedServiceConfirmation extends Mailable
             $signedAt = isset($data['signed_at']) ? Carbon::parse($data['signed_at']) : now();
         }
 
-        $signedAtFormatted = Carbon::parse($signedAt)->locale('id')->translatedFormat('d F Y');
+        $signedAtFormatted = Carbon::parse($signedAt)->locale('id')->translatedFormat('d F Y, H:i');
         $estimatedDateFormatted = Carbon::parse($this->estimatedDate)->locale('id')->translatedFormat('d F Y');
 
         $waRaw = config('exata.admin_wa_number', '6281199896308');
@@ -61,15 +61,31 @@ class SpeedServiceConfirmation extends Mailable
             $formattedWa = '+' . $waRaw;
         }
 
+        $client = $esign ? $esign->client : null;
+        $serviceTypeLabel = 'Speed Service';
+        if ($client) {
+            if ($client->claim_type === \App\Models\Client\Client::CLAIM_TYPE_SPEED) {
+                $serviceTypeLabel = 'Speed Service';
+            } elseif ($client->claim_type === \App\Models\Client\Client::CLAIM_TYPE_ADJUSTMENT) {
+                $serviceTypeLabel = 'Klaim Adjustment';
+            } else {
+                $serviceTypeLabel = 'Klaim Normal';
+            }
+        }
+
         return new Content(
-            view: 'emails.speed_service_confirmation',
+            text: 'emails.esign_confirmation_plain',
             with: [
                 'clientName' => $clientName,
                 'signedAtFormatted' => $signedAtFormatted,
                 'estimatedDateFormatted' => $estimatedDateFormatted,
-                'dashboardUrl' => config('app.url') . '/dashboard',
+                'dashboardUrl' => config('app.url') . '/client/dashboard',
                 'whatsappUrl' => 'https://wa.me/' . $waRaw,
                 'formattedWa' => $formattedWa,
+                'client' => $client,
+                'signedAt' => $signedAt,
+                'estimatedTransferDate' => $this->estimatedDate,
+                'serviceTypeLabel' => $serviceTypeLabel,
             ],
         );
     }
