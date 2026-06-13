@@ -403,6 +403,11 @@ class Datatable extends Component
     public function export($type)
     {
         $fileName = "Data Client Registered " . Carbon::now()->format('Y-m-d H:i:s');
+        consoleLog($this, [
+            $this->batch_name,
+            $this->filter_claim_type,
+            $this->bulkPic
+        ]);
         return ExportHelper::export(
             $type,
             $fileName,
