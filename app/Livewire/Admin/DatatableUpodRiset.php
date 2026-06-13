@@ -207,7 +207,7 @@ class DatatableUpodRiset extends Component
             $type,
             $fileName,
             ClientRepository::getClientUpodSurvey($this->batch_name, $this->filter_claim_type, $this->bulkPic),
-            'app.admin.reviews.export',
+            'admin.reviews.export',
             [
                 'title' => 'Data Ulasan',
                 'type' => $type,
