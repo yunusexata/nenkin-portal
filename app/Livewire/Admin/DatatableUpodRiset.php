@@ -79,12 +79,14 @@ class DatatableUpodRiset extends Component
     {
         $columns = [
             [
+                'key' => 'name',
                 'name' => 'Nama Klien',
                 'render' => function ($item) {
                     return $item->name;
                 }
             ],
             [
+                'key' => 'pic',
                 'name' => 'PIC',
                 'render' => function ($item) {
                     return $item->pic;
@@ -202,7 +204,7 @@ class DatatableUpodRiset extends Component
     #[On('export')]
     public function export($type)
     {
-        $fileName = "Data ClUlasanient Registered " . Carbon::now()->format('Y-m-d H:i:s');
+        $fileName = "Data Upod Riset Client " . Carbon::now()->format('Y-m-d H:i:s');
         return ExportHelper::export(
             $type,
             $fileName,
