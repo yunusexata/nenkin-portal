@@ -7,7 +7,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title', 'Nenkin Portal') | by PT Sumber Rezeki Exata Indonesia</title>
-
+<link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     

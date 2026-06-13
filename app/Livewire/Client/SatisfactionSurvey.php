@@ -189,7 +189,7 @@ class SatisfactionSurvey extends Component
             'Survei Terkirim',
             'Terima kasih atas partisipasi Anda dalam survei kepuasan pelanggan.'
         ]);
-        
+
         $this->dispatch('refresh-survey');
     }
 
