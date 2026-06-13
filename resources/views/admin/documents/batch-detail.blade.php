@@ -30,6 +30,12 @@
         </div>
     @endif
 
+    @if(session('error'))
+        <div class="mb-6 p-4 bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 rounded text-red-700 dark:text-red-300 font-semibold">
+            {{ session('error') }}
+        </div>
+    @endif
+
     @if($errors->any())
         <div class="mb-6 p-4 bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 rounded text-red-700 dark:text-red-300">
             <ul class="list-disc pl-5">
@@ -221,6 +227,7 @@
                             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">No Input JPN</th>
                             <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Confidence Score</th>
                             <th class="px-4 py-3 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Waktu Upload</th>
+                            <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 dark:divide-gray-800">
@@ -240,10 +247,43 @@
                                     @endif
                                 </td>
                                 <td class="px-4 py-3 text-sm text-right text-gray-500 dark:text-gray-400">{{ $doc->uploaded_at->format('d M Y, H:i') }}</td>
+                                <td class="px-4 py-3 text-center text-sm">
+                                    @php
+                                        $client = $doc->client;
+                                        $hasAllDocs = false;
+                                        if ($client) {
+                                            $clientDocs = $client->documents;
+                                            $hasIchijikin = $clientDocs->where('type', 'ichijikin')->isNotEmpty();
+                                            $hasResi = $clientDocs->where('type', 'resi')->isNotEmpty();
+                                            $hasKwitansi = $clientDocs->where('type', 'kwitansi')->isNotEmpty();
+                                            $hasAllDocs = $hasIchijikin && $hasResi && $hasKwitansi;
+                                        }
+                                    @endphp
+
+                                    @if($client)
+                                        @if($hasAllDocs)
+                                            <a href="{{ route('admin.documents.download-zip', $client->id) }}" 
+                                                class="inline-flex items-center text-brand-600 dark:text-brand-400 hover:underline font-semibold"
+                                                title="Download ZIP">
+                                                Download ZIP
+                                                <svg class="w-4 h-4 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                            </a>
+                                        @else
+                                            <button class="inline-flex items-center text-gray-400 dark:text-gray-500 font-semibold cursor-not-allowed opacity-50" 
+                                                title="Dokumen belum lengkap" 
+                                                disabled>
+                                                Download ZIP
+                                                <svg class="w-4 h-4 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                            </button>
+                                        @endif
+                                    @else
+                                        -
+                                    @endif
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                                <td colspan="7" class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
                                     Belum ada dokumen yang berhasil ter-match dalam batch ini.
                                 </td>
                             </tr>

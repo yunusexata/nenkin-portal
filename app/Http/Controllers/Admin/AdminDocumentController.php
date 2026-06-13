@@ -25,7 +25,7 @@ class AdminDocumentController extends Controller
         $adminId = auth()->id();
         $referenceClients = Cache::get("reference_clients_{$adminId}");
 
-        $batches = DocumentUploadBatch::with('uploader')
+        $batches = DocumentUploadBatch::with(['uploader', 'documents.client'])
             ->orderBy('id', 'desc')
             ->paginate(10);
 
@@ -452,7 +452,7 @@ class AdminDocumentController extends Controller
     {
         $batch = DocumentUploadBatch::with('uploader')->findOrFail($id);
 
-        $documents = Document::with('client')
+        $documents = Document::with('client.documents')
             ->where('batch_id', $id)
             ->get();
 
@@ -672,5 +672,86 @@ class AdminDocumentController extends Controller
         }
 
         return $missingDocuments;
+    }
+
+    /**
+     * Download client documents (ichijikin, resi, kwitansi) packaged in a ZIP file.
+     */
+    public function downloadZip(Client $client)
+    {
+        if (!class_exists('\ZipArchive')) {
+            return redirect()->back()->with('error', 'Ekstensi ZipArchive tidak tersedia di server ini.');
+        }
+
+        $client->loadMissing('documents');
+
+        $ichijikinDoc = $client->documents->where('type', 'ichijikin')->first();
+        $resiDoc = $client->documents->where('type', 'resi')->first();
+        $kwitansiDoc = $client->documents->where('type', 'kwitansi')->first();
+
+        if (!$ichijikinDoc || !$ichijikinDoc->bucket_path) {
+            return redirect()->back()->with('error', 'Dokumen Ichijikin untuk client ini belum tersedia.');
+        }
+        if (!$resiDoc || !$resiDoc->bucket_path) {
+            return redirect()->back()->with('error', 'Dokumen Resi Transfer untuk client ini belum tersedia.');
+        }
+        if (!$kwitansiDoc || !$kwitansiDoc->bucket_path) {
+            return redirect()->back()->with('error', 'Dokumen Kwitansi untuk client ini belum tersedia.');
+        }
+
+        $disk = Storage::disk('supabase');
+
+        if (!$disk->exists($ichijikinDoc->bucket_path)) {
+            return redirect()->back()->with('error', 'File Ichijikin tidak ditemukan di penyimpanan awan.');
+        }
+        if (!$disk->exists($resiDoc->bucket_path)) {
+            return redirect()->back()->with('error', 'File Resi Transfer tidak ditemukan di penyimpanan awan.');
+        }
+        if (!$disk->exists($kwitansiDoc->bucket_path)) {
+            return redirect()->back()->with('error', 'File Kwitansi tidak ditemukan di penyimpanan awan.');
+        }
+
+        try {
+            $zip = new \ZipArchive();
+            $zipFileName = 'Dokumen_' . Str::slug($client->name) . '_' . now()->format('Ymd') . '.zip';
+            $tempDir = storage_path('app/temp');
+            
+            if (!file_exists($tempDir)) {
+                mkdir($tempDir, 0755, true);
+            }
+            
+            $zipPath = $tempDir . '/' . $zipFileName;
+
+            if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+                return redirect()->back()->with('error', 'Gagal membuat file ZIP di server.');
+            }
+
+            $ichijikinExt = pathinfo($ichijikinDoc->original_filename, PATHINFO_EXTENSION) ?: 'jpg';
+            $resiExt = pathinfo($resiDoc->original_filename, PATHINFO_EXTENSION) ?: 'jpg';
+            $kwitansiExt = pathinfo($kwitansiDoc->original_filename, PATHINFO_EXTENSION) ?: 'jpg';
+
+            $clientNameClean = str_replace(['/', '\\', '?', '%', '*', ':', '|', '"', '<', '>', '.'], '', $client->name);
+
+            $ichijikinName = "Ichijikin_" . $clientNameClean . "." . $ichijikinExt;
+            $resiName = "Resi_" . $clientNameClean . "." . $resiExt;
+            $kwitansiName = "Kwitansi_" . $clientNameClean . "." . $kwitansiExt;
+
+            $zip->addFromString($ichijikinName, $disk->get($ichijikinDoc->bucket_path));
+            $zip->addFromString($resiName, $disk->get($resiDoc->bucket_path));
+            $zip->addFromString($kwitansiName, $disk->get($kwitansiDoc->bucket_path));
+
+            $zip->close();
+
+            return response()->download($zipPath, $zipFileName, [
+                'Content-Type' => 'application/zip',
+            ])->deleteFileAfterSend(true);
+
+        } catch (\Throwable $e) {
+            if (isset($zipPath) && file_exists($zipPath)) {
+                @unlink($zipPath);
+            }
+            logger()->error("Failed to generate ZIP", ['exception' => $e->getMessage(), 'client_id' => $client->id]);
+            return redirect()->back()->with('error', 'Terjadi kesalahan sistem saat membuat file ZIP: ' . $e->getMessage());
+        }
     }
 }

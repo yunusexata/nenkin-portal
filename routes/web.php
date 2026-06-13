@@ -50,6 +50,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/documents/batches/{id}/failures/export', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'exportFailures'])->name('admin.documents.failures.export');
     Route::post('/admin/documents/failures/{id}/resolve', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'resolveFailure'])->name('admin.documents.failures.resolve');
     Route::get('/admin/documents/clients/search', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'searchClients'])->name('admin.documents.clients.search');
+    Route::get('/admin/documents/{client}/download-zip', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'downloadZip'])->name('admin.documents.download-zip');
 });
 
 
