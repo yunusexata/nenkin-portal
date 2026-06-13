@@ -44,6 +44,7 @@ class ClientRepository extends MasterDataRepository
             ->when($pic, function ($q) use ($pic) {
                 $q->where('clients.pic', $pic);
             })
+            ->whereHas('user')
             ->select('clients.*')
             ->selectRaw("
             EXISTS (
