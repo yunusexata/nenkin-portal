@@ -54,4 +54,20 @@ class ClientRepository extends MasterDataRepository
             ) as esign_exists
         ");
     }
+
+    public static function getClientUpodSurvey($batchName = null, $claimType = null, $pic = null)
+    {
+        return Client::query()
+            ->when($batchName && $batchName != 'all', function ($q) use ($batchName) {
+                $q->where('clients.source_file_name', $batchName);
+            })
+            ->when($claimType, function ($q) use ($claimType) {
+                $q->where('clients.claim_type', $claimType);
+            })
+            ->when($pic, function ($q) use ($pic) {
+                $q->where('clients.pic', $pic);
+            })
+            ->whereHas('upodSurveyResponse')
+            ->select('clients.*');
+    }
 }
