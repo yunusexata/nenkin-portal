@@ -120,7 +120,7 @@ class DatatableUpodRiset extends Component
                 'sortable' => false,
                 'name' => 'Berangkat dari LPK / SO / PT?',
                 'render' => function ($item) {
-                    return $item->upodSurveyResponse->response->q1;
+                    return $item->upodSurveyResponse->responses->q1;
                 }
             ],
             [
@@ -128,7 +128,7 @@ class DatatableUpodRiset extends Component
                 'sortable' => false,
                 'name' => 'Tahu Exata dari mana?',
                 'render' => function ($item) {
-                    return $item->upodSurveyResponse->response->q2;
+                    return $item->upodSurveyResponse->responses->q2;
                 }
             ],
             [
@@ -136,7 +136,7 @@ class DatatableUpodRiset extends Component
                 'sortable' => false,
                 'name' => 'Kenapa memutuskan untuk urus nenkin di Exata?',
                 'render' => function ($item) {
-                    return $item->upodSurveyResponse->response->q3;
+                    return $item->upodSurveyResponse->responses->q3;
                 }
             ],
             [
@@ -144,7 +144,7 @@ class DatatableUpodRiset extends Component
                 'sortable' => false,
                 'name' => 'Apakah kamu pernah dapat penawaran dari konsultan nenkin lain?',
                 'render' => function ($item) {
-                    return $item->upodSurveyResponse->response->q4;
+                    return $item->upodSurveyResponse->responses->q4;
                 }
             ],
             [
@@ -152,7 +152,7 @@ class DatatableUpodRiset extends Component
                 'sortable' => false,
                 'name' => 'Jika Ya, apa nama konsultan nenkin lain tersebut?',
                 'render' => function ($item) {
-                    return $item->upodSurveyResponse->response->q5;
+                    return $item->upodSurveyResponse->responses->q5;
                 }
             ],
             [
@@ -160,7 +160,7 @@ class DatatableUpodRiset extends Component
                 'sortable' => false,
                 'name' => 'Jika Ya, kenapa tetap memilih Exata dan bukan konsultan nenkin lain?',
                 'render' => function ($item) {
-                    return $item->upodSurveyResponse->response->q6;
+                    return $item->upodSurveyResponse->responses->q6;
                 }
             ],
             [
@@ -168,7 +168,7 @@ class DatatableUpodRiset extends Component
                 'sortable' => false,
                 'name' => 'Menurut kamu, hal apa yang paling disukai dari Exata Indonesia?',
                 'render' => function ($item) {
-                    return $item->upodSurveyResponse->response->q7;
+                    return $item->upodSurveyResponse->responses->q7;
                 }
             ],
             [
@@ -176,7 +176,7 @@ class DatatableUpodRiset extends Component
                 'sortable' => false,
                 'name' => 'Dari segi "Pemberkasan dokumen, informasi/edukasi, dan responsibility staff kami" — apa yang harus kami perbaiki agar pelayanan sesuai harapan?',
                 'render' => function ($item) {
-                    return $item->upodSurveyResponse->response->q8;
+                    return $item->upodSurveyResponse->responses->q8;
                 }
             ],
             [
@@ -184,7 +184,7 @@ class DatatableUpodRiset extends Component
                 'sortable' => false,
                 'name' => 'Apakah kamu bersedia merekomendasikan Exata Indonesia ke teman/kohai?',
                 'render' => function ($item) {
-                    return $item->upodSurveyResponse->response->q9;
+                    return $item->upodSurveyResponse->responses->q9;
                 }
             ],
             [
@@ -192,7 +192,7 @@ class DatatableUpodRiset extends Component
                 'sortable' => false,
                 'name' => 'Jika MERCY terkenal sebagai mobil Mewah, Elegan, untuk Kaum Berkelas, dan IPHONE terkenal sebagai HP Eksklusif, Keren, Cepat, dan Kamera Bagus — maka bagaimana kamu mendeskripsikan Exata Indonesia dalam beberapa kata?',
                 'render' => function ($item) {
-                    return $item->upodSurveyResponse->response->q10;
+                    return $item->upodSurveyResponse->responses->q10;
                 }
             ],
         ];
