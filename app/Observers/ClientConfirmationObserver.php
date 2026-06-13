@@ -65,6 +65,7 @@ class ClientConfirmationObserver
         }
 
         if ($claimType === Client::CLAIM_TYPE_SPEED || $claimType === Client::CLAIM_TYPE_ADJUSTMENT) {
+            logger('CLAIM TYPE OBSERVER : ' . $claimType);
             $exists = SendEmailLog::where('subject_type', ClientConfirmation::class)
                 ->where('subject_id', $confirmation->id)
                 ->where('mailable', EsignReminderNotification::class)

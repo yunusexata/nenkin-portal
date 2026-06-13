@@ -98,7 +98,7 @@ class FormConfirmation extends Component
             if (
                 $is_less_then_7_month
             ) {
-                $this->claim_type = 'NORMAL';
+                $this->claim_type = 'ADJUSMNET';
             }
             if (
                 !$is_less_then_7_month
@@ -111,7 +111,7 @@ class FormConfirmation extends Component
             $this->current_position === ClientConfirmation::CURRENT_POSITION_INDONESIA &&
             $this->back_to_jp_type === ClientConfirmation::BACK_TO_JP_TYPE_NO
         ) {
-            $this->claim_type = 'NORMAL';
+            $this->claim_type = 'SPEED';
         }
         if (
             $this->current_position === ClientConfirmation::CURRENT_POSITION_JEPANG
@@ -214,11 +214,12 @@ class FormConfirmation extends Component
 
             DB::commit();
 
-            if ($this->claim_type === Client::CLAIM_TYPE_NORMAL) {
+            if (strtolower($this->claim_type) == Client::CLAIM_TYPE_NORMAL) {
                 Alert::success($this, 'Berhasil', 'Tipe Pencairan Nenkin Anda Adalah ' . strtoupper($this->claim_type));
             } else {
                 Alert::information($this, 'Data Berhasil Disimpan');
             }
+            $this->dispatch('redirect-dashboard');
         } catch (\Exception $e) {
             DB::rollBack();
             Alert::fail($this, "Gagal", $e->getMessage());

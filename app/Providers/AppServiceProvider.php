@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
         $this->configureDefaults();
 
         \App\Models\Document::observe(\App\Observers\DocumentObserver::class);
-        \App\Models\Document::observe(\App\Observers\ClientConfirmationObserver::class);
+        \App\Models\Client\ClientConfirmation::observe(\App\Observers\ClientConfirmationObserver::class);
         \App\Models\Client\ClientEsign::observe(\App\Observers\EsignObserver::class);
     }
 
