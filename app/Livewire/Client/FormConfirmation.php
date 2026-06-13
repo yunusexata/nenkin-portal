@@ -181,21 +181,21 @@ class FormConfirmation extends Component
                 $is_less_then_7_month = $departure->greaterThanOrEqualTo(now()->addMonths(6));
             }
 
-            consoleLog($this, [
-                'nenkin_80_received_type' => $this->nenkin_80_received_type,
-                'current_position' => $this->current_position,
-                'back_to_jp_type' => $this->back_to_jp_type,
-                'departure' => $this->departure,
-                'departure_type' => $this->departure_type,
-                'departure_month' => $this->departure ? Carbon::createFromFormat('Y-m', $this->departure)->format('m') : null,
-                'departure_year' => $this->departure ? Carbon::createFromFormat('Y-m', $this->departure)->format('Y') : null,
-                'is_less_than_7_month' => $is_less_then_7_month ? 'YA' : 'TIDAK',
-                'estimated_return' => $this->estimated_return,
-                'estimated_return_month' => $this->estimated_return ? Carbon::createFromFormat('Y-m', $this->estimated_return)->format('m') : null,
-                'estimated_return_year' => $this->estimated_return ? Carbon::createFromFormat('Y-m', $this->estimated_return)->format('Y') : null,
-                'indonesia_address' => $this->indonesia_address,
-                'nik' => $this->nik,
-            ]);
+            // consoleLog($this, [
+            //     'nenkin_80_received_type' => $this->nenkin_80_received_type,
+            //     'current_position' => $this->current_position,
+            //     'back_to_jp_type' => $this->back_to_jp_type,
+            //     'departure' => $this->departure,
+            //     'departure_type' => $this->departure_type,
+            //     'departure_month' => $this->departure ? Carbon::createFromFormat('Y-m', $this->departure)->format('m') : null,
+            //     'departure_year' => $this->departure ? Carbon::createFromFormat('Y-m', $this->departure)->format('Y') : null,
+            //     'is_less_than_7_month' => $is_less_then_7_month ? 'YA' : 'TIDAK',
+            //     'estimated_return' => $this->estimated_return,
+            //     'estimated_return_month' => $this->estimated_return ? Carbon::createFromFormat('Y-m', $this->estimated_return)->format('m') : null,
+            //     'estimated_return_year' => $this->estimated_return ? Carbon::createFromFormat('Y-m', $this->estimated_return)->format('Y') : null,
+            //     'indonesia_address' => $this->indonesia_address,
+            //     'nik' => $this->nik,
+            // ]);
 
             $client_confirmation = ClientConfirmation::firstOrCreate([
                 'client_id' => Auth::user()->client_id,

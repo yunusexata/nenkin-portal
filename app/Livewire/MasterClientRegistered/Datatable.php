@@ -271,30 +271,36 @@ class Datatable extends Component
                 'key' => 'nenkin_80_received_type',
                 'name' => 'Status Penerimaan Nenkin 80%',
                 'render' => function ($item) {
-                    return ClientConfirmation::NENKIN_80_RECEIVED_TYPE_CHOICE[$item->nenkin_80_received_type];
+                    return $item->nenkin_80_received_type ? ClientConfirmation::NENKIN_80_RECEIVED_TYPE_CHOICE[$item->nenkin_80_received_type] : '-';
                 }
             ],
             [
                 'key' => 'current_position',
                 'name' => 'Posisi Saat Ini',
+                'render' => function ($item) {
+                    return $item->current_position ?? '-';
+                }
             ],
             [
                 'key' => 'back_to_jp_type',
                 'name' => 'Rencana Kembali Ke Jepang',
                 'render' => function ($item) {
-                    return ClientConfirmation::BACK_TO_JP_TYPE_CHOICE[$item->back_to_jp_type];
+                    return $item->back_to_jp_type ? ClientConfirmation::BACK_TO_JP_TYPE_CHOICE[$item->back_to_jp_type] : '-';
                 }
             ],
             [
                 'key' => 'departure_type',
                 'name' => 'Estimasi Bulan Kembali Ke Jepang',
+                'render' => function ($item) {
+                    return $item->departure_type ?? '-';
+                }
             ],
             [
                 'key' => 'departure_month',
                 'name' => 'Bulan Kembali Ke Jepang',
                 'render' => function ($item) {
                     if (blank($item->departure_month)) {
-                        return '';
+                        return '-';
                     }
 
                     return Carbon::create()
@@ -306,14 +312,14 @@ class Datatable extends Component
             [
                 'key' => 'departure_year',
                 'name' => 'Tahun Kembali Ke Jepang',
-                'render' => fn($item) => $item->departure_year ?: '',
+                'render' => fn($item) => $item->departure_year ?? '-',
             ],
             [
                 'key' => 'estimated_return_month',
                 'name' => 'Bulan Kepulangan',
                 'render' => function ($item) {
                     if (blank($item->estimated_return_month)) {
-                        return '';
+                        return '-';
                     }
 
                     return Carbon::create()
@@ -325,15 +331,17 @@ class Datatable extends Component
             [
                 'key' => 'estimated_return_year',
                 'name' => 'Tahun Kepulangan',
-                'render' => fn($item) => $item->estimated_return_year ?: '',
+                'render' => fn($item) => $item->estimated_return_year ?? '',
             ],
             [
                 'key' => 'nik',
                 'name' => 'NIK',
+                'render' => fn($item) => $item->nik ?? '',
             ],
             [
                 'key' => 'indonesia_address',
                 'name' => 'Alamat Indonesia',
+                'render' => fn($item) => $item->indonesia_address ?? '',
             ],
         ];
     }

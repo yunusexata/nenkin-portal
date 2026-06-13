@@ -36,7 +36,7 @@
                     <select id="nenkin_80_received_type" 
                             name="nenkin_80_received_type"
                             wire:model="nenkin_80_received_type" 
-                            
+                            required
                             class="w-full px-4 py-2.5 bg-white rounded-lg border text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#F97316] transition @error('nenkin_80_received_type') border-red-500 focus:ring-red-500 @else border-gray-300 @enderror">
                         <option value="">-- Pilih Status --</option>
                         @foreach (\App\Models\Client\ClientConfirmation::NENKIN_80_RECEIVED_TYPE_CHOICE as $key => $value)
@@ -105,7 +105,7 @@
                         <input type="month" 
                             id="estimated_return" 
                             wire:model="estimated_return" 
-                            
+                            required
                             class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#F97316] focus:border-transparent transition">
                             <p class="text-gray-400 text-[10px] mt-0.5">Silakan pilih bulan & tahun perkiraan Kepulangan Anda.</p>
                         @error('estimated_return')
@@ -126,6 +126,7 @@
                         <input type="month" 
                             id="departure" 
                             wire:model.live="departure" 
+                            required
                             class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#F97316] focus:border-transparent transition">
                         <p class="text-gray-400 text-[10px] mt-0.5">
                             Silakan pilih bulan & tahun perkiraan keberangkatan Anda.
@@ -147,7 +148,7 @@
                               name="indonesia_address" 
                               rows="3" 
                               wire:model="indonesia_address"
-                               
+                              required
                               placeholder="Masukkan alamat detail (Jalan, No. Rumah, RT/RW, Kecamatan, Kabupaten, Provinsi)"
                               class="w-full px-4 py-2.5 rounded-lg border text-[#111827] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#F97316] transition @error('indonesia_address') border-red-500 focus:ring-red-500 @else border-gray-300 @enderror"></textarea>
                     @error('indonesia_address')
@@ -165,7 +166,7 @@
                            id="nik" 
                            name="nik" 
                            wire:model="nik"
-                           
+                           required
                            class="w-full px-4 py-2.5 rounded-lg border text-[#111827] uppercase placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#F97316] transition @error('nik') border-red-500 focus:ring-red-500 @else border-gray-300 @enderror"
                            placeholder="Masukkan NIK sesuai KTP">
                     @error('nik')
