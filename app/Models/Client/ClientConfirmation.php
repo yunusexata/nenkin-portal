@@ -63,9 +63,9 @@ class ClientConfirmation extends Model
     protected static function onBoot()
     {
         self::created(function ($model) {
-            if ($model->client) {
-                $model->client->update(['claim_type' => $model->claim_type]);
-            }
+            // if ($model->client) {
+            //     $model->client->update(['claim_type' => $model->claim_type]);
+            // }
         });
 
         self::updated(function ($model) {
