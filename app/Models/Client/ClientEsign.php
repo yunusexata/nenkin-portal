@@ -94,6 +94,7 @@ class ClientEsign extends Model
         $line2 = strlen($address) > 40 ? (string) substr($address, 40, 50) : '';
         $line3 = strlen($address) > 90 ? (string) substr($address, 90, 50) : '';
 
+
         $lines = [
             $line1,
             $line2,
