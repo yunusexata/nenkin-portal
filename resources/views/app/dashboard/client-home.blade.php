@@ -285,7 +285,7 @@
 
         {{-- === STEP 2: Sudah konfirmasi, belum esign → tombol ke esign ATAU status "Proses Klaim" untuk tipe NORMAL === --}}
         @if ($hasConfirmation && !$hasEsign)
-            @if ($client->claim_type === \App\Models\Client\Client::CLAIM_TYPE_NORMAL)
+            @if ($client->confirmation->claim_type === \App\Models\Client\Client::CLAIM_TYPE_NORMAL)
                 @if (!$hasDocuments)
                 <div class="bg-white rounded-2xl shadow-md border border-blue-200 overflow-hidden">
                     <div class="bg-gradient-to-r from-[#001B5E] to-[#0049FF] px-4 py-3 flex items-center gap-2">
