@@ -90,16 +90,25 @@ class ClientEsign extends Model
         $address = $clientModel->esign?->address
             ?? $clientModel->confirmation?->indonesia_address
             ?? '-';
-        $line1 = (string) substr($address, 0, 40);
-        $line2 = strlen($address) > 40 ? (string) substr($address, 40, 50) : '';
-        $line3 = strlen($address) > 90 ? (string) substr($address, 90, 50) : '';
+        // $line1 = (string) substr($address, 0, 40);
+        // $line2 = strlen($address) > 40 ? (string) substr($address, 40, 50) : '';
+        // $line3 = strlen($address) > 90 ? (string) substr($address, 90, 50) : '';
 
 
-        $lines = [
+        // $lines = [
+        //     $line1,
+        //     $line2,
+        //     $line3,
+        // ];
+        $line1 = substr($address, 0, 40);
+        $line2 = substr($address, 40, 50);
+        $line3 = substr($address, 90, 50);
+
+        $lines = array_filter([
             $line1,
             $line2,
             $line3,
-        ];
+        ]);
         $y = 506;
 
         foreach ($lines as $index => $line) {
