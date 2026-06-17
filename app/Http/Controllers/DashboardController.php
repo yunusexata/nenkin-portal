@@ -32,7 +32,7 @@ class DashboardController extends Controller
                 [
                     'key'    => 'claim_process',
                     'label'  => 'Proses Klaim',
-                    'done'   => (bool) $client->esign,
+                    'done'   => $client->confirmation->claim_type === 'normal' ? true : (bool) $client->esign,
                     'icon'   => 'folder',
                 ],
                 [
