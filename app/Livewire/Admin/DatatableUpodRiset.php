@@ -59,6 +59,7 @@ class DatatableUpodRiset extends Component
     public function onMount()
     {
         $this->loadBatches();
+        $this->bulkPic = auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN) ? null : auth()->user()->pic;
     }
 
     #[On('refresh-table')]

@@ -29,6 +29,7 @@ class Datatable extends Component
     public $isCanUpdateBookingTime;
     public $isCanUpdateDetail;
 
+    public $isAdmin = false;
     public $status;
     public $selectedBatch = 'all';
     public $batches = [];
@@ -69,6 +70,8 @@ class Datatable extends Component
         $this->isCanUpdate = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_IMPORT_DATA_JEPANG, PermissionHelper::TYPE_UPDATE));
         $this->isCanDelete = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_IMPORT_DATA_JEPANG, PermissionHelper::TYPE_DELETE));
         $this->loadBatches();
+        $this->isAdmin = auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN);
+        $this->bulkPic = auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN) ? null : auth()->user()->pic;
     }
 
     #[On('on-delete-dialog-confirm')]
@@ -382,7 +385,11 @@ class Datatable extends Component
             ->when($this->selectedBatch != 'all', function ($q) {
                 $q->where('source_file_name', $this->selectedBatch);
             })
-            ->when($this->bulkPic, function ($q) {
+
+            ->when($this->bulkPic && $this->isAdmin, function ($q) {
+                $q->where('pic', strtolower($this->bulkPic));
+            })
+            ->when(!$this->isAdmin, function ($q) {
                 $q->where('pic', strtolower($this->bulkPic));
             })
             ->when($this->filter_claim_type, function ($q) {

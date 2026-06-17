@@ -17,7 +17,7 @@ class ClientRepository extends MasterDataRepository
         return Client::query();
     }
 
-    public static function getMagicLink($batchName = null, $claimType = null)
+    public static function getMagicLink($batchName = null, $claimType = null, $pic = null)
     {
         return Client::query()
             ->join('client_magic_links', 'client_magic_links.client_id', '=', 'clients.id')
@@ -28,6 +28,9 @@ class ClientRepository extends MasterDataRepository
             })
             ->when($claimType, function ($q) use ($claimType) {
                 $q->where('clients.claim_type', $claimType);
+            })
+            ->when($pic, function ($q) use ($pic) {
+                $q->where('clients.pic', $pic);
             })
             ->select('clients.*');
     }

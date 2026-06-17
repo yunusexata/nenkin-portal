@@ -24,12 +24,16 @@ class ImportModal extends Component
     public $input_file;
     public $batch_name;
     public $filter_claim_type;
+    public $bulkPic;
 
     // Import Pipeline
     public $previewBulkStatusRows;
     public $errorBulkStatusRows = [];
 
-    public function mount() {}
+    public function mount()
+    {
+        $this->bulkPic = auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN) ? null : auth()->user()->pic;
+    }
     // IMPORT PIPELINE
     public function updatedInputFile()
     {
@@ -193,7 +197,7 @@ class ImportModal extends Component
         return ExportHelper::export(
             $type,
             $fileName,
-            ClientRepository::getMagicLink($this->batch_name, $this->filter_claim_type),
+            ClientRepository::getMagicLink($this->batch_name, $this->filter_claim_type, $this->bulkPic),
             'app.master-client.export',
             [
                 'title' => 'Data Client',
