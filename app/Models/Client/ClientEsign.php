@@ -100,9 +100,9 @@ class ClientEsign extends Model
         //     $line2,
         //     $line3,
         // ];
-        $line1 = substr($address, 0, 40);
-        $line2 = substr($address, 40, 50);
-        $line3 = substr($address, 90, 50);
+        $line1 = substr($address, 0, 38);
+        $line2 = substr($address, 38, 50);
+        $line3 = substr($address, 88, 50);
 
         $lines = array_filter([
             $line1,
