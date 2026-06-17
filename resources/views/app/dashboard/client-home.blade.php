@@ -296,10 +296,10 @@
                     </div>
                     <div class="p-4 flex flex-col items-center text-center gap-3">
                         <p class="text-gray-600 text-sm leading-relaxed">
-                            Dokumen kamu sedang dalam proses verifikasi dan klaim oleh tim PT Sumber Rezeki Exata Indonesia. Kamu akan mendapatkan notifikasi ketika dokumen sudah siap.
+                            Proses nenkin kamu akan masuk ke pencairan <strong>NORMAL</strong>. Dikarenakan kamu sudah berada di Jepang atau akan kembali ke Jepang dalam kurun waktu kurang dari 6 bulan. Kamu akan mendapatkan notifikasi dan pemberitahuan jika nenkin kamu sudah cair.
                         </p>
                         <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            Sedang Diproses
+                            Sedang Diproses Japan Pension Service
                         </span>
                     </div>
                 </div>
