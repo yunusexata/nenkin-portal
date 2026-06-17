@@ -25,7 +25,7 @@ class EsignController extends Controller
         }
 
         // Hanya tipe klaim SPEED atau ADJUSTMENT yang wajib E-Sign
-        $claimType = strtoupper($client->claim_type ?? '');
+        $claimType = strtoupper($client->confirmation->claim_type ?? '');
         if (!in_array($claimType, ['SPEED', 'ADJUSTMENT', 'ADJUSMENT'])) {
             return redirect()->route('dashboard.index');
         }
@@ -56,7 +56,7 @@ class EsignController extends Controller
         }
 
         // Validasi tipe klaim
-        $claimType = strtoupper($client->claim_type ?? '');
+        $claimType = strtoupper($client->confirmation->claim_type ?? '');
         if (!in_array($claimType, ['SPEED', 'ADJUSTMENT', 'ADJUSMENT'])) {
             return redirect()->route('dashboard.index');
         }
