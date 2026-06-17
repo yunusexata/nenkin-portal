@@ -87,16 +87,17 @@ class ClientEsign extends Model
             ->translatedFormat('d F Y'));
         // Alamat
         $clientModel = $user->client;
-        $address = $clientModel->confirmation?->indonesia_address
+        $address = $clientModel->esign?->address
+            ?? $clientModel->confirmation?->indonesia_address
             ?? '-';
-
-        $split = str_split($address, 40);
-        $split2 = str_split($address, 50);
+        $line1 = (string) substr($address, 0, 40);
+        $line2 = strlen($address) > 40 ? (string) substr($address, 40, 50) : '';
+        $line3 = strlen($address) > 90 ? (string) substr($address, 90, 50) : '';
 
         $lines = [
-            $split[0],
-            $split2[1],
-            $split2[2],
+            $line1,
+            $line2,
+            $line3,
         ];
         $y = 506;
 
