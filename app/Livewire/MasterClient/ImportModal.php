@@ -136,7 +136,28 @@ class ImportModal extends Component
 
                 if (!$value['error']) {
                     $phone = trim((string) ($value['data']['phone'] ?? ''));
+                    // 1. Bersihkan spasi di awal dan akhir teks
+                    $rawPic = $value['data']['pic'] ?? ''; // Tambahkan ?? '' aman jika key 'pic' absen
+                    $trimmed = trim($rawPic);
 
+                    // 2. Siapkan nilai default (Fallback) agar tidak terjadi "Undefined variable"
+                    $pic = strtolower($trimmed); // Default: pakai teks asli jika tidak cocok regex
+
+                    // 3. Gunakan regex untuk mengambil KATA PERTAMA saja
+                    if (preg_match('/^([a-zA-Z]+)/', $trimmed, $matches)) {
+                        $firstName = strtolower($matches[1]);
+
+                        // 4. Peta normalisasi nama (Mengubah 'selamet' menjadi 'slamet')
+                        $allowedPics = [
+                            'ainul'   => 'ainul',
+                            'kim'     => 'kim',
+                            'slamet'  => 'slamet',
+                            'selamet' => 'slamet', // Auto-correct ke 'slamet' sesuai keinginan Anda
+                        ];
+
+                        // Jika kata pertama terdaftar, timpa dengan nama bersihnya
+                        $pic = $allowedPics[$firstName] ?? $firstName;
+                    } // Hapus tanda titik koma (;) di sini
                     $validatedData = [
 
                         'no_jp' => $value['data']['no_jp'],
@@ -147,7 +168,7 @@ class ImportModal extends Component
                         'raw_data' => json_encode($value['data'], true),
                         'facebook' => $value['data']['facebook'],
                         'instagram' => $value['data']['instagram'],
-                        'pic' => $value['data']['pic'],
+                        'pic' => $pic,
                         'lpk' => $value['data']['lpk'],
                         'note' => $value['data']['note'],
 
