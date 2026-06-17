@@ -87,17 +87,16 @@ class ClientEsign extends Model
             ->translatedFormat('d F Y'));
         // Alamat
         $clientModel = $user->client;
-        $address = $clientModel->esign?->address 
-            ?? $clientModel->confirmation?->indonesia_address 
+        $address = $clientModel->confirmation?->indonesia_address
             ?? '-';
-        $line1 = (string) substr($address, 0, 40);
-        $line2 = strlen($address) > 40 ? (string) substr($address, 40, 50) : '';
-        $line3 = strlen($address) > 90 ? (string) substr($address, 90, 50) : '';
+
+        $split = str_split($address, 40);
+        $split2 = str_split($address, 50);
 
         $lines = [
-            $line1,
-            $line2,
-            $line3,
+            $split[0],
+            $split2[1],
+            $split2[2],
         ];
         $y = 506;
 
@@ -124,7 +123,7 @@ class ClientEsign extends Model
 
         // Create temporary file
         $tempFile = storage_path('app/temp-signature-' . uniqid() . '.png');
-        
+
         $tempDir = storage_path('app');
         if (!file_exists($tempDir)) {
             mkdir($tempDir, 0755, true);
