@@ -384,7 +384,7 @@
                 </div>
 
                 {{-- Tanda Tangan --}}
-                @if ($client->claim_type !== \App\Models\Client\Client::CLAIM_TYPE_NORMAL)
+                @if ($client->confirmation->claim_type !== \App\Models\Client\Client::CLAIM_TYPE_NORMAL)
                 <div class="flex items-center gap-3 p-3 rounded-xl {{ $hasEsign ? 'bg-green-50 border border-green-200' : ($hasConfirmation ? 'bg-blue-50 border border-[#0049FF]/30' : 'bg-gray-50 border border-gray-200') }}">
                     <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0
                                 {{ $hasEsign ? 'bg-green-500' : ($hasConfirmation ? 'bg-[#0049FF]' : 'bg-gray-300') }}">
