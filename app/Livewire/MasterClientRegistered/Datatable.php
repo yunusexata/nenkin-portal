@@ -387,10 +387,10 @@ class Datatable extends Component
             })
 
             ->when($this->bulkPic && $this->isAdmin, function ($q) {
-                $q->where('pic', strtolower($this->bulkPic));
+                $q->where('pic', 'ILIKE', '%' . $this->bulkPic . '%');
             })
             ->when(!$this->isAdmin, function ($q) {
-                $q->where('pic', strtolower($this->bulkPic));
+                $q->where('pic', 'ILIKE', '%' . $this->bulkPic . '%');
             })
             ->when($this->filter_claim_type, function ($q) {
                 $q->where('clients.claim_type', $this->filter_claim_type);

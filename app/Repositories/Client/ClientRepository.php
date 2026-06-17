@@ -30,7 +30,7 @@ class ClientRepository extends MasterDataRepository
                 $q->where('clients.claim_type', $claimType);
             })
             ->when($pic, function ($q) use ($pic) {
-                $q->where('clients.pic', $pic);
+                $q->where('clients.pic', 'ILIKE', '%' . $pic . '%');
             })
             ->select('clients.*');
     }
@@ -45,7 +45,7 @@ class ClientRepository extends MasterDataRepository
                 $q->where('clients.claim_type', $claimType);
             })
             ->when($pic, function ($q) use ($pic) {
-                $q->where('clients.pic', $pic);
+                $q->where('clients.pic', 'ILIKE', '%' . $pic . '%');
             })
             ->whereHas('user')
             ->select('clients.*')
