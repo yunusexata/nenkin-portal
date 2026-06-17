@@ -51,7 +51,7 @@ class ClientEsign extends Model
 
     public static function generatePdfForUser(\App\Models\User $user): string
     {
-        $imagePath = storage_path('app/public/template_perjanjian.pdf');
+        $imagePath = public_path('assets/pdf/perjanjian_nenkin_20.pdf');
         $pdf = new \setasign\Fpdi\Fpdi();
 
         $pageWidth = 1130;
@@ -83,7 +83,7 @@ class ClientEsign extends Model
         // NIK
         $pdf->Text(585, 462, $user->client->esign->nik);
         // Tgl Lahir
-        $pdf->Text(585, 484, \Carbon\Carbon::parse($user->client->bod)->locale('id')
+        $pdf->Text(585, 484, \Carbon\Carbon::parse($user->client->dob)->locale('id')
             ->translatedFormat('d F Y'));
         // Alamat
         $clientModel = $user->client;
