@@ -75,11 +75,10 @@ class Client extends Model
             ClientMagicLinkRepository::create($vlaidatedData);
         });
         self::creating(function ($model) {
-            $pic = User::query()
+            $model->upod_type = User::query()
                 ->where('pic', $model->pic)
                 ->role(User::ROLE_SALES)
-                ->first();
-            $model->upod_type = $pic->upod_type;
+                ->value('upod_type');
         });
     }
 
