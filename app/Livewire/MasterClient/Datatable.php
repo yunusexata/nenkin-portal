@@ -379,7 +379,7 @@ class Datatable extends Component
             ->when($this->filter_data_type && $this->filter_data_type === Client::FILTER_DATA_TYPE_NOT_REGISTERED, function ($q) {
                 $q->whereDoesntHave('user');
             })
-            $q->whereDoesntHave('confirmation');
+            ->whereDoesntHave('confirmation');
     }
 
     public function getView(): string
