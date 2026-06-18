@@ -336,14 +336,14 @@
                     <svg class="w-5 h-5 fill-white flex-shrink-0" viewBox="0 0 24 24">
                         <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm4.2 14.2L11 13V7h1.5v5.2l4.5 2.7-.8 1.3z"/>
                     </svg>
-                <span class="text-white font-bold text-sm">Nenkin 20% sedang dalam proses transfer.</span>
+                <span class="text-white font-bold text-sm">Nenkin 20% sedang dalam proses.</span>
             </div>
             <div class="p-4 flex flex-col items-center text-center gap-3">
                 <p class="text-gray-600 text-sm leading-relaxed">
                     Estimasi proses pencairan Nenkin adalah 2-3 minggu dari tanggal konfirmasi. Kami akan menghubungi dan memberikan pemberitahuan jika uang Nenkin 20% kamu sudah ditransfer.
                 </p>
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                    Sedang Ditransfer
+                    Mohon sabar menunggu
                 </span>
             </div>
         </div>

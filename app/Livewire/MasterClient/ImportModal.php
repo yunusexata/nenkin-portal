@@ -4,6 +4,7 @@ namespace App\Livewire\MasterClient;
 
 use App\Helpers\Alert;
 use App\Helpers\ExportHelper;
+use App\Helpers\PermissionHelper;
 use App\Imports\ExcelImportBulk;
 use App\Models\Client\Client;
 use App\Repositories\Client\ClientRepository;
@@ -33,7 +34,7 @@ class ImportModal extends Component
 
     public function mount()
     {
-        $this->bulkPic = auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN) ? null : auth()->user()->pic;
+        $this->bulkPic = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE)) ? null : auth()->user()->pic;
     }
     // IMPORT PIPELINE
     public function updatedInputFile()

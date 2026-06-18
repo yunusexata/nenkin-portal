@@ -74,8 +74,8 @@ class Datatable extends Component
         $this->isCanUpdate = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_IMPORT_DATA_JEPANG, PermissionHelper::TYPE_UPDATE));
         $this->isCanDelete = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_IMPORT_DATA_JEPANG, PermissionHelper::TYPE_DELETE));
         $this->loadBatches();
-        $this->isAdmin = auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN);
-        $this->bulkPic = auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN) ? null : auth()->user()->pic;
+        $this->isAdmin = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE));
+        $this->bulkPic = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE)) ? null : auth()->user()->pic;
     }
 
     #[On('on-delete-dialog-confirm')]
@@ -378,21 +378,6 @@ class Datatable extends Component
             })
             ->when($this->filter_data_type && $this->filter_data_type === Client::FILTER_DATA_TYPE_NOT_REGISTERED, function ($q) {
                 $q->whereDoesntHave('user');
-            })
-            ->when($this->filter_claim_type && $this->filter_claim_type === Client::CLAIM_TYPE_NORMAL, function ($q) {
-                $q->where('client_confirmations.claim_type', Client::CLAIM_TYPE_NORMAL);
-            })
-            ->when($this->filter_claim_type &&
-                in_array(
-                    $this->filter_claim_type,
-                    [Client::CLAIM_TYPE_SPEED, Client::CLAIM_TYPE_ADJUSTMENT]
-                ), function ($q) {
-                $q->where('client_confirmations.claim_type', $this->filter_claim_type)
-                    ->whereHas('esign');
-            })
-            ->when($this->filter_claim_type && $this->filter_claim_type === Client::STATUS_PENDING, function ($q) {
-                $q->whereIn('client_confirmations.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
-                    ->whereDoesntHave('esign');
             });
     }
 

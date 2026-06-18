@@ -113,8 +113,8 @@
                     </div>
                 </div>
             </div>
-            <div class="w-1/3">
-                <!-- Filter by Batch Dropdown Select -->
+            <!-- Filter by Batch Dropdown Select -->
+            {{-- <div class="w-1/3">
                 <div class="px-5 mb-5 sm:px-6">
                     <div class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Jenis Pencairan</div>
                     
@@ -133,7 +133,7 @@
                         </select>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <div class="w-1/3">
                 <!-- Filter by Batch Dropdown Select -->
                 <div class="px-5 mb-5 sm:px-6">
@@ -156,7 +156,8 @@
                     </div>
                 </div>
             </div>
-            @if (auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN))
+            
+            @can(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE))
                 <div class="w-1/3">
                     <div class="px-5 mb-5 sm:px-6">
                         <div class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Pilih PIC (Sales Agent)</div>
@@ -171,7 +172,7 @@
                         </div>
                     </div>
                 </div>
-            @endif
+            @endCan
         </div>
 
         <!-- Table -->
