@@ -19,11 +19,10 @@
             font-weight: bold;
             padding: 3px;
         }
-
-        .bg-green  { background-color: #D4EDDA; }
-        .bg-red    { background-color: #F8D7DA; }
-        .bg-orange { background-color: #FFE0B2; }
-        .bg-yellow { background-color: #FFF3CD; }
+        .bg-green  { background-color: #00ff3c; }
+        .bg-red    { background-color: #ff0015; }
+        .bg-orange { background-color: #ff9900; }
+        .bg-yellow { background-color: #fffb00; }
     </style>
 </head>
 
@@ -59,10 +58,10 @@
                     @php
                         /*
                          * Colour matrix:
-                         * SPEED                                           → green  #D4EDDA
-                         * NORMAL + ALASAN RE ENTRY = akan kembali jepang → red    #F8D7DA
-                         * NORMAL + ALASAN RE ENTRY = sudah di jepang     → orange #FFE0B2
-                         * ADJUSTMENT                                      → yellow #FFF3CD
+                         * SPEED                                           → green  #00ff3c
+                         * NORMAL + ALASAN RE ENTRY = akan kembali jepang → red    #ff0015
+                         * NORMAL + ALASAN RE ENTRY = sudah di jepang     → orange #ff9900
+                         * ADJUSTMENT                                      → yellow #fffb00
                          */
                         $rowColor = '';
 
@@ -71,17 +70,17 @@
                         $backToJpType    = $data->confirmation?->back_to_jp_type;
 
                         if ($claimType === App\Models\Client\Client::CLAIM_TYPE_SPEED) {
-                            $rowColor = '#D4EDDA'; // hijau
+                            $rowColor = '#00ff3c'; // hijau
                         } elseif ($claimType === App\Models\Client\Client::CLAIM_TYPE_ADJUSTMENT) {
-                            $rowColor = '#FFF3CD'; // kuning
+                            $rowColor = '#fffb00'; // kuning
                         } elseif ($claimType === App\Models\Client\Client::CLAIM_TYPE_NORMAL) {
                             if ($currentPosition === App\Models\Client\ClientConfirmation::CURRENT_POSITION_JEPANG) {
-                                $rowColor = '#FFE0B2'; // orange — sudah di jepang
+                                $rowColor = '#ff9900'; // orange — sudah di jepang
                             } elseif (
                                 $currentPosition === App\Models\Client\ClientConfirmation::CURRENT_POSITION_INDONESIA
                                 && $backToJpType === App\Models\Client\ClientConfirmation::BACK_TO_JP_TYPE_YES
                             ) {
-                                $rowColor = '#F8D7DA'; // merah — akan kembali ke jepang
+                                $rowColor = '#ff0015'; // merah — akan kembali ke jepang
                             }
                         }
 
