@@ -35,7 +35,6 @@ class ImportModal extends Component
 
     public function mount()
     {
-
         $authUser = UserRepository::authenticatedUser();
         $this->bulkPic = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE)) ? null : auth()->user()->pic;
     }
