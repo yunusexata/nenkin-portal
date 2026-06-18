@@ -47,7 +47,7 @@
                         <td>{{ mb_strtoupper($data['name']) }}</td>
                         <td>{{ $data['dob'] ? Carbon\Carbon::parse($data['dob'])->format('Ymd') : '' }}</td>
                         <td>{{ mb_strtoupper($data['phone']) }}</td>
-                        <td>{{ mb_strtoupper$data['pic'] }}</td>
+                        <td>{{ mb_strtoupper($data['pic']) }}</td>
                         @if (!$data->user)
                             <td>{{ route('client.create', $data->magicLink['token']) }}
                          </td>
