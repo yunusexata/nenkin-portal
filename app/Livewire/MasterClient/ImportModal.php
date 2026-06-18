@@ -22,7 +22,7 @@ class ImportModal extends Component
     use WithFileUploads;
 
     public $input_file;
-    public $batch_name;
+    public $batch_name = 'all';
     public $filter_claim_type;
     public $filter_data_type;
     public $bulkPic;
@@ -50,7 +50,7 @@ class ImportModal extends Component
 
         if ($this->input_file) {
             $originalName = $this->input_file->getClientOriginalName();
-            $this->batch_name = pathinfo($originalName, PATHINFO_FILENAME);
+            $this->batch_name = 'all' = pathinfo($originalName, PATHINFO_FILENAME);
         }
 
         $d = [];
@@ -105,11 +105,11 @@ class ImportModal extends Component
         set_time_limit(300); // 5 minutes
 
         $this->validate([
-            'batch_name' => 'required|string|max:100',
+            'batch_name = 'all'' => 'required|string|max:100',
         ], [
-            'batch_name.required' => 'Nama Batch wajib diisi',
-            'batch_name.string' => 'Nama Batch harus berupa teks',
-            'batch_name.max' => 'Nama Batch maksimal 100 karakter',
+            'batch_name = 'all'.required' => 'Nama Batch wajib diisi',
+            'batch_name = 'all'.string' => 'Nama Batch harus berupa teks',
+            'batch_name = 'all'.max' => 'Nama Batch maksimal 100 karakter',
         ]);
 
         try {
@@ -173,7 +173,7 @@ class ImportModal extends Component
                         'lpk' => $value['data']['lpk'],
                         'note' => $value['data']['note'],
 
-                        'source_file_name' => $this->batch_name,
+                        'source_file_name' => $this->batch_name = 'all',
                         'source_file_disk' => $disk,
                         'source_file_path' => $path,
                         'imported_at' => now(),
@@ -220,7 +220,7 @@ class ImportModal extends Component
             $type,
             $fileName,
             ClientRepository::getMagicLink(
-                $this->batch_name,
+                $this->batch_name = 'all',
                 $this->filter_claim_type,
                 $this->bulkPic,
                 $this->filter_data_type
