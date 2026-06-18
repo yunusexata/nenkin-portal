@@ -6,7 +6,6 @@
         <div class="col-span-12">
             <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Dokumen Saya</h3>
             <p class="text-sm text-gray-500 mb-6">Status ketersediaan dokumen Anda yang diunggah oleh admin</p>
-            
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             @include('client.components.document-card', ['type' => 'ichijikin', 'title' => 'Ichijikin', 'document' => $documents['ichijikin'] ?? null])
             @include('client.components.document-card', ['type' => 'resi', 'title' => 'Resi Transfer', 'document' => $documents['resi'] ?? null])

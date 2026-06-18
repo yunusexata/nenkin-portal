@@ -9,7 +9,6 @@
             <x-ui.button size="sm" variant="success" @click="$dispatch('export', { type: '{{ App\Helpers\ExportHelper::TYPE_EXCEL }}' })">Export Excel
             </x-ui.button>
         </div>
-        
     <livewire:master-client.import-modal />
     
         @livewire('master-client.datatable')
