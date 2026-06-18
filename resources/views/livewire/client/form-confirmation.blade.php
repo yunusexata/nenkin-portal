@@ -166,6 +166,8 @@
                     id="nik" 
                     name="nik" 
                     wire:model="nik"
+                    maxlength="16"
+                    inputmode="numeric"
                     required
                     class="w-full px-4 py-2.5 rounded-lg border text-[#111827] uppercase placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#F97316] transition @error('nik') border-red-500 focus:ring-red-500 @else border-gray-300 @enderror"
                     placeholder="Masukkan NIK sesuai KTP">

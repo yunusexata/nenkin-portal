@@ -38,7 +38,15 @@ class FormConfirmation extends Component
     public $estimated_return_year;
     #[Validate('required', message: 'Alamat Indonesia Harus Diisi', onUpdate: false)]
     public $indonesia_address;
-    #[Validate('required', message: 'NIK Harus Diisi', onUpdate: false)]
+    #[Validate(
+        'required|numeric|digits:16',
+        message: [
+            'required' => 'NIK Harus Diisi',
+            'numeric' => 'NIK Hanya Boleh Angka',
+            'digits' => 'NIK Harus 16 Digit',
+        ],
+        onUpdate: false
+    )]
     public $nik;
 
     public function mount()
