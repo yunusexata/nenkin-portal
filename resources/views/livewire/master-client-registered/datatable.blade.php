@@ -152,7 +152,7 @@
                 </div>
             </div>
             
-            @if (auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN))
+            @can(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE))
                 <div class="w-1/4">
                     <div class="px-5 mb-5 sm:px-6">
                         <div class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Pilih PIC (Sales Agent)</div>
@@ -167,7 +167,7 @@
                         </div>
                     </div>
                 </div>
-            @endIf
+            @endCan
         </div>
 
         <!-- Table -->

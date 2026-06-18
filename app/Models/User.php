@@ -70,6 +70,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
     const ROLE_SUPER_ADMIN = 'SUPERADMIN';
     const ROLE_HS = 'HS';
+    const ROLE_HS2 = 'HS2';
+    const ROLE_HS3 = 'HS3';
     const ROLE_SALES = 'SALES';
     const ROLE_CLIENT = 'CLIENT';
 

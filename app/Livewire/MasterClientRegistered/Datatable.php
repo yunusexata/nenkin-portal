@@ -29,7 +29,7 @@ class Datatable extends Component
     public $isCanUpdateBookingTime;
     public $isCanUpdateDetail;
 
-    public $isAdmin = false;
+    public $isCanGetAll = false;
     public $status;
     public $selectedBatch = 'all';
     public $batches = [];
@@ -71,8 +71,8 @@ class Datatable extends Component
         $this->isCanUpdate = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_IMPORT_DATA_JEPANG, PermissionHelper::TYPE_UPDATE));
         $this->isCanDelete = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_IMPORT_DATA_JEPANG, PermissionHelper::TYPE_DELETE));
         $this->loadBatches();
-        $this->isAdmin = auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN);
-        $this->bulkPic = auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN) ? null : auth()->user()->pic;
+        $this->isCanGetAll = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE));
+        $this->bulkPic =  $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE)) ? null : auth()->user()->pic;
     }
 
     #[On('on-delete-dialog-confirm')]
@@ -419,20 +419,24 @@ class Datatable extends Component
                 $q->where('clients.source_file_name', $this->selectedBatch);
             })
 
-            ->when($this->bulkPic && $this->isAdmin, function ($q) {
+            ->when($this->bulkPic && $this->isCanGetAll, function ($q) {
                 $q->where('clients.pic', 'ILIKE', '%' . $this->bulkPic . '%');
             })
-            ->when(!$this->isAdmin, function ($q) {
+            ->when(!$this->isCanGetAll, function ($q) {
                 $q->where('clients.pic', 'ILIKE', '%' . $this->bulkPic . '%');
-            })
-            ->when($this->filter_claim_type, function ($q) {
-                $q->where('clients.claim_type', $this->filter_claim_type);
             })
             ->when($this->filter_export_status === 'exported', function ($q) {
                 $q->where('clients.is_exported', true);
             })
             ->when($this->filter_export_status === 'unexported', function ($q) {
                 $q->where('clients.is_exported', false);
+            })
+            ->when($this->filter_claim_type && $this->filter_claim_type != Client::STATUS_PENDING, function ($q) {
+                $q->where('clients.claim_type', $this->filter_claim_type);
+            })
+            ->when($this->filter_claim_type && $this->filter_claim_type === Client::STATUS_PENDING, function ($q) {
+                $q->whereIn('clients.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
+                    ->whereDoesntHave('esign');
             });
     }
 
@@ -449,24 +453,23 @@ class Datatable extends Component
     public function export($type)
     {
         $fileName = "Data Client Registered " . Carbon::now()->format('Y-m-d H:i:s');
-        consoleLog($this, [
-            $this->batch_name,
-            $this->filter_claim_type,
-            $this->bulkPic
-        ]);
 
         // Mark all matching clients as EXPORTED
         \App\Models\Client\Client::query()
             ->when($this->batch_name && $this->batch_name != 'all', function ($q) {
                 $q->where('source_file_name', $this->batch_name);
             })
-            ->when($this->filter_claim_type, function ($q) {
-                $q->where('claim_type', $this->filter_claim_type);
+            ->when($this->filter_claim_type && $this->filter_claim_type != Client::STATUS_PENDING, function ($q) {
+                $q->where('clients.claim_type', $this->filter_claim_type);
             })
-            ->when($this->bulkPic && $this->isAdmin, function ($q) {
+            ->when($this->filter_claim_type && $this->filter_claim_type === Client::STATUS_PENDING, function ($q) {
+                $q->whereIn('clients.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
+                    ->whereDoesntHave('esign');
+            })
+            ->when($this->bulkPic && $this->isCanGetAll, function ($q) {
                 $q->where('pic', 'ILIKE', '%' . $this->bulkPic . '%');
             })
-            ->when(!$this->isAdmin, function ($q) {
+            ->when(!$this->isCanGetAll, function ($q) {
                 $q->where('pic', 'ILIKE', '%' . $this->bulkPic . '%');
             })
             ->whereHas('user')

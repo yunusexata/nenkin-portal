@@ -24,8 +24,13 @@ class ClientRepository extends MasterDataRepository
             ->when($batchName  != 'all', function ($q) use ($batchName) {
                 $q->where('clients.source_file_name', $batchName);
             })
-            ->when($claimType, function ($q) use ($claimType) {
+
+            ->when($claimType && $claimType != Client::STATUS_PENDING, function ($q) use ($claimType) {
                 $q->where('clients.claim_type', $claimType);
+            })
+            ->when($claimType && $claimType === Client::STATUS_PENDING, function ($q) {
+                $q->whereIn('clients.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
+                    ->whereDoesntHave('esign');
             })
             ->when($pic, function ($q) use ($pic) {
                 $q->where('clients.pic', 'ILIKE', '%' . $pic . '%');

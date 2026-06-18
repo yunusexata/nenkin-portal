@@ -379,8 +379,12 @@ class Datatable extends Component
             ->when($this->filter_data_type && $this->filter_data_type === Client::FILTER_DATA_TYPE_NOT_REGISTERED, function ($q) {
                 $q->whereDoesntHave('user');
             })
-            ->when($this->filter_claim_type, function ($q) {
+            ->when($this->filter_claim_type && $this->filter_claim_type != Client::STATUS_PENDING, function ($q) {
                 $q->where('clients.claim_type', $this->filter_claim_type);
+            })
+            ->when($this->filter_claim_type && $this->filter_claim_type === Client::STATUS_PENDING, function ($q) {
+                $q->whereIn('clients.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
+                    ->whereDoesntHave('esign');
             });
     }
 
