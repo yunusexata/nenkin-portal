@@ -329,7 +329,7 @@ class Datatable extends Component
     public function updatedFilterDataType($value)
     {
         $this->dispatch('modal-filter', [
-            'filter_claim_type' => $value,
+            'filter_data_type' => $value,
         ]);
     }
 
