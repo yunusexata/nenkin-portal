@@ -502,57 +502,33 @@ class Datatable extends Component
     public function export($type)
     {
         $fileName = "Data Client Registered " . Carbon::now()->format('Y-m-d H:i:s');
+        $query = ClientRepository::getClientRegistered(
+            $this->batch_name,
+            $this->filter_claim_type,
+            $this->bulkPic
+        );
 
-        // Mark all matching clients as EXPORTED
-        \App\Models\Client\Client::query()
-            ->when($this->batch_name && $this->batch_name != 'all', function ($q) {
-                $q->where('source_file_name', $this->batch_name);
-            })
-            ->join('client_confirmations', function ($j) {
-                $j->on('client_confirmations.client_id', '=', 'clients.id')
-                    ->whereNull('client_confirmations.deleted_at');
-            })
-            ->whereHas('user')
-            ->when($this->filter_claim_type && $this->filter_claim_type === Client::CLAIM_TYPE_NORMAL, function ($q) {
-                $q->where('client_confirmations.claim_type', Client::CLAIM_TYPE_NORMAL);
-            })
-            ->when($this->filter_claim_type &&
-                in_array(
-                    $this->filter_claim_type,
-                    [Client::CLAIM_TYPE_SPEED, Client::CLAIM_TYPE_ADJUSTMENT]
-                ), function ($q) {
-                $q->where('client_confirmations.claim_type', $this->filter_claim_type)
-                    ->whereHas('esign');
-            })
-            ->when($this->filter_claim_type && $this->filter_claim_type === Client::STATUS_PENDING, function ($q) {
-                $q->whereIn('client_confirmations.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
-                    ->whereDoesntHave('esign');
-            })
-            ->when($this->bulkPic && $this->isCanGetAll, function ($q) {
-                $q->where('pic', 'ILIKE', '%' . $this->bulkPic . '%');
-            })
-            ->when(!$this->isCanGetAll, function ($q) {
-                $q->where('pic', 'ILIKE', '%' . $this->bulkPic . '%');
-            })
-            ->update([
-                'is_exported' => true,
-                'exported_at' => Carbon::now(),
-            ]);
-
-        return ExportHelper::export(
+        $export = ExportHelper::export(
             $type,
             $fileName,
-            ClientRepository::getClientRegistered($this->batch_name, $this->filter_claim_type, $this->bulkPic),
+            $query,
             'app.master-client-registered.export',
             [
                 'title' => 'Data Client Registered',
-                'type'  => $type,
+                'type' => $type,
             ],
             [
-                'size'        => 'legal',
+                'size' => 'legal',
                 'orientation' => 'landscape',
             ]
         );
+
+        $query->update([
+            'is_exported' => true,
+            'exported_at' => now(),
+        ]);
+
+        return $export;
     }
 
     public function getView(): string
