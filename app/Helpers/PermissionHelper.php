@@ -69,7 +69,7 @@ class PermissionHelper
         self::ACCESS_IMPORT_DATA_JEPANG => 'Import Data Jepang',
         self::ACCESS_MASTER_CLIENT => 'Master Data Klien',
         self::ACCESS_MASTER_CLIENT_REGISTERED => 'Master Klien - Registered',
-        self::ACCESS_CLIENT => 'Master Data Klien',
+        self::ACCESS_CLIENT => 'Master Klien',
         self::ACCESS_CLIENT_DOCUMENT => 'Document Klien',
         self::ACCESS_CLIENT_AGREEMENT => 'Surat Perjanjian Klien',
         self::ACCESS_ADMIN_UPLOAD_DOCUMENT => 'Admin Upload Dokumen',
