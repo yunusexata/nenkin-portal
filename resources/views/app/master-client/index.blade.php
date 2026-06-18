@@ -9,7 +9,7 @@
                     <x-ui.button size="sm" variant="primary" @click="$dispatch('open-regular-modal')">Import Excel Data Client
                     </x-ui.button>
                 @endCan
-                <x-ui.button size="sm" variant="success" @click="$dispatch('export', { type: '{{ App\Helpers\ExportHelper::TYPE_EXCEL }}' })">Export Excel Belum Buat Akun
+                <x-ui.button size="sm" variant="success" @click="$dispatch('export', { type: '{{ App\Helpers\ExportHelper::TYPE_EXCEL }}' })">Export Excel
                 </x-ui.button>
             </div>
             

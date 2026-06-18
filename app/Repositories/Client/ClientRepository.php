@@ -17,12 +17,24 @@ class ClientRepository extends MasterDataRepository
         return Client::query();
     }
 
-    public static function getMagicLink($batchName = null, $claimType = null, $pic = null)
+    public static function getMagicLink($batchName = null, $claimType = null, $pic = null, $data_type = null)
     {
+        // dd([
+        //     $batchName,
+        //     $claimType,
+        //     $pic,
+        //     $data_type
+        // ]);
+        // dd(Client::query()
+        //     ->join('client_magic_links', 'client_magic_links.client_id', '=', 'clients.id')
+        //     ->whereNull('client_magic_links.email')
+        //     ->whereNull('client_magic_links.used_at')
+        //     ->whereDoesntHave('esign')->get());
         return Client::query()
             ->join('client_magic_links', 'client_magic_links.client_id', '=', 'clients.id')
             ->whereNull('client_magic_links.email')
             ->whereNull('client_magic_links.used_at')
+            ->whereDoesntHave('esign')
             ->when($batchName, function ($q) use ($batchName) {
                 $q->where('clients.source_file_name', $batchName);
             })
@@ -32,7 +44,18 @@ class ClientRepository extends MasterDataRepository
             ->when($pic, function ($q) use ($pic) {
                 $q->where('clients.pic', 'ILIKE', '%' . $pic . '%');
             })
-            ->select('clients.*');
+            ->when($data_type && $data_type === Client::FILTER_DATA_TYPE_CONFIRMATION, function ($q) {
+                $q->whereHas('confirmation');
+            })
+            ->when($data_type && $data_type === Client::FILTER_DATA_TYPE_NOT_CONFIRMATION, function ($q) {
+                $q->whereDoesntHave('confirmation');
+            })
+            ->when($data_type && $data_type === Client::FILTER_DATA_TYPE_REGISTERED, function ($q) {
+                $q->whereHas('user');
+            })
+            ->when($data_type && $data_type === Client::FILTER_DATA_TYPE_NOT_REGISTERED, function ($q) {
+                $q->whereDoesntHave('user');
+            });
     }
 
     public static function getClientRegistered($batchName = null, $claimType = null, $pic = null)

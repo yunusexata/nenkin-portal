@@ -30,6 +30,7 @@ class Datatable extends Component
     public $status;
     public $selectedBatch = 'all';
     public $filter_claim_type;
+    public $filter_data_type;
     public $batches = [];
     public $bulkPic;
 
@@ -207,22 +208,64 @@ class Datatable extends Component
                 'name' => 'Jenis Pencairan',
                 'render' => function ($item) {
                     $style = 'primary';
-                    switch ($item->claim_type) {
-                        case Client::CLAIM_TYPE_ADJUSTMENT:
-                            $style = 'amber';
-                            break;
-                        case Client::CLAIM_TYPE_NORMAL:
-                            $style = 'blue';
-                            break;
-                        case Client::CLAIM_TYPE_SPEED:
+                    $text = '';
+                    if (
+                        in_array(
+                            $item?->confirmation?->claim_type,
+                            [
+                                Client::CLAIM_TYPE_ADJUSTMENT,
+                                Client::CLAIM_TYPE_SPEED,
+                            ]
+                        ) && !$item?->esign
+                    ) {
+                        $text = Client::CLAIM_TYPE_PENDING;
+                        $style = 'red';
+                    } elseif (
+                        $item?->confirmation?->claim_type == Client::CLAIM_TYPE_ADJUSTMENT
+                        && $item?->esign
+                    ) {
+                        $text = Client::CLAIM_TYPE_ADJUSTMENT;
+                        $style = 'amber';
+                    } elseif (
+                        $item?->confirmation?->claim_type == Client::CLAIM_TYPE_SPEED
+                        && $item?->esign
+                    ) {
+                        $text = Client::CLAIM_TYPE_SPEED;
+                        $style = 'success';
+                    } elseif (
+                        $item?->confirmation?->claim_type == Client::CLAIM_TYPE_NORMAL
+                    ) {
+                        $text = Client::CLAIM_TYPE_NORMAL;
+                        $style = 'blue';
+                    } elseif (!$item->confirmation) {
+                        $text = Client::CLAIM_TYPE_NORMAL;
+                        $style = 'blue';
+                    }
+                    return '<span class="bg-' . $style . '-50 dark:bg-' . $style . '-500/15 text-' . $style . '-600 dark:text-' . $style . '-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">' . strtoupper($text) . '</span>';
+                }
+            ],
+            [
+                'searchable' => false,
+                'key' => 'confirmation_exists',
+                'name' => 'Konfimasi',
+                'render' => function ($item) {
+                    $style = 'success';
+                    $text = 'belum';
+                    switch ($item->confirmation_exists) {
+                        case true:
                             $style = 'success';
+                            $text = 'sudah';
+                            break;
+                        case false:
+                            $style = 'warning';
+                            $text = 'belum';
                             break;
 
                         default:
                             # code...
                             break;
                     }
-                    return '<span class="bg-' . $style . '-50 dark:bg-' . $style . '-500/15 text-' . $style . '-600 dark:text-' . $style . '-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">' . strtoupper($item->claim_type) . '</span>';
+                    return '<span class="bg-' . $style . '-50 dark:bg-' . $style . '-500/15 text-' . $style . '-700 dark:text-' . $style . '-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">' . strtoupper($text) . '</span>';
                 }
             ],
             [
@@ -249,11 +292,41 @@ class Datatable extends Component
                     return '<span class="bg-' . $style . '-50 dark:bg-' . $style . '-500/15 text-' . $style . '-700 dark:text-' . $style . '-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">' . strtoupper($text) . '</span>';
                 }
             ],
+            [
+                'searchable' => false,
+                'key' => 'esign_exists',
+                'name' => 'TTD',
+                'render' => function ($item) {
+                    $style = 'success';
+                    $text = 'belum';
+                    switch ($item->esign_exists) {
+                        case true:
+                            $style = 'success';
+                            $text = 'sudah';
+                            break;
+                        case false:
+                            $style = 'warning';
+                            $text = 'belum';
+                            break;
+
+                        default:
+                            # code...
+                            break;
+                    }
+                    return '<span class="bg-' . $style . '-50 dark:bg-' . $style . '-500/15 text-' . $style . '-700 dark:text-' . $style . '-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">' . strtoupper($text) . '</span>';
+                }
+            ],
 
         ];
     }
 
     public function updatedFilterClaimType($value)
+    {
+        $this->dispatch('modal-filter', [
+            'filter_claim_type' => $value,
+        ]);
+    }
+    public function updatedFilterDataType($value)
     {
         $this->dispatch('modal-filter', [
             'filter_claim_type' => $value,
@@ -267,18 +340,44 @@ class Datatable extends Component
             ->selectRaw("
         EXISTS (
             SELECT 1
+            FROM client_confirmations
+            WHERE client_confirmations.client_id = clients.id
+                  AND client_confirmations.deleted_at IS NULL
+        ) as confirmation_exists,
+        EXISTS (
+            SELECT 1
+            FROM client_esigns
+            WHERE client_esigns.client_id = clients.id
+                  AND client_esigns.deleted_at IS NULL
+        ) as esign_exists,
+        EXISTS (
+            SELECT 1
             FROM users
             WHERE users.client_id = clients.id
+                  AND users.deleted_at IS NULL
         ) as user_exists
     ")
             ->when($this->selectedBatch != 'all', function ($q) {
-                $q->where('source_file_name', $this->selectedBatch);
+                $q->where('clients.source_file_name', $this->selectedBatch);
             })
             ->when($this->bulkPic && $this->isAdmin, function ($q) {
-                $q->where('pic', 'ILIKE', '%' . $this->bulkPic . '%');
+                $q->where('clients.pic', 'ILIKE', '%' . $this->bulkPic . '%');
             })
             ->when(!$this->isAdmin, function ($q) {
-                $q->where('pic', 'ILIKE', '%' . $this->bulkPic . '%');
+                $q->where('clients.pic', 'ILIKE', '%' . $this->bulkPic . '%');
+            })
+            ->whereDoesntHave('esign')
+            ->when($this->filter_data_type && $this->filter_data_type === Client::FILTER_DATA_TYPE_CONFIRMATION, function ($q) {
+                $q->whereHas('confirmation');
+            })
+            ->when($this->filter_data_type && $this->filter_data_type === Client::FILTER_DATA_TYPE_NOT_CONFIRMATION, function ($q) {
+                $q->whereDoesntHave('confirmation');
+            })
+            ->when($this->filter_data_type && $this->filter_data_type === Client::FILTER_DATA_TYPE_REGISTERED, function ($q) {
+                $q->whereHas('user');
+            })
+            ->when($this->filter_data_type && $this->filter_data_type === Client::FILTER_DATA_TYPE_NOT_REGISTERED, function ($q) {
+                $q->whereDoesntHave('user');
             })
             ->when($this->filter_claim_type, function ($q) {
                 $q->where('clients.claim_type', $this->filter_claim_type);

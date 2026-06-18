@@ -24,6 +24,7 @@ class ImportModal extends Component
     public $input_file;
     public $batch_name;
     public $filter_claim_type;
+    public $filter_data_type;
     public $bulkPic;
 
     // Import Pipeline
@@ -218,7 +219,12 @@ class ImportModal extends Component
         return ExportHelper::export(
             $type,
             $fileName,
-            ClientRepository::getMagicLink($this->batch_name, $this->filter_claim_type, $this->bulkPic),
+            ClientRepository::getMagicLink(
+                $this->batch_name,
+                $this->filter_claim_type,
+                $this->bulkPic,
+                $this->filter_data_type
+            ),
             'app.master-client.export',
             [
                 'title' => 'Data Client',

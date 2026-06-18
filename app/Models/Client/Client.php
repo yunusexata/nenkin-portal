@@ -56,11 +56,25 @@ class Client extends Model
     const CLAIM_TYPE_ADJUSTMENT = 'adjusment';
     const CLAIM_TYPE_NORMAL = 'normal';
     const CLAIM_TYPE_SPEED = 'speed';
+    const CLAIM_TYPE_PENDING = 'pending';
 
     const CLAIM_TYPE_CHOICE = [
-        self::CLAIM_TYPE_ADJUSTMENT => 'ADJUSMENT',
         self::CLAIM_TYPE_NORMAL => 'NORMAL',
+        self::CLAIM_TYPE_PENDING => 'PENDING',
+        self::CLAIM_TYPE_ADJUSTMENT => 'ADJUSMENT',
         self::CLAIM_TYPE_SPEED => 'SPEED',
+    ];
+
+    const FILTER_DATA_TYPE_CONFIRMATION = 'confirmation';
+    const FILTER_DATA_TYPE_NOT_CONFIRMATION = 'not_confirmation';
+    const FILTER_DATA_TYPE_REGISTERED = 'registered';
+    const FILTER_DATA_TYPE_NOT_REGISTERED = 'not_registered';
+
+    const FILTER_DATA_TYPE_CHOICE = [
+        self::FILTER_DATA_TYPE_CONFIRMATION => 'Sudah Konfirmasi',
+        self::FILTER_DATA_TYPE_NOT_CONFIRMATION => 'Belum Konfirmasi',
+        self::FILTER_DATA_TYPE_REGISTERED => 'Sudah Buat Akun',
+        self::FILTER_DATA_TYPE_NOT_REGISTERED => 'Belum Buat Akun',
     ];
 
     protected static function onBoot()

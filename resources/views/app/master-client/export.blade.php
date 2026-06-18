@@ -48,7 +48,13 @@
                         <td>{{ $data['dob'] ? Carbon\Carbon::parse($data['dob'])->format('Ymd') : '' }}</td>
                         <td>{{ $data['phone'] }}</td>
                         <td>{{ $data['pic'] }}</td>
-                        <td>{{ route('client.create', $data->magicLink['token']) }}</td>
+                        @if (!$data->user)
+                            <td>{{ route('client.create', $data->magicLink['token']) }}
+                         </td>
+                        @elseif ($data->user && !$data->confirmation)
+                            <td>Belum Konfirmasi</td>
+                        @endif
+                        <td></td>
                     </tr>
                 @endforeach
             @endif

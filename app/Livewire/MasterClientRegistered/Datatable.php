@@ -200,6 +200,8 @@ class Datatable extends Component
                 'name' => 'Note',
             ],
             [
+                'sortable' => false,
+                'searchable' => false,
                 'key' => 'claim_type',
                 'name' => 'Jenis Pencairan',
                 'render' => function ($item) {
