@@ -7,6 +7,7 @@ use App\Helpers\ExportHelper;
 use App\Helpers\PermissionHelper;
 use App\Imports\ExcelImportBulk;
 use App\Models\Client\Client;
+use App\Repositories\Account\UserRepository;
 use App\Repositories\Client\ClientRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -34,6 +35,8 @@ class ImportModal extends Component
 
     public function mount()
     {
+
+        $authUser = UserRepository::authenticatedUser();
         $this->bulkPic = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE)) ? null : auth()->user()->pic;
     }
     // IMPORT PIPELINE
