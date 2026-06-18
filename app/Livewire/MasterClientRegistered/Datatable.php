@@ -10,6 +10,7 @@ use App\Models\Client\ClientConfirmation;
 use App\Models\GensenForm\GensenFormLink;
 use App\Repositories\Account\UserRepository;
 use App\Repositories\Client\ClientConfirmationRepository;
+use App\Repositories\Client\ClientEsignRepository;
 use App\Repositories\Client\ClientRepository;
 use App\Repositories\Exata\ExataFormCandidateRepository;
 use App\Repositories\GensenForm\GensenFormLinkRepository;
@@ -85,6 +86,9 @@ class Datatable extends Component
         }
 
         ClientConfirmationRepository::deleteBy([
+            ['client_id', $this->targetDeleteId]
+        ]);
+        ClientEsignRepository::deleteBy([
             ['client_id', $this->targetDeleteId]
         ]);
         Alert::success($this, 'Berhasil', 'Data berhasil dihapus');
