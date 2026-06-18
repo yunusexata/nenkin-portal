@@ -209,28 +209,44 @@ class Datatable extends Component
                 'render' => fn($item) => $item->note,
             ],
             [
-                'sortable' => false,
-                'searchable' => false,
-                'key' => 'claim_type',
+                'key' => 'client_confirmations.claim_type',
                 'name' => 'Jenis Pencairan',
                 'render' => function ($item) {
                     $style = 'primary';
-                    switch ($item->claim_type) {
-                        case Client::CLAIM_TYPE_ADJUSTMENT:
-                            $style = 'amber';
-                            break;
-                        case Client::CLAIM_TYPE_NORMAL:
-                            $style = 'blue';
-                            break;
-                        case Client::CLAIM_TYPE_SPEED:
-                            $style = 'success';
-                            break;
-
-                        default:
-                            # code...
-                            break;
+                    $text = '';
+                    if (
+                        in_array(
+                            $item?->confirmation?->claim_type,
+                            [
+                                Client::CLAIM_TYPE_ADJUSTMENT,
+                                Client::CLAIM_TYPE_SPEED,
+                            ]
+                        ) && !$item?->esign
+                    ) {
+                        $text = Client::CLAIM_TYPE_PENDING;
+                        $style = 'red';
+                    } elseif (
+                        $item?->confirmation?->claim_type == Client::CLAIM_TYPE_ADJUSTMENT
+                        && $item?->esign
+                    ) {
+                        $text = Client::CLAIM_TYPE_ADJUSTMENT;
+                        $style = 'amber';
+                    } elseif (
+                        $item?->confirmation?->claim_type == Client::CLAIM_TYPE_SPEED
+                        && $item?->esign
+                    ) {
+                        $text = Client::CLAIM_TYPE_SPEED;
+                        $style = 'success';
+                    } elseif (
+                        $item?->confirmation?->claim_type == Client::CLAIM_TYPE_NORMAL
+                    ) {
+                        $text = Client::CLAIM_TYPE_NORMAL;
+                        $style = 'blue';
+                    } elseif (!$item->confirmation) {
+                        $text = Client::CLAIM_TYPE_NORMAL;
+                        $style = 'blue';
                     }
-                    return '<span class="bg-' . $style . '-50 dark:bg-' . $style . '-500/15 text-' . $style . '-600 dark:text-' . $style . '-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">' . strtoupper($item->claim_type) . '</span>';
+                    return '<span class="bg-' . $style . '-50 dark:bg-' . $style . '-500/15 text-' . $style . '-600 dark:text-' . $style . '-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">' . strtoupper($text) . '</span>';
                 }
             ],
             [
