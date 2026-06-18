@@ -310,7 +310,9 @@
                         <svg class="w-5 h-5 fill-white flex-shrink-0" viewBox="0 0 24 24">
                             <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
                         </svg>
-                        <span class="text-white font-bold text-sm">Tanda Tangan Diperlukan</span>
+                        <span class="text-white font-bold text-sm">
+                            Tanda Tangan Diperlukan
+                        </span>
                     </div>
                     <div class="p-4 flex flex-col items-center text-center gap-3">
                         <p class="text-gray-600 text-sm leading-relaxed">
@@ -342,6 +344,7 @@
                 <p class="text-gray-600 text-sm leading-relaxed">
                     Estimasi proses pencairan Nenkin adalah 2-3 minggu dari tanggal konfirmasi. Kami akan menghubungi dan memberikan pemberitahuan jika uang Nenkin 20% kamu sudah ditransfer.
                 </p>
+
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                     Mohon sabar menunggu
                 </span>
