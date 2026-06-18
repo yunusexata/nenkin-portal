@@ -99,8 +99,7 @@
 
                 {{-- Action Button Step 1 --}}
                 <div class="text-center space-y-3">
-                    <button
-                    type="button"
+                    <button type="button"
                     @click="goToStep2"
                     :class="'bg-[#F97316] hover:bg-orange-600 shadow-orange-100 shadow-lg cursor-pointer'"
                     class="w-full py-4 px-6 text-white font-bold rounded-xl text-base sm:text-lg transition-all duration-300 uppercase tracking-wider flex items-center justify-center gap-3 text-white">
