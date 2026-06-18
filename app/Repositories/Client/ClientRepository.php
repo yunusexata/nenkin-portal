@@ -66,8 +66,8 @@ class ClientRepository extends MasterDataRepository
                 in_array(
                     $claimType,
                     [Client::CLAIM_TYPE_SPEED, Client::CLAIM_TYPE_ADJUSTMENT]
-                ), function ($q) {
-                $q->whereIn('client_confirmations.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
+                ), function ($q) use($claimType) {
+                $q->where('client_confirmations.claim_type', $claimType)
                     ->whereHas('esign');
             })
             ->when($claimType && $claimType === Client::STATUS_PENDING, function ($q) {

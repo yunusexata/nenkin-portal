@@ -456,7 +456,7 @@ class Datatable extends Component
                     $this->filter_claim_type,
                     [Client::CLAIM_TYPE_SPEED, Client::CLAIM_TYPE_ADJUSTMENT]
                 ), function ($q) {
-                $q->whereIn('client_confirmations.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
+                $q->where('client_confirmations.claim_type', $this->filter_claim_type)
                     ->whereHas('esign');
             })
             ->when($this->filter_claim_type && $this->filter_claim_type === Client::STATUS_PENDING, function ($q) {
@@ -497,7 +497,7 @@ class Datatable extends Component
                     $this->filter_claim_type,
                     [Client::CLAIM_TYPE_SPEED, Client::CLAIM_TYPE_ADJUSTMENT]
                 ), function ($q) {
-                $q->whereIn('client_confirmations.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
+                $q->where('client_confirmations.claim_type', $this->filter_claim_type)
                     ->whereHas('esign');
             })
             ->when($this->filter_claim_type && $this->filter_claim_type === Client::STATUS_PENDING, function ($q) {
