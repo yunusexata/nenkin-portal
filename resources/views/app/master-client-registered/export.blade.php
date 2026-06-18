@@ -65,11 +65,16 @@
                          */
                         $rowColor = '';
 
-                        $claimType       = $data['claim_type'] ?? '';
+                        $claimType       = $data?->confirmation?->claim_type ?? '';
                         $currentPosition = $data->confirmation?->current_position;
                         $backToJpType    = $data->confirmation?->back_to_jp_type;
-
-                        if ($claimType === App\Models\Client\Client::CLAIM_TYPE_SPEED) {
+                        if(in_array($claimType, [
+                            App\Models\Client\Client::CLAIM_TYPE_SPEED,
+                            App\Models\Client\Client::CLAIM_TYPE_ADJUSTMENT
+                        ]) && !$data?->esign
+                        ){
+                            $rowColor = '#465FFF';
+                        }elseif ($claimType === App\Models\Client\Client::CLAIM_TYPE_SPEED) {
                             $rowColor = '#00ff3c'; // hijau
                         } elseif ($claimType === App\Models\Client\Client::CLAIM_TYPE_ADJUSTMENT) {
                             $rowColor = '#fffb00'; // kuning
@@ -112,7 +117,18 @@
                         <td style="{{ $rowStyle }}">{{ mb_strtoupper($data['pic']) }}</td>
                         <td style="{{ $rowStyle }}">{{ mb_strtoupper($data['lpk']) }}</td>
                         <td style="{{ $rowStyle }}">{{ mb_strtoupper($data['note']) }}</td>
-                        <td style="{{ $rowStyle }}">{{ mb_strtoupper($data['claim_type']) }}</td>
+                        @php
+                            $claimType = $data?->confirmation?->claim_type;
+                            $text = '';
+
+                            if (!$data?->confirmation || $claimType === App\Models\Client\Client::CLAIM_TYPE_NORMAL) {
+                                $text = App\Models\Client\Client::CLAIM_TYPE_NORMAL;
+                            } elseif (in_array($claimType, [App\Models\Client\Client::CLAIM_TYPE_ADJUSTMENT, App\Models\Client\Client::CLAIM_TYPE_SPEED])) {
+                                // Jika esign true -> pakai claim_type asli, jika false -> PENDING
+                                $text = $data?->esign ? $claimType : App\Models\Client\Client::CLAIM_TYPE_PENDING;
+                            }
+                        @endphp
+                        <td style="{{ $rowStyle }}">{{ mb_strtoupper($text) }}</td>
                         <td style="{{ $rowStyle }}">{{ mb_strtoupper($data['esign_exists'] ? 'Sudah' : 'Belum') }}</td>
                         <td style="{{ $rowStyle }}">{{ mb_strtoupper($data->confirmation?->current_position) }}</td>
                         <td style="{{ $rowStyle }}">{{ mb_strtoupper($data->confirmation?->departure_month ? Carbon\Carbon::createFromFormat('n-Y', $data->confirmation?->departure_month.'-'.$data->confirmation?->departure_year)->locale('id')->translatedFormat('F Y') : '') }}</td>
