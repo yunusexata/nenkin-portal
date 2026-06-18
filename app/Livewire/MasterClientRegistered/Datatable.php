@@ -37,6 +37,7 @@ class Datatable extends Component
 
     public $batch_name;
     public $filter_claim_type;
+    public $filter_export_status;
 
     // Delete Dialog
     public $targetDeleteId;
@@ -161,43 +162,51 @@ class Datatable extends Component
             //     },
             // ],
             [
-                'key' => 'no_jp',
+                'key' => 'clients.no_jp',
                 'name' => 'No Input JPN',
                 'render' => function ($item) {
                     return $item->no_jp;
                 }
             ],
             [
-                'key' => 'name',
+                'key' => 'clients.name',
                 'name' => 'Nama',
+                'render' => fn($item) => $item->name,
             ],
             [
-                'key' => 'dob',
+                'key' => 'clients.dob',
                 'name' => 'Tgl Lahir',
+                'render' => fn($item) => $item->dob,
             ],
             [
-                'key' => 'facebook',
+                'key' => 'clients.facebook',
                 'name' => 'Nama FB',
+                'render' => fn($item) => $item->facebook,
             ],
             [
-                'key' => 'instagram',
+                'key' => 'clients.instagram',
                 'name' => 'Nama IG',
+                'render' => fn($item) => $item->instagram,
             ],
             [
-                'key' => 'phone',
+                'key' => 'clients.phone',
                 'name' => 'No Telp',
+                'render' => fn($item) => $item->phone,
             ],
             [
-                'key' => 'pic',
+                'key' => 'clients.pic',
                 'name' => 'PIC',
+                'render' => fn($item) => $item->pic,
             ],
             [
-                'key' => 'lpk',
+                'key' => 'clients.lpk',
                 'name' => 'LPK',
+                'render' => fn($item) => $item->lpk,
             ],
             [
-                'key' => 'note',
+                'key' => 'clients.note',
                 'name' => 'Note',
+                'render' => fn($item) => $item->note,
             ],
             [
                 'sortable' => false,
@@ -222,6 +231,18 @@ class Datatable extends Component
                             break;
                     }
                     return '<span class="bg-' . $style . '-50 dark:bg-' . $style . '-500/15 text-' . $style . '-600 dark:text-' . $style . '-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">' . strtoupper($item->claim_type) . '</span>';
+                }
+            ],
+            [
+                'key'  => 'is_exported',
+                'name' => 'Status Ekspor',
+                'sortable' => false,
+                'searchable' => false,
+                'render' => function ($item) {
+                    if ($item->is_exported) {
+                        return '<span class="bg-success-50 dark:bg-success-500/15 text-success-600 dark:text-success-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">EXPORTED</span>';
+                    }
+                    return '<span class="bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 text-theme-xs rounded-full px-2 py-0.5 font-medium">UN-EXPORTED</span>';
                 }
             ],
             [
@@ -273,6 +294,7 @@ class Datatable extends Component
                 }
             ],
             [
+                'searchable' => false,
                 'key' => 'nenkin_80_received_type',
                 'name' => 'Status Penerimaan Nenkin 80%',
                 'render' => function ($item) {
@@ -280,6 +302,7 @@ class Datatable extends Component
                 }
             ],
             [
+                'searchable' => false,
                 'key' => 'current_position',
                 'name' => 'Posisi Saat Ini',
                 'render' => function ($item) {
@@ -287,6 +310,7 @@ class Datatable extends Component
                 }
             ],
             [
+                'searchable' => false,
                 'key' => 'back_to_jp_type',
                 'name' => 'Rencana Kembali Ke Jepang',
                 'render' => function ($item) {
@@ -294,6 +318,7 @@ class Datatable extends Component
                 }
             ],
             [
+                'searchable' => false,
                 'key' => 'departure_type',
                 'name' => 'Estimasi Bulan Kembali Ke Jepang',
                 'render' => function ($item) {
@@ -301,6 +326,7 @@ class Datatable extends Component
                 }
             ],
             [
+                'searchable' => false,
                 'key' => 'departure_month',
                 'name' => 'Bulan Kembali Ke Jepang',
                 'render' => function ($item) {
@@ -315,11 +341,13 @@ class Datatable extends Component
                 }
             ],
             [
+                'searchable' => false,
                 'key' => 'departure_year',
                 'name' => 'Tahun Kembali Ke Jepang',
                 'render' => fn($item) => $item->departure_year ?? '-',
             ],
             [
+                'searchable' => false,
                 'key' => 'estimated_return_month',
                 'name' => 'Bulan Kepulangan',
                 'render' => function ($item) {
@@ -334,16 +362,19 @@ class Datatable extends Component
                 }
             ],
             [
+                'searchable' => false,
                 'key' => 'estimated_return_year',
                 'name' => 'Tahun Kepulangan',
                 'render' => fn($item) => $item->estimated_return_year ?? '',
             ],
             [
+                'searchable' => false,
                 'key' => 'nik',
                 'name' => 'NIK',
                 'render' => fn($item) => $item->nik ?? '',
             ],
             [
+                'searchable' => false,
                 'key' => 'indonesia_address',
                 'name' => 'Alamat Indonesia',
                 'render' => fn($item) => $item->indonesia_address ?? '',
@@ -385,17 +416,23 @@ class Datatable extends Component
             })
             ->whereHas('user')
             ->when($this->selectedBatch != 'all', function ($q) {
-                $q->where('source_file_name', $this->selectedBatch);
+                $q->where('clients.source_file_name', $this->selectedBatch);
             })
 
             ->when($this->bulkPic && $this->isAdmin, function ($q) {
-                $q->where('pic', 'ILIKE', '%' . $this->bulkPic . '%');
+                $q->where('clients.pic', 'ILIKE', '%' . $this->bulkPic . '%');
             })
             ->when(!$this->isAdmin, function ($q) {
-                $q->where('pic', 'ILIKE', '%' . $this->bulkPic . '%');
+                $q->where('clients.pic', 'ILIKE', '%' . $this->bulkPic . '%');
             })
             ->when($this->filter_claim_type, function ($q) {
                 $q->where('clients.claim_type', $this->filter_claim_type);
+            })
+            ->when($this->filter_export_status === 'exported', function ($q) {
+                $q->where('clients.is_exported', true);
+            })
+            ->when($this->filter_export_status === 'unexported', function ($q) {
+                $q->where('clients.is_exported', false);
             });
     }
 
@@ -417,6 +454,27 @@ class Datatable extends Component
             $this->filter_claim_type,
             $this->bulkPic
         ]);
+
+        // Mark all matching clients as EXPORTED
+        \App\Models\Client\Client::query()
+            ->when($this->batch_name && $this->batch_name != 'all', function ($q) {
+                $q->where('source_file_name', $this->batch_name);
+            })
+            ->when($this->filter_claim_type, function ($q) {
+                $q->where('claim_type', $this->filter_claim_type);
+            })
+            ->when($this->bulkPic && $this->isAdmin, function ($q) {
+                $q->where('pic', 'ILIKE', '%' . $this->bulkPic . '%');
+            })
+            ->when(!$this->isAdmin, function ($q) {
+                $q->where('pic', 'ILIKE', '%' . $this->bulkPic . '%');
+            })
+            ->whereHas('user')
+            ->update([
+                'is_exported' => true,
+                'exported_at' => Carbon::now(),
+            ]);
+
         return ExportHelper::export(
             $type,
             $fileName,
@@ -424,10 +482,10 @@ class Datatable extends Component
             'app.master-client-registered.export',
             [
                 'title' => 'Data Client Registered',
-                'type' => $type,
+                'type'  => $type,
             ],
             [
-                'size' => 'legal',
+                'size'        => 'legal',
                 'orientation' => 'landscape',
             ]
         );

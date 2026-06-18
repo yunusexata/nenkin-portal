@@ -4,7 +4,7 @@
         <div class="flex flex-col gap-2 px-5 mb-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
             
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-                <form>
+                <form onsubmit="event.preventDefault();">
                     <div class="relative">
                         <button type="button" class="absolute -translate-y-1/2 left-4 top-1/2">
                             <svg class="fill-gray-500 dark:fill-gray-400" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -36,6 +36,8 @@ class Client extends Model
         'pic',
         'lpk',
         'note',
+        'is_exported',
+        'exported_at',
         'upod_type',
     ];
 

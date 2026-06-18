@@ -296,7 +296,7 @@
                     </div>
                     <div class="p-4 flex flex-col items-center text-center gap-3">
                         <p class="text-gray-600 text-sm leading-relaxed">
-                            Proses nenkin kamu akan masuk ke pencairan <strong>NORMAL</strong>. Dikarenakan kamu sudah berada di Jepang atau akan kembali ke Jepang dalam kurun waktu kurang dari 6 bulan. Kamu akan mendapatkan notifikasi dan pemberitahuan jika nenkin kamu sudah cair.
+                            Proses nenkin kamu masuk ke pencairan <strong>NORMAL</strong>. Dikarenakan kamu sudah berada di Jepang atau akan kembali ke Jepang dalam kurun waktu kurang dari 6 bulan. Kamu akan mendapatkan notifikasi dan pemberitahuan jika nenkin kamu sudah cair. Estimasi pencairan nenkin adalah 3-4 bulan sejak tanggal pencairan 80%.
                         </p>
                         <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                             Sedang Diproses Japan Pension Service
@@ -340,7 +340,7 @@
             </div>
             <div class="p-4 flex flex-col items-center text-center gap-3">
                 <p class="text-gray-600 text-sm leading-relaxed">
-                    Estimasi proses pencairan Nenkin adalah 2 minggu dari tanggal konfirmasi. Kami akan menghubungi dan memberikan pemberitahuan jika uang Nenkin 20% kamu sudah ditransfer.
+                    Estimasi proses pencairan Nenkin adalah 2-3 minggu dari tanggal konfirmasi. Kami akan menghubungi dan memberikan pemberitahuan jika uang Nenkin 20% kamu sudah ditransfer.
                 </p>
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                     Sedang Ditransfer
