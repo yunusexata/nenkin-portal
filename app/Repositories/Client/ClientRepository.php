@@ -19,23 +19,9 @@ class ClientRepository extends MasterDataRepository
 
     public static function getMagicLink($batchName = null, $claimType = null, $pic = null, $data_type = null)
     {
-        // dd([
-        //     $batchName,
-        //     $claimType,
-        //     $pic,
-        //     $data_type
-        // ]);
-        // dd(Client::query()
-        //     ->join('client_magic_links', 'client_magic_links.client_id', '=', 'clients.id')
-        //     ->whereNull('client_magic_links.email')
-        //     ->whereNull('client_magic_links.used_at')
-        //     ->whereDoesntHave('esign')->get());
         return Client::query()
-            ->join('client_magic_links', 'client_magic_links.client_id', '=', 'clients.id')
-            ->whereNull('client_magic_links.email')
-            ->whereNull('client_magic_links.used_at')
             ->whereDoesntHave('esign')
-            ->when($batchName, function ($q) use ($batchName) {
+            ->when($batchName  != 'all', function ($q) use ($batchName) {
                 $q->where('clients.source_file_name', $batchName);
             })
             ->when($claimType, function ($q) use ($claimType) {
