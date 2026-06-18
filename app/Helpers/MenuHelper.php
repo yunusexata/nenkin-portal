@@ -18,7 +18,7 @@ class MenuHelper
             ],
             [
                 'icon' => 'dashboard',
-                'name' => 'Master Client Registered',
+                'name' => 'Master Client Konfirmasi',
                 'path' => 'master_client_registered.index',
             ],
             [

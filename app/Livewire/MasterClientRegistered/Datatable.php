@@ -209,7 +209,8 @@ class Datatable extends Component
                 'render' => fn($item) => $item->note,
             ],
             [
-                'key' => 'client_confirmations.claim_type',
+                'searchable' => false,
+                'sortable' => false,
                 'name' => 'Jenis Pencairan',
                 'render' => function ($item) {
                     $style = 'primary';
@@ -403,16 +404,16 @@ class Datatable extends Component
         return \App\Models\Client\Client::query()
             ->select(
                 'clients.*',
-                'cc.nenkin_80_received_type',
-                'cc.current_position',
-                'cc.back_to_jp_type',
-                'cc.departure_type',
-                'cc.departure_month',
-                'cc.departure_year',
-                'cc.estimated_return_month',
-                'cc.estimated_return_year',
-                'cc.nik',
-                'cc.indonesia_address',
+                'client_confirmations.nenkin_80_received_type',
+                'client_confirmations.current_position',
+                'client_confirmations.back_to_jp_type',
+                'client_confirmations.departure_type',
+                'client_confirmations.departure_month',
+                'client_confirmations.departure_year',
+                'client_confirmations.estimated_return_month',
+                'client_confirmations.estimated_return_year',
+                'client_confirmations.nik',
+                'client_confirmations.indonesia_address',
             )
             ->selectRaw("
         EXISTS (
@@ -426,9 +427,9 @@ class Datatable extends Component
             WHERE client_confirmations.client_id = clients.id
         ) as confirmation_exists
     ")
-            ->join('client_confirmations as cc', function ($j) {
-                $j->on('cc.client_id', '=', 'clients.id')
-                    ->whereNull('cc.deleted_at');
+            ->join('client_confirmations', function ($j) {
+                $j->on('client_confirmations.client_id', '=', 'clients.id')
+                    ->whereNull('client_confirmations.deleted_at');
             })
             ->whereHas('user')
             ->when($this->selectedBatch != 'all', function ($q) {
@@ -447,11 +448,19 @@ class Datatable extends Component
             ->when($this->filter_export_status === 'unexported', function ($q) {
                 $q->where('clients.is_exported', false);
             })
-            ->when($this->filter_claim_type && $this->filter_claim_type != Client::STATUS_PENDING, function ($q) {
-                $q->where('cc.claim_type', $this->filter_claim_type);
+            ->when($this->filter_claim_type && $this->filter_claim_type === Client::CLAIM_TYPE_NORMAL, function ($q) {
+                $q->where('client_confirmations.claim_type', Client::CLAIM_TYPE_NORMAL);
+            })
+            ->when($this->filter_claim_type &&
+                in_array(
+                    $this->filter_claim_type,
+                    [Client::CLAIM_TYPE_SPEED, Client::CLAIM_TYPE_ADJUSTMENT]
+                ), function ($q) {
+                $q->whereIn('client_confirmations.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
+                    ->whereHas('esign');
             })
             ->when($this->filter_claim_type && $this->filter_claim_type === Client::STATUS_PENDING, function ($q) {
-                $q->whereIn('cc.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
+                $q->whereIn('client_confirmations.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
                     ->whereDoesntHave('esign');
             });
     }
@@ -475,11 +484,24 @@ class Datatable extends Component
             ->when($this->batch_name && $this->batch_name != 'all', function ($q) {
                 $q->where('source_file_name', $this->batch_name);
             })
-            ->when($this->filter_claim_type && $this->filter_claim_type != Client::STATUS_PENDING, function ($q) {
-                $q->where('clients.claim_type', $this->filter_claim_type);
+            ->join('client_confirmations', function ($j) {
+                $j->on('client_confirmations.client_id', '=', 'clients.id')
+                    ->whereNull('client_confirmations.deleted_at');
+            })
+            ->whereHas('user')
+            ->when($this->filter_claim_type && $this->filter_claim_type === Client::CLAIM_TYPE_NORMAL, function ($q) {
+                $q->where('client_confirmations.claim_type', Client::CLAIM_TYPE_NORMAL);
+            })
+            ->when($this->filter_claim_type &&
+                in_array(
+                    $this->filter_claim_type,
+                    [Client::CLAIM_TYPE_SPEED, Client::CLAIM_TYPE_ADJUSTMENT]
+                ), function ($q) {
+                $q->whereIn('client_confirmations.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
+                    ->whereHas('esign');
             })
             ->when($this->filter_claim_type && $this->filter_claim_type === Client::STATUS_PENDING, function ($q) {
-                $q->whereIn('clients.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
+                $q->whereIn('client_confirmations.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
                     ->whereDoesntHave('esign');
             })
             ->when($this->bulkPic && $this->isCanGetAll, function ($q) {
@@ -488,7 +510,6 @@ class Datatable extends Component
             ->when(!$this->isCanGetAll, function ($q) {
                 $q->where('pic', 'ILIKE', '%' . $this->bulkPic . '%');
             })
-            ->whereHas('user')
             ->update([
                 'is_exported' => true,
                 'exported_at' => Carbon::now(),

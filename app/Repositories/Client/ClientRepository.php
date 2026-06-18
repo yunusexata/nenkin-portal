@@ -52,12 +52,28 @@ class ClientRepository extends MasterDataRepository
     public static function getClientRegistered($batchName = null, $claimType = null, $pic = null)
     {
         return Client::query()
+            ->join('client_confirmations', function ($j) {
+                $j->on('client_confirmations.client_id', '=', 'clients.id')
+                    ->whereNull('client_confirmations.deleted_at');
+            })
             ->when($batchName && $batchName != 'all', function ($q) use ($batchName) {
                 $q->where('clients.source_file_name', $batchName);
             })
-            ->when($claimType, function ($q) use ($claimType) {
-                $q->where('clients.claim_type', $claimType);
+            ->when($claimType && $claimType === Client::CLAIM_TYPE_NORMAL, function ($q) {
+                $q->where('client_confirmations.claim_type', Client::CLAIM_TYPE_NORMAL);
             })
+            ->when($claimType &&
+                in_array(
+                    $claimType,
+                    [Client::CLAIM_TYPE_SPEED, Client::CLAIM_TYPE_ADJUSTMENT]
+                ), function ($q) {
+                $q->whereIn('client_confirmations.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
+                    ->whereHas('esign');
+            })
+            ->when($claimType && $claimType === Client::STATUS_PENDING, function ($q) {
+                $q->whereIn('client_confirmations.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
+                    ->whereDoesntHave('esign');
+            });
             ->when($pic, function ($q) use ($pic) {
                 $q->where('clients.pic', 'ILIKE', '%' . $pic . '%');
             })
