@@ -43,18 +43,17 @@
             @if ($collection)
                 @foreach ($collection as $index => $data)
                     <tr>
-                        <td>{{ $data['no_jp'] }}</td>
-                        <td>{{ $data['name'] }}</td>
+                        <td>{{ mb_strtoupper($data['no_jp']) }}</td>
+                        <td>{{ mb_strtoupper($data['name']) }}</td>
                         <td>{{ $data['dob'] ? Carbon\Carbon::parse($data['dob'])->format('Ymd') : '' }}</td>
-                        <td>{{ $data['phone'] }}</td>
-                        <td>{{ $data['pic'] }}</td>
+                        <td>{{ mb_strtoupper($data['phone']) }}</td>
+                        <td>{{ mb_strtoupper$data['pic'] }}</td>
                         @if (!$data->user)
                             <td>{{ route('client.create', $data->magicLink['token']) }}
                          </td>
                         @elseif ($data->user && !$data->confirmation)
-                            <td>Belum Konfirmasi</td>
+                            <td>BELUM KONFIRMASI</td>
                         @endif
-                        <td></td>
                     </tr>
                 @endforeach
             @endif

@@ -103,20 +103,20 @@
                         }
                     @endphp
                     <tr style="{{ $rowStyle }}">
-                        <td style="{{ $rowStyle }}">{{ $data['no_jp'] }}</td>
-                        <td style="{{ $rowStyle }}">{{ $data['name'] }}</td>
+                        <td style="{{ $rowStyle }}">{{ mb_strtoupper($data['no_jp']) }}</td>
+                        <td style="{{ $rowStyle }}">{{ mb_strtoupper($data['name']) }}</td>
                         <td style="{{ $rowStyle }}">{{ $data['dob'] ? Carbon\Carbon::parse($data['dob'])->format('Ymd') : '' }}</td>
-                        <td style="{{ $rowStyle }}">{{ $data['facebook'] }}</td>
-                        <td style="{{ $rowStyle }}">{{ $data['instagram'] }}</td>
+                        <td style="{{ $rowStyle }}">{{ mb_strtoupper($data['facebook']) }}</td>
+                        <td style="{{ $rowStyle }}">{{ mb_strtoupper($data['instagram']) }}</td>
                         <td style="{{ $rowStyle }}">{{ $data['phone'] }}</td>
-                        <td style="{{ $rowStyle }}">{{ $data['pic'] }}</td>
-                        <td style="{{ $rowStyle }}">{{ $data['lpk'] }}</td>
-                        <td style="{{ $rowStyle }}">{{ $data['note'] }}</td>
-                        <td style="{{ $rowStyle }}">{{ $data['claim_type'] }}</td>
-                        <td style="{{ $rowStyle }}">{{ $data['esign_exists'] ? 'Sudah' : 'Belum' }}</td>
-                        <td style="{{ $rowStyle }}">{{ $data->confirmation?->current_position }}</td>
-                        <td style="{{ $rowStyle }}">{{ $data->confirmation?->departure_month ? Carbon\Carbon::createFromFormat('n-Y', $data->confirmation?->departure_month.'-'.$data->confirmation?->departure_year)->locale('id')->translatedFormat('F Y') : ''; }}</td>
-                        <td style="{{ $rowStyle }}">{{ $alasanReEntry }}</td>
+                        <td style="{{ $rowStyle }}">{{ mb_strtoupper($data['pic']) }}</td>
+                        <td style="{{ $rowStyle }}">{{ mb_strtoupper($data['lpk']) }}</td>
+                        <td style="{{ $rowStyle }}">{{ mb_strtoupper($data['note']) }}</td>
+                        <td style="{{ $rowStyle }}">{{ mb_strtoupper($data['claim_type']) }}</td>
+                        <td style="{{ $rowStyle }}">{{ mb_strtoupper($data['esign_exists'] ? 'Sudah' : 'Belum') }}</td>
+                        <td style="{{ $rowStyle }}">{{ mb_strtoupper($data->confirmation?->current_position) }}</td>
+                        <td style="{{ $rowStyle }}">{{ mb_strtoupper($data->confirmation?->departure_month ? Carbon\Carbon::createFromFormat('n-Y', $data->confirmation?->departure_month.'-'.$data->confirmation?->departure_year)->locale('id')->translatedFormat('F Y') : '') }}</td>
+                        <td style="{{ $rowStyle }}">{{ mb_strtoupper($alasanReEntry) }}</td>
                         <td style="{{ $rowStyle }}">{{ $data['is_exported'] ? 'EXPORTED' : 'UN-EXPORTED' }}</td>
                     </tr>
                 @endforeach
