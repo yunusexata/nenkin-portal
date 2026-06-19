@@ -54,6 +54,8 @@
                         @elseif ($data->user && !$data->confirmation)
                             <td>BELUM KONFIRMASI</td>
                         @endif
+                        <td>{{ mb_strtoupper($data['facebook']) }}</td>
+                        <td>{{ mb_strtoupper($data['lpk']) }}</td>
                     </tr>
                 @endforeach
             @endif

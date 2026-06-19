@@ -1,0 +1,332 @@
+BCA
+
+[2026-06-19 08:40:13] local.DEBUG: array (
+  'message' => 'Berhasil mengambil 2 data email.',
+  'data' => 
+  array (
+    0 => 
+    array (
+      'date' => '2026-06-05T08:46:28.000Z',
+      'subjek' => 'Beneficiary Information',
+      'dari' => 'klikbcabisnis@klikbca.com',
+      'body' => ' 
+
+EXATA SOLUSI KREATIF PT telah melakukan transfer dana dengan informasi 
+sebagai berikut:
+
+Tanggal : 05/06/2026 
+Jam : 15:46:28 
+Pengirim : EXATA SOLUSI KREATIF PT 
+Rekening Tujuan : 339-1224488 
+No Referensi : 26060500830073 
+Nominal : Rp 1,127,394.00 
+Berita : SPEED MEI 2026 KL.1 334 
+
+Semoga informasi ini bermanfaat bagi Anda. 
+
+Terima kasih. 
+
+Hormat Kami, 
+
+PT. Bank Central Asia,Tbk 
+
+
+EXATA SOLUSI KREATIF PT has done fund transfer with the following 
+information: 
+
+Date : 05/06/2026 
+Time : 15:46:28 
+Sender : EXATA SOLUSI KREATIF PT 
+To Account : 339-1224488 
+Reference No. : 26060500830073 
+Amount : Rp 1,127,394.00 
+Remark : SPEED MEI 2026 KL.1 334 
+
+We hope this information is useful for you. 
+
+Thank you. 
+
+Best Regards, 
+
+PT. Bank Central Asia,Tbk 
+
+
+',
+      'html_body' => '
+<html>
+<head></head>
+<body>
+<p> EXATA SOLUSI KREATIF PT telah melakukan transfer dana dengan informasi sebagai berikut:</p>
+<br/>
+<table border="0" width="600px">
+<tr>
+<td width="36%">Tanggal </td>
+<td width="1%">:</td>
+<td width="63%">05/06/2026</td>
+</tr>
+<tr>
+<td>Jam</td>
+<td>:</td>
+<td>15:46:28</td>
+</tr>
+<tr>
+<td>Pengirim</td>
+<td>:</td>
+<td>EXATA SOLUSI KREATIF PT</td>
+</tr>
+<tr>
+<td>Rekening Tujuan</td>
+<td>:</td>
+<td>339-1224488</td>
+</tr>
+<tr>
+<td>No Referensi</td>
+<td>:</td>
+<td>26060500830073</td>
+</tr>
+<tr>
+<td>Nominal</td>
+<td>:</td>
+<td>Rp  1,127,394.00</td>
+</tr>
+<tr>
+<td>Berita</td>
+<td>:</td>
+<td>SPEED MEI 2026 KL.1 334</td>
+</tr>
+</table>
+<br/>
+<p>Semoga informasi ini bermanfaat bagi Anda. </p>
+<p>Terima kasih. </p>
+<p>Hormat Kami, </p>
+<br/>  
+<p>PT. Bank Central Asia,Tbk </p>
+<br/> 
+<br/> 
+<p> EXATA SOLUSI KREATIF PT has done fund transfer with the following information: </p>
+<br/>
+<table border="0" width="600px">
+<tr>
+<td width="36%">Date </td>
+<td width="1%">:</td>
+<td width="63%">05/06/2026</td>
+</tr>
+<tr>
+<td>Time</td>
+<td>:</td>
+<td>15:46:28</td>
+</tr>
+<tr>
+<td>Sender</td>
+<td>:</td>
+<td>EXATA SOLUSI KREATIF PT</td>
+</tr>
+<tr>
+<td>To Account</td>
+<td>:</td>
+<td>339-1224488</td>
+</tr>
+<tr>
+<td>Reference No.</td>
+<td>:</td>
+<td>26060500830073</td>
+</tr>
+<tr>
+<td>Amount</td>
+<td>:</td>
+<td>Rp  1,127,394.00</td>
+</tr>
+<tr>
+<td>Remark</td>
+<td>:</td>
+<td>SPEED MEI 2026 KL.1 334</td>
+</tr>
+</table>
+<br/>
+<p>We hope this information is useful for you. </p>
+<p>Thank you. </p>
+<p>Best Regards, </p>
+<br/>  
+<p>PT. Bank Central Asia,Tbk </p>
+<br/> 
+<br/> 
+</body>
+</html>',
+      'is_unread' => false,
+      'parsed' => 
+      array (
+        'reference_number_bni' => NULL,
+        'reference_number_customer' => NULL,
+        'transaction_date' => NULL,
+        'amount_raw' => 'Rp 1,127,394.00',
+        'sender' => 'EXATA SOLUSI KREATIF PT',
+        'recipient_raw' => NULL,
+        'remark' => NULL,
+        'status' => NULL,
+        'recipient_name' => NULL,
+      ),
+    ),
+    1 => 
+    array (
+      'date' => '2026-06-05T08:46:29.000Z',
+      'subjek' => 'Beneficiary Information',
+      'dari' => 'klikbcabisnis@klikbca.com',
+      'body' => ' 
+
+EXATA SOLUSI KREATIF PT telah melakukan transfer dana dengan informasi 
+sebagai berikut:
+
+Tanggal : 05/06/2026 
+Jam : 15:46:28 
+Pengirim : EXATA SOLUSI KREATIF PT 
+Rekening Tujuan : 048-3087168 
+No Referensi : 26060500831199 
+Nominal : Rp 9,115,678.00 
+Berita : SPEED MEI 2026 KL.1 361 
+
+Semoga informasi ini bermanfaat bagi Anda. 
+
+Terima kasih. 
+
+Hormat Kami, 
+
+PT. Bank Central Asia,Tbk 
+
+
+EXATA SOLUSI KREATIF PT has done fund transfer with the following 
+information: 
+
+Date : 05/06/2026 
+Time : 15:46:28 
+Sender : EXATA SOLUSI KREATIF PT 
+To Account : 048-3087168 
+Reference No. : 26060500831199 
+Amount : Rp 9,115,678.00 
+Remark : SPEED MEI 2026 KL.1 361 
+
+We hope this information is useful for you. 
+
+Thank you. 
+
+Best Regards, 
+
+PT. Bank Central Asia,Tbk 
+
+
+',
+      'html_body' => '
+<html>
+<head></head>
+<body>
+<p> EXATA SOLUSI KREATIF PT telah melakukan transfer dana dengan informasi sebagai berikut:</p>
+<br/>
+<table border="0" width="600px">
+<tr>
+<td width="36%">Tanggal </td>
+<td width="1%">:</td>
+<td width="63%">05/06/2026</td>
+</tr>
+<tr>
+<td>Jam</td>
+<td>:</td>
+<td>15:46:28</td>
+</tr>
+<tr>
+<td>Pengirim</td>
+<td>:</td>
+<td>EXATA SOLUSI KREATIF PT</td>
+</tr>
+<tr>
+<td>Rekening Tujuan</td>
+<td>:</td>
+<td>048-3087168</td>
+</tr>
+<tr>
+<td>No Referensi</td>
+<td>:</td>
+<td>26060500831199</td>
+</tr>
+<tr>
+<td>Nominal</td>
+<td>:</td>
+<td>Rp  9,115,678.00</td>
+</tr>
+<tr>
+<td>Berita</td>
+<td>:</td>
+<td>SPEED MEI 2026 KL.1 361</td>
+</tr>
+</table>
+<br/>
+<p>Semoga informasi ini bermanfaat bagi Anda. </p>
+<p>Terima kasih. </p>
+<p>Hormat Kami, </p>
+<br/>  
+<p>PT. Bank Central Asia,Tbk </p>
+<br/> 
+<br/> 
+<p> EXATA SOLUSI KREATIF PT has done fund transfer with the following information: </p>
+<br/>
+<table border="0" width="600px">
+<tr>
+<td width="36%">Date </td>
+<td width="1%">:</td>
+<td width="63%">05/06/2026</td>
+</tr>
+<tr>
+<td>Time</td>
+<td>:</td>
+<td>15:46:28</td>
+</tr>
+<tr>
+<td>Sender</td>
+<td>:</td>
+<td>EXATA SOLUSI KREATIF PT</td>
+</tr>
+<tr>
+<td>To Account</td>
+<td>:</td>
+<td>048-3087168</td>
+</tr>
+<tr>
+<td>Reference No.</td>
+<td>:</td>
+<td>26060500831199</td>
+</tr>
+<tr>
+<td>Amount</td>
+<td>:</td>
+<td>Rp  9,115,678.00</td>
+</tr>
+<tr>
+<td>Remark</td>
+<td>:</td>
+<td>SPEED MEI 2026 KL.1 361</td>
+</tr>
+</table>
+<br/>
+<p>We hope this information is useful for you. </p>
+<p>Thank you. </p>
+<p>Best Regards, </p>
+<br/>  
+<p>PT. Bank Central Asia,Tbk </p>
+<br/> 
+<br/> 
+</body>
+</html>',
+      'is_unread' => false,
+      'parsed' => 
+      array (
+        'reference_number_bni' => NULL,
+        'reference_number_customer' => NULL,
+        'transaction_date' => NULL,
+        'amount_raw' => 'Rp 9,115,678.00',
+        'sender' => 'EXATA SOLUSI KREATIF PT',
+        'recipient_raw' => NULL,
+        'remark' => NULL,
+        'status' => NULL,
+        'recipient_name' => NULL,
+      ),
+    ),
+  ),
+)  

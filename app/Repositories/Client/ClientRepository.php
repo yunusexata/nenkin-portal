@@ -21,6 +21,7 @@ class ClientRepository extends MasterDataRepository
     {
         return Client::query()
             ->whereDoesntHave('esign')
+            ->whereDoesntHave('confirmation')
             ->when($batchName  != 'all', function ($q) use ($batchName) {
                 $q->where('clients.source_file_name', $batchName);
             })

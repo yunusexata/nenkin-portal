@@ -14,7 +14,7 @@ trait WithDatatable
 
     public $pageName = "";
     public $lengthOptions = [10, 25, 50, 100];
-    public $length = 10;
+    public $length = 50;
     public $search;
     public $sortBy = '';
     public $sortDirection = 'asc';
