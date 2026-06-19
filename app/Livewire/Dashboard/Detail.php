@@ -113,7 +113,10 @@ class Detail extends Component
         }
     }
 
-    private function test() {}
+    private function test()
+    {
+        return 'test';
+    }
 
     public function updatedbulkPic($value)
     {
