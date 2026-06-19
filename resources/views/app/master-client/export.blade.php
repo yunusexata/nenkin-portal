@@ -21,7 +21,6 @@
         }
     </style>
 </head>
-
 <body>
 
     <table class="table-border" style="width: 100%">

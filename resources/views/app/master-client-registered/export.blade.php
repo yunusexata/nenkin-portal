@@ -92,6 +92,7 @@
                         $rowStyle = $rowColor ? "background-color: {$rowColor};" : '';
 
                         // Alasan re entry text
+                        
                         $alasanReEntry = '';
                         if ($currentPosition === App\Models\Client\ClientConfirmation::CURRENT_POSITION_JEPANG) {
                             $alasanReEntry = 'SUDAH DIJEPANG';
