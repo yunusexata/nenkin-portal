@@ -35,8 +35,8 @@ class Detail extends Component
             })
             ->selectRaw("
         clients.pic,
-
-        COUNT(clients.id) as total_client,
+        
+        COUNT(DISTINCT clients.id) as total_client,
 
         COUNT(DISTINCT clients.id) FILTER (
             WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "'
@@ -141,11 +141,6 @@ class Detail extends Component
 
     public function render()
     {
-
-        consoleLog($this, [
-            $this->pic_achievements,
-            $this->total_achievements
-        ]);
         return view('livewire.dashboard.detail');
     }
 }
