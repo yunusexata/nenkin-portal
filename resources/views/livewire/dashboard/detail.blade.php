@@ -234,7 +234,7 @@
         </div>
     </div>
     <div class="my-6">
-        <h1 class="text-2xl font-bold text-gray-800 dark:text-white/90">Detail Data PIC</h1>
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-white/90">Detail Data PIC Registrasi</h1>
     </div>
     <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div class="max-w-full overflow-x-auto">
@@ -252,12 +252,6 @@
                             Sudah Buat Akun
                         </th>
                         <th class="text-center px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider  hidden sm:table-cell">
-                            Belum Konfirmasi
-                        </th>
-                        <th class="text-center px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider  hidden sm:table-cell">
-                            Sudah Konfirmasi
-                        </th>
-                        <th class="text-center px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider  hidden sm:table-cell">
                             KOKUMIN
                         </th>
                         <th class="text-center px-6 py-4.5 font-extrabold uppercase text-primary dark:text-white text-lg tracking-wider ">
@@ -268,7 +262,6 @@
 
                 @php
                     $total_pic_not_registered = 0;
-                    $total_pic_not_confirmed = 0;
                     $total_pic_kokumin = 0;
                     $total_pic_total = 0;
                 @endphp
@@ -277,7 +270,6 @@
                     @foreach ($pic_achievements as $item)
                     @php
                         $total_pic_not_registered += $item['not_registered'];
-                        $total_pic_not_confirmed += $item['not_confirmed'];
                         $total_pic_kokumin += $item['kokumin'];
                         $total_pic_total += $item['total_client'];
                     @endphp
@@ -296,6 +288,93 @@
                             
                             <td class="text-center px-6 py-5 text-2xl font-semibold text-green-500 dark:text-white hidden sm:table-cell">
                                 {{ number_format($item['total_client'] - $item['kokumin'] - $item['not_registered']) }}
+                            </td>
+                            
+                            <td class="text-center px-6 py-5 text-2xl text-blue-500 font-semibold text-meta-1 hidden sm:table-cell">
+                                {{ number_format($item['kokumin']) }}
+                            </td>
+                            <td class="text-center px-6 py-5 text-3xl font-black text-meta-3 tracking-tight">
+                                {{ number_format($item['total_client']) }}
+                            </td>
+                            
+                        </tr>
+                    @endforeach
+                        <tr class="border-t-2 border-slate-300 dark:border-slate-600 bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-900">
+                            <td class="text-center px-6 py-5">
+                                <div class="flex flex-col gap-1">
+                                    <h3 class="text-xl font-bold text-black dark:text-white">
+                                        TOTAL
+                                    </h3>
+                                </div>
+                            </td>
+                            
+                            <td class="text-center px-6 py-5 text-2xl font-semibold text-red-500 dark:text-white hidden sm:table-cell">
+                                {{ number_format($total_pic_not_registered) }}
+                            </td>
+                            
+                            <td class="text-center px-6 py-5 text-2xl font-semibold text-green-500 dark:text-white hidden sm:table-cell">
+                                {{ number_format($total_pic_total - $total_pic_kokumin - $total_pic_not_registered) }}
+                            </td>
+                            
+                            <td class="text-center px-6 py-5 text-2xl text-blue-500 font-semibold text-meta-1 hidden sm:table-cell">
+                                {{ number_format($total_pic_kokumin) }}
+                            </td>
+                            <td class="text-center px-6 py-5 text-3xl font-black text-meta-3 tracking-tight">
+                                {{ number_format($total_pic_total) }}
+                            </td>
+                            
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="my-6">
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-white/90">Detail Data PIC Konfirmasi</h1>
+    </div>
+    <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+        <div class="max-w-full overflow-x-auto">
+            <table class="w-full table-auto">
+                
+                <thead>
+                    <tr class="bg-gray-2 text-left dark:bg-meta-4 border-b border-stroke dark:border-strokedark">
+                        <th class="text-center min-w-[150px] px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider">
+                            PIC
+                        </th>
+                        <th class="text-center px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider  hidden sm:table-cell">
+                            Belum Konfirmasi
+                        </th>
+                        <th class="text-center px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider  hidden sm:table-cell">
+                            Sudah Konfirmasi
+                        </th>
+                        <th class="text-center px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider  hidden sm:table-cell">
+                            KOKUMIN
+                        </th>
+                        <th class="text-center px-6 py-4.5 font-extrabold uppercase text-primary dark:text-white text-lg tracking-wider ">
+                            Total
+                        </th>
+                    </tr>
+                </thead>
+
+                @php
+                    $total_pic_not_confirmed = 0;
+                    $total_pic_kokumin = 0;
+                    $total_pic_total = 0;
+                @endphp
+                
+                <tbody class="bg-white dark:bg-boxdark">
+                    @foreach ($pic_achievements as $item)
+                    @php
+                        $total_pic_not_confirmed += $item['not_confirmed'];
+                        $total_pic_kokumin += $item['kokumin'];
+                        $total_pic_total += $item['total_client'];
+                    @endphp
+                        <tr class="border-b border-stroke dark:border-strokedark bg-gradient-to-r from-orange-50/30 to-transparent dark:from-meta-4/20 transition hover:bg-gray-50 dark:hover:bg-meta-4/40">
+                            <td class="text-center px-6 py-5">
+                                <div class="flex flex-col gap-1">
+                                    <h3 class="text-xl font-bold text-black dark:text-white">
+                                        {{ strtoupper($item['pic']) }}
+                                    </h3>
+                                </div>
                             </td>
                             
                             <td class="text-center px-6 py-5 text-2xl text-red-500 font-semibold text-meta-1 hidden sm:table-cell">
@@ -317,17 +396,9 @@
                             <td class="text-center px-6 py-5">
                                 <div class="flex flex-col gap-1">
                                     <h3 class="text-xl font-bold text-black dark:text-white">
-                                        Total
+                                        TOTAL
                                     </h3>
                                 </div>
-                            </td>
-                            
-                            <td class="text-center px-6 py-5 text-2xl font-semibold text-red-500 dark:text-white hidden sm:table-cell">
-                                {{ number_format($total_pic_not_registered) }}
-                            </td>
-                            
-                            <td class="text-center px-6 py-5 text-2xl font-semibold text-green-500 dark:text-white hidden sm:table-cell">
-                                {{ number_format($total_pic_total - $total_pic_kokumin - $total_pic_not_registered) }}
                             </td>
                             
                             <td class="text-center px-6 py-5 text-2xl text-red-500 font-semibold text-meta-1 hidden sm:table-cell">
