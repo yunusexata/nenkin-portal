@@ -181,7 +181,7 @@ class ImportModal extends Component
                         'source_file_path' => $path,
                         'imported_at' => now(),
 
-                        'claim_type' => Client::CLAIM_TYPE_NORMAL,
+                        'claim_type' => mb_strtolower($value['data']['note']) === Client::CLAIM_TYPE_KOKUMIN ? Client::CLAIM_TYPE_KOKUMIN : Client::CLAIM_TYPE_NORMAL,
                         'status' => Client::STATUS_PENDING,
 
                     ];

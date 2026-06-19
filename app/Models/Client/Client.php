@@ -59,12 +59,14 @@ class Client extends Model
     const CLAIM_TYPE_NORMAL = 'normal';
     const CLAIM_TYPE_SPEED = 'speed';
     const CLAIM_TYPE_PENDING = 'pending';
+    const CLAIM_TYPE_KOKUMIN = 'kokumin';
 
     const CLAIM_TYPE_CHOICE = [
         self::CLAIM_TYPE_NORMAL => 'NORMAL',
         self::CLAIM_TYPE_PENDING => 'PENDING',
         self::CLAIM_TYPE_ADJUSTMENT => 'ADJUSMENT',
         self::CLAIM_TYPE_SPEED => 'SPEED',
+        self::CLAIM_TYPE_KOKUMIN => 'KOKUMIN',
     ];
 
     const FILTER_DATA_TYPE_CONFIRMATION = 'confirmation';

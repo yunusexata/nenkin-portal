@@ -33,6 +33,8 @@
                 <th class="text-center">NO TELP</th>
                 <th class="text-center">PIC</th>
                 <th class="text-center">LINK</th>
+                <th class="text-center">NAMA FB</th>
+                <th class="text-center">LPK</th>
             </tr>
         </thead>
         <tbody>
