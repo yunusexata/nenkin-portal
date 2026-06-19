@@ -22,6 +22,7 @@ class ClientRepository extends MasterDataRepository
         return Client::query()
             ->whereDoesntHave('esign')
             ->whereDoesntHave('confirmation')
+            ->where('clients.claim_type', '!=', Client::CLAIM_TYPE_KOKUMIN)
             ->when($batchName  != 'all', function ($q) use ($batchName) {
                 $q->where('clients.source_file_name', $batchName);
             })
@@ -45,6 +46,7 @@ class ClientRepository extends MasterDataRepository
     public static function getClientRegistered($batchName = null, $claimType = null, $pic = null)
     {
         return Client::query()
+            ->where('clients.claim_type', '!=', Client::CLAIM_TYPE_KOKUMIN)
             ->join('client_confirmations', function ($j) {
                 $j->on('client_confirmations.client_id', '=', 'clients.id')
                     ->whereNull('client_confirmations.deleted_at');
@@ -85,6 +87,7 @@ class ClientRepository extends MasterDataRepository
     public static function getClientUpodSurvey($batchName = null, $claimType = null, $pic = null)
     {
         return Client::query()
+            ->where('clients.claim_type', '!=', Client::CLAIM_TYPE_KOKUMIN)
             ->when($batchName && $batchName != 'all', function ($q) use ($batchName) {
                 $q->where('clients.source_file_name', $batchName);
             })

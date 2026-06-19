@@ -379,6 +379,7 @@ class Datatable extends Component
             ->when($this->filter_data_type && $this->filter_data_type === Client::FILTER_DATA_TYPE_NOT_REGISTERED, function ($q) {
                 $q->whereDoesntHave('user');
             })
+            ->where('clients.claim_type', '!=', Client::CLAIM_TYPE_KOKUMIN)
             ->whereDoesntHave('confirmation');
     }
 

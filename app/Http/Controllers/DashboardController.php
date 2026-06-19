@@ -56,14 +56,6 @@ class DashboardController extends Controller
             ));
         }
 
-        // Admin / Internal dashboard
-        $stats = [
-            'total_clients'   => Client::count(),
-            'speed_clients'   => Client::whereIn('claim_type', ['speed', 'adjusment'])->count(),
-            'total_documents' => Document::count(),
-            'pending_reviews' => Review::where('status', 'intercepted')->count(),
-        ];
-
-        return view('app.dashboard.index', compact('stats'));
+        return view('app.dashboard.index');
     }
 }

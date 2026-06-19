@@ -430,6 +430,7 @@ class Datatable extends Component
     public function getQuery(): Builder
     {
         return \App\Models\Client\Client::query()
+            ->where('clients.claim_type', '!=', Client::CLAIM_TYPE_KOKUMIN)
             ->select(
                 'clients.*',
                 'client_confirmations.nenkin_80_received_type',
