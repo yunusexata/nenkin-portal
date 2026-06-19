@@ -13,52 +13,68 @@ class Detail extends Component
     public $selectedBatch = 'all';
     public $batches = [];
 
-    public $total_clients;
-    public $jpn_total;
-    public $re_total;
-    public $speed_total;
-    public $adjusment_total;
-    public $kokumin_total;
+    public $pic_achievements = [];
+    public $total_achievements = [];
 
     public function mount()
     {
-
-        // Admin / Internal dashboard
-        $limitDate = now()->addMonths(6)->format('Y-m-01');
-
         $this->loadBatches();
+        $this->getDashboardStats();
+        $this->getDashboardStatsPIC();
     }
-    public static function getDashboardStats()
+    private function getDashboardStatsPIC()
     {
-        return $statsByPic = Client::query()
+        $this->pic_achievements = Client::query()
             ->leftJoin('users', 'users.client_id', '=', 'clients.id')
             ->leftJoin('client_confirmations', function ($join) {
                 $join->on('client_confirmations.client_id', '=', 'clients.id')
                     ->whereNull('client_confirmations.deleted_at');
             })
+            ->when($this->selectedBatch != 'all', function ($q) {
+                $q->where('clients.source_file_name', $this->selectedBatch);
+            })
             ->selectRaw("
         clients.pic,
 
-        COUNT(DISTINCT clients.id) as total_client,
+        COUNT(clients.id) as total_client,
 
         COUNT(DISTINCT clients.id) FILTER (
-            WHERE users.id IS NULL
-        ) as belum_registrasi,
+            WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "'
+            AND users.id IS NULL
+        ) as not_registered,
 
         COUNT(DISTINCT clients.id) FILTER (
-            WHERE client_confirmations.id IS NULL
-        ) as belum_konfirmasi
+            WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "'
+            AND client_confirmations.id IS NULL
+        ) as not_confirmed,
+
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE clients.claim_type = '" . Client::CLAIM_TYPE_KOKUMIN . "'
+        ) as kokumin
     ")
             ->groupBy('clients.pic')
             ->orderBy('clients.pic')
-            ->get();
-        return Client::query()
+            ->get()
+            ->toArray();
+    }
+
+    private function getDashboardStats()
+    {
+        $this->total_achievements = Client::query()
             ->leftJoin('client_confirmations', function ($join) {
                 $join->on('client_confirmations.client_id', '=', 'clients.id')
                     ->whereNull('client_confirmations.deleted_at');
             })
+            ->when($this->selectedBatch != 'all', function ($q) {
+                $q->where('clients.source_file_name', $this->selectedBatch);
+            })
             ->selectRaw("
             COUNT(clients.id) AS total_clients,
+
+            COUNT(*) FILTER (
+                WHERE client_confirmations.id IS NULL
+                AND clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "'
+            ) AS not_confirmed_total,
 
             COUNT(*) FILTER (
                 WHERE clients.claim_type = '" . Client::CLAIM_TYPE_KOKUMIN . "'
@@ -97,33 +113,20 @@ class Detail extends Component
                 )
             ) AS adjustment_total
         ")
-            ->first();
+            ->first()->toArray();
     }
 
     public function selectBatch($batchName)
     {
         $this->selectedBatch = $batchName;
-        $this->resetPage();
 
-        $this->dispatch('modal-filter', [
-            'batch_name' => $batchName,
-        ]);
-        if ($batchName !== 'all') {
-            $this->dispatch('openBatchModal', batchName: $batchName);
-        }
+        $this->getDashboardStats();
+        $this->getDashboardStatsPIC();
     }
 
     private function test()
     {
         return 'test';
-    }
-
-    public function updatedbulkPic($value)
-    {
-
-        $this->dispatch('modal-filter', [
-            'bulkPic' => $value,
-        ]);
     }
 
     public function loadBatches()
@@ -139,7 +142,10 @@ class Detail extends Component
     public function render()
     {
 
-        consoleLog($this, $this->getDashboardStats()->toArray());
+        consoleLog($this, [
+            $this->pic_achievements,
+            $this->total_achievements
+        ]);
         return view('livewire.dashboard.detail');
     }
 }
