@@ -290,7 +290,7 @@
                                 {{ number_format($item['total_client'] - $item['kokumin'] - $item['not_registered']) }}
                             </td>
                             
-                            <td class="text-center px-6 py-5 text-2xl text-blue-500 font-semibold text-meta-1 hidden sm:table-cell">
+                            <td class="text-center px-6 py-5 text-2xl text-[#FF00FE] font-semibold text-meta-1 hidden sm:table-cell">
                                 {{ number_format($item['kokumin']) }}
                             </td>
                             <td class="text-center px-6 py-5 text-3xl font-black text-meta-3 tracking-tight">
@@ -316,7 +316,7 @@
                                 {{ number_format($total_pic_total - $total_pic_kokumin - $total_pic_not_registered) }}
                             </td>
                             
-                            <td class="text-center px-6 py-5 text-2xl text-blue-500 font-semibold text-meta-1 hidden sm:table-cell">
+                            <td class="text-center px-6 py-5 text-2xl text-[#FF00FE] font-semibold text-meta-1 hidden sm:table-cell">
                                 {{ number_format($total_pic_kokumin) }}
                             </td>
                             <td class="text-center px-6 py-5 text-3xl font-black text-meta-3 tracking-tight">
@@ -383,7 +383,7 @@
                             <td class="text-center px-6 py-5 text-2xl text-green-500 font-semibold text-meta-1 hidden sm:table-cell">
                                 {{ number_format($item['total_client'] - $item['kokumin'] - $item['not_confirmed']) }}
                             </td>
-                            <td class="text-center px-6 py-5 text-2xl text-blue-500 font-semibold text-meta-1 hidden sm:table-cell">
+                            <td class="text-center px-6 py-5 text-2xl text-[#FF00FE] font-semibold text-meta-1 hidden sm:table-cell">
                                 {{ number_format($item['kokumin']) }}
                             </td>
                             <td class="text-center px-6 py-5 text-3xl font-black text-meta-3 tracking-tight">
@@ -407,7 +407,7 @@
                             <td class="text-center px-6 py-5 text-2xl text-green-500 font-semibold text-meta-1 hidden sm:table-cell">
                                 {{ number_format($total_pic_total - $total_pic_kokumin - $total_pic_not_confirmed) }}
                             </td>
-                            <td class="text-center px-6 py-5 text-2xl text-blue-500 font-semibold text-meta-1 hidden sm:table-cell">
+                            <td class="text-center px-6 py-5 text-2xl text-[#FF00FE] font-semibold text-meta-1 hidden sm:table-cell">
                                 {{ number_format($total_pic_kokumin) }}
                             </td>
                             <td class="text-center px-6 py-5 text-3xl font-black text-meta-3 tracking-tight">
