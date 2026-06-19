@@ -242,19 +242,25 @@
                 
                 <thead>
                     <tr class="bg-gray-2 text-left dark:bg-meta-4 border-b border-stroke dark:border-strokedark">
-                        <th class="min-w-[150px] px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider">
+                        <th class="text-center min-w-[150px] px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider">
                             PIC
                         </th>
-                        <th class="px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider text-right hidden sm:table-cell">
+                        <th class="text-center px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider  hidden sm:table-cell">
                             Belum Buat Akun
                         </th>
-                        <th class="px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider text-right hidden sm:table-cell">
+                        <th class="text-center px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider  hidden sm:table-cell">
+                            Sudah Buat Akun
+                        </th>
+                        <th class="text-center px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider  hidden sm:table-cell">
                             Belum Konfirmasi
                         </th>
-                        <th class="px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider text-right hidden sm:table-cell">
+                        <th class="text-center px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider  hidden sm:table-cell">
+                            Sudah Konfirmasi
+                        </th>
+                        <th class="text-center px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider  hidden sm:table-cell">
                             KOKUMIN
                         </th>
-                        <th class="px-6 py-4.5 font-extrabold uppercase text-primary dark:text-white text-lg tracking-wider text-right">
+                        <th class="text-center px-6 py-4.5 font-extrabold uppercase text-primary dark:text-white text-lg tracking-wider ">
                             Total
                         </th>
                     </tr>
@@ -276,7 +282,7 @@
                         $total_pic_total += $item['total_client'];
                     @endphp
                         <tr class="border-b border-stroke dark:border-strokedark bg-gradient-to-r from-orange-50/30 to-transparent dark:from-meta-4/20 transition hover:bg-gray-50 dark:hover:bg-meta-4/40">
-                            <td class="px-6 py-5">
+                            <td class="text-center px-6 py-5">
                                 <div class="flex flex-col gap-1">
                                     <h3 class="text-xl font-bold text-black dark:text-white">
                                         {{ strtoupper($item['pic']) }}
@@ -284,24 +290,31 @@
                                 </div>
                             </td>
                             
-                            <td class="px-6 py-5 text-right text-2xl font-semibold text-red-500 dark:text-white hidden sm:table-cell">
+                            <td class="text-center px-6 py-5 text-2xl font-semibold text-red-500 dark:text-white hidden sm:table-cell">
                                 {{ number_format($item['not_registered']) }}
                             </td>
                             
-                            <td class="px-6 py-5 text-right text-2xl text-red-500 font-semibold text-meta-1 hidden sm:table-cell">
+                            <td class="text-center px-6 py-5 text-2xl font-semibold text-green-500 dark:text-white hidden sm:table-cell">
+                                {{ number_format($item['total_client'] - $item['kokumin'] - $item['not_registered']) }}
+                            </td>
+                            
+                            <td class="text-center px-6 py-5 text-2xl text-red-500 font-semibold text-meta-1 hidden sm:table-cell">
                                 {{ number_format($item['not_confirmed']) }}
                             </td>
-                            <td class="px-6 py-5 text-right text-2xl text-blue-500 font-semibold text-meta-1 hidden sm:table-cell">
+                            <td class="text-center px-6 py-5 text-2xl text-green-500 font-semibold text-meta-1 hidden sm:table-cell">
+                                {{ number_format($item['total_client'] - $item['kokumin'] - $item['not_confirmed']) }}
+                            </td>
+                            <td class="text-center px-6 py-5 text-2xl text-blue-500 font-semibold text-meta-1 hidden sm:table-cell">
                                 {{ number_format($item['kokumin']) }}
                             </td>
-                            <td class="px-6 py-5 text-right text-3xl font-black text-meta-3 tracking-tight">
+                            <td class="text-center px-6 py-5 text-3xl font-black text-meta-3 tracking-tight">
                                 {{ number_format($item['total_client']) }}
                             </td>
                             
                         </tr>
                     @endforeach
                         <tr class="border-t-2 border-slate-300 dark:border-slate-600 bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-900">
-                            <td class="px-6 py-5">
+                            <td class="text-center px-6 py-5">
                                 <div class="flex flex-col gap-1">
                                     <h3 class="text-xl font-bold text-black dark:text-white">
                                         Total
@@ -309,17 +322,24 @@
                                 </div>
                             </td>
                             
-                            <td class="px-6 py-5 text-right text-2xl font-semibold text-red-500 dark:text-white hidden sm:table-cell">
+                            <td class="text-center px-6 py-5 text-2xl font-semibold text-red-500 dark:text-white hidden sm:table-cell">
                                 {{ number_format($total_pic_not_registered) }}
                             </td>
                             
-                            <td class="px-6 py-5 text-right text-2xl text-red-500 font-semibold text-meta-1 hidden sm:table-cell">
+                            <td class="text-center px-6 py-5 text-2xl font-semibold text-green-500 dark:text-white hidden sm:table-cell">
+                                {{ number_format($total_pic_total - $total_pic_kokumin - $total_pic_not_registered) }}
+                            </td>
+                            
+                            <td class="text-center px-6 py-5 text-2xl text-red-500 font-semibold text-meta-1 hidden sm:table-cell">
                                 {{ number_format($total_pic_not_confirmed) }}
                             </td>
-                            <td class="px-6 py-5 text-right text-2xl text-blue-500 font-semibold text-meta-1 hidden sm:table-cell">
+                            <td class="text-center px-6 py-5 text-2xl text-green-500 font-semibold text-meta-1 hidden sm:table-cell">
+                                {{ number_format($total_pic_total - $total_pic_kokumin - $total_pic_not_confirmed) }}
+                            </td>
+                            <td class="text-center px-6 py-5 text-2xl text-blue-500 font-semibold text-meta-1 hidden sm:table-cell">
                                 {{ number_format($total_pic_kokumin) }}
                             </td>
-                            <td class="px-6 py-5 text-right text-3xl font-black text-meta-3 tracking-tight">
+                            <td class="text-center px-6 py-5 text-3xl font-black text-meta-3 tracking-tight">
                                 {{ number_format($total_pic_total) }}
                             </td>
                             
