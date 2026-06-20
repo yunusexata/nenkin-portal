@@ -99,7 +99,7 @@ class Detail extends Component
                 $q->where('clients.source_file_name', $this->selectedBatch);
             })
             ->selectRaw("
-            COUNT(clients.id) AS total_clients,
+            COUNT(DISTINCT clients.id) AS total_clients,
 
             COUNT(DISTINCT clients.id) FILTER (
                 WHERE clients.claim_type = '" . Client::CLAIM_TYPE_KOKUMIN . "'
