@@ -101,22 +101,22 @@ class Detail extends Component
             ->selectRaw("
             COUNT(clients.id) AS total_clients,
 
-            COUNT(*) FILTER (
+            COUNT(DISTINCT clients.id) FILTER (
                 WHERE clients.claim_type = '" . Client::CLAIM_TYPE_KOKUMIN . "'
             ) AS kokumin_total,
 
-            COUNT(*) FILTER (
+            COUNT(DISTINCT clients.id) FILTER (
                 WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "'
                 AND users.id IS NOT NULL
             ) AS registered_total,
 
-            COUNT(*) FILTER (
+            COUNT(DISTINCT clients.id) FILTER (
                 WHERE client_confirmations.id IS NULL
                 AND clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "'
                 AND users.id IS NOT NULL
             ) AS not_confirmed_total,
 
-            COUNT(*) FILTER (
+            COUNT(DISTINCT clients.id) FILTER (
                 WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "'
                 AND client_confirmations.claim_type IN (
                     '" . Client::CLAIM_TYPE_SPEED . "',
@@ -125,11 +125,11 @@ class Detail extends Component
                 AND client_esigns.id IS NULL
             ) AS pending_total,
             
-            COUNT(*) FILTER (
+            COUNT(DISTINCT clients.id) FILTER (
                 WHERE client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_JEPANG . "'
             ) AS jpn_total,
 
-            COUNT(*) FILTER (
+            COUNT(DISTINCT clients.id) FILTER (
                 WHERE client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_INDONESIA . "'
                 AND client_confirmations.back_to_jp_type = '" . ClientConfirmation::BACK_TO_JP_TYPE_YES . "'
                 AND make_date(
@@ -141,12 +141,12 @@ class Detail extends Component
                 )
             ) AS re_total,
 
-            COUNT(*) FILTER (
+            COUNT(DISTINCT clients.id) FILTER (
                 WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_SPEED . "'
                 AND client_esigns.id IS NOT NULL
             ) AS speed_total,
 
-            COUNT(*) FILTER (
+            COUNT(DISTINCT clients.id) FILTER (
                 WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_ADJUSTMENT . "'
                 AND client_esigns.id IS NOT NULL
             ) AS adjustment_total
