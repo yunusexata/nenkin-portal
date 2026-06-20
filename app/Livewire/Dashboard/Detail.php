@@ -44,7 +44,8 @@ class Detail extends Component
                 COUNT(DISTINCT clients.id) as total_client,
 
                 COUNT(DISTINCT clients.id) FILTER (
-                    WHERE users.id IS NOT NULL
+                    WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "'
+                    AND users.id IS NOT NULL
                 ) as total_registered,
 
                 COUNT(DISTINCT clients.id) FILTER (

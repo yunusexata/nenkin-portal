@@ -543,10 +543,12 @@ class Datatable extends Component
             ]
         );
 
-        $query->update([
-            'is_exported' => true,
-            'exported_at' => now(),
-        ]);
+        if (auth()->user()->hasRole(\App\Models\User::ROLE_HS3)) {
+            $query->update([
+                'is_exported' => true,
+                'exported_at' => now(),
+            ]);
+        }
 
         return $export;
     }
