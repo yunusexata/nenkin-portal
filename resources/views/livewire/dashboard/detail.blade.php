@@ -417,9 +417,6 @@
                         <th class="text-center px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider  hidden sm:table-cell">
                             Sudah Konfirmasi
                         </th>
-                        <th class="text-center px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider  hidden sm:table-cell">
-                            KOKUMIN
-                        </th>
                         <th class="text-center px-6 py-4.5 font-extrabold uppercase text-primary dark:text-white text-lg tracking-wider ">
                             Total Registered
                         </th>
@@ -428,7 +425,6 @@
 
                 @php
                     $total_pic_not_confirmed = 0;
-                    $total_pic_kokumin = 0;
                     $total_pic_total = 0;
                 @endphp
                 
@@ -436,7 +432,6 @@
                     @foreach ($pic_achievements as $item)
                     @php
                         $total_pic_not_confirmed += $item['not_confirmed'];
-                        $total_pic_kokumin += $item['kokumin'];
                         $total_pic_total += $item['total_registered'];
                     @endphp
                         <tr class="border-b border-stroke dark:border-strokedark bg-gradient-to-r from-orange-50/30 to-transparent dark:from-meta-4/20 transition hover:bg-gray-50 dark:hover:bg-meta-4/40">
@@ -462,10 +457,7 @@
                                  </a>
                             </td>
                             <td class="text-center px-6 py-5 text-2xl text-green-500 font-semibold text-meta-1 hidden sm:table-cell">
-                                {{ number_format($item['total_registered'] - $item['kokumin'] - $item['not_confirmed']) }}
-                            </td>
-                            <td class="text-center px-6 py-5 text-2xl text-[#FF00FE] font-semibold text-meta-1 hidden sm:table-cell">
-                                {{ number_format($item['kokumin']) }}
+                                {{ number_format($item['total_registered'] - $item['not_confirmed']) }}
                             </td>
                             <td class="text-center px-6 py-5 text-3xl font-black text-meta-3 tracking-tight">
                                 {{ number_format($item['total_registered']) }}
@@ -486,10 +478,7 @@
                                 {{ number_format($total_pic_not_confirmed) }}
                             </td>
                             <td class="text-center px-6 py-5 text-2xl text-green-500 font-semibold text-meta-1 hidden sm:table-cell">
-                                {{ number_format($total_pic_total - $total_pic_kokumin - $total_pic_not_confirmed) }}
-                            </td>
-                            <td class="text-center px-6 py-5 text-2xl text-[#FF00FE] font-semibold text-meta-1 hidden sm:table-cell">
-                                {{ number_format($total_pic_kokumin) }}
+                                {{ number_format($total_pic_total - $total_pic_not_confirmed) }}
                             </td>
                             <td class="text-center px-6 py-5 text-3xl font-black text-meta-3 tracking-tight">
                                 {{ number_format($total_pic_total) }}
@@ -518,9 +507,6 @@
                         <th class="text-center px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider  hidden sm:table-cell">
                             Sudah E-Sign
                         </th>
-                        <th class="text-center px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider  hidden sm:table-cell">
-                            KOKUMIN
-                        </th>
                         <th class="text-center px-6 py-4.5 font-extrabold uppercase text-primary dark:text-white text-lg tracking-wider ">
                             Total Speed / Adjusment
                         </th>
@@ -529,7 +515,6 @@
 
                 @php
                     $total_pic_pending = 0;
-                    $total_pic_kokumin = 0;
                     $total_pic_total_speed = 0;
                 @endphp
                 
@@ -537,7 +522,6 @@
                     @foreach ($pic_achievements as $item)
                     @php
                         $total_pic_pending += $item['pending'];
-                        $total_pic_kokumin += $item['kokumin'];
                         $total_pic_total_speed += $item['total_speed'];
                     @endphp
                         <tr class="border-b border-stroke dark:border-strokedark bg-gradient-to-r from-orange-50/30 to-transparent dark:from-meta-4/20 transition hover:bg-gray-50 dark:hover:bg-meta-4/40">
@@ -565,9 +549,6 @@
                             <td class="text-center px-6 py-5 text-2xl text-green-500 font-semibold text-meta-1 hidden sm:table-cell">
                                 {{ number_format($item['total_speed'] - $item['pending']) }}
                             </td>
-                            <td class="text-center px-6 py-5 text-2xl text-[#FF00FE] font-semibold text-meta-1 hidden sm:table-cell">
-                                {{ number_format($item['kokumin']) }}
-                            </td>
                             <td class="text-center px-6 py-5 text-3xl font-black text-meta-3 tracking-tight">
                                 {{ number_format($item['total_speed']) }}
                             </td>
@@ -589,13 +570,9 @@
                             <td class="text-center px-6 py-5 text-2xl text-green-500 font-semibold text-meta-1 hidden sm:table-cell">
                                 {{ number_format($total_pic_total_speed - $total_pic_pending) }}
                             </td>
-                            <td class="text-center px-6 py-5 text-2xl text-[#FF00FE] font-semibold text-meta-1 hidden sm:table-cell">
-                                {{ number_format($total_pic_kokumin) }}
-                            </td>
                             <td class="text-center px-6 py-5 text-3xl font-black text-meta-3 tracking-tight">
                                 {{ number_format($total_pic_total_speed) }}
                             </td>
-                            
                         </tr>
                 </tbody>
             </table>
