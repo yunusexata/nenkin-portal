@@ -299,7 +299,7 @@
                             Proses nenkin kamu masuk ke pencairan <strong>NORMAL</strong>. Dikarenakan kamu sudah berada di Jepang atau akan kembali ke Jepang dalam kurun waktu kurang dari 6 bulan. Kamu akan mendapatkan notifikasi dan pemberitahuan jika nenkin kamu sudah cair. Estimasi pencairan nenkin adalah 3-4 bulan sejak tanggal pencairan 80%.
                         </p>
                         <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            Sedang Diproses Japan Pension Service
+                            Sedang di proses ke Zeimusho / kantor pajak Jepang
                         </span>
                     </div>
                 </div>
@@ -389,12 +389,13 @@
                 {{-- Tanda Tangan --}}
                 @if ($client->confirmation->claim_type !== \App\Models\Client\Client::CLAIM_TYPE_NORMAL)
                 <div class="flex items-center gap-3 p-3 rounded-xl {{ $hasEsign ? 'bg-green-50 border border-green-200' : ($hasConfirmation ? 'bg-blue-50 border border-[#0049FF]/30' : 'bg-gray-50 border border-gray-200') }}">
-                    <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0
+                    <div class="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 
                                 {{ $hasEsign ? 'bg-green-500' : ($hasConfirmation ? 'bg-[#0049FF]' : 'bg-gray-300') }}">
                         <svg class="w-5 h-5 fill-white" viewBox="0 0 24 24">
                             <path d="{{ $hasEsign ? 'M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z' : 'M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z' }}"/>
                         </svg>
                     </div>
+                    
                     <div class="flex-1">
                         <div class="font-semibold text-sm {{ $hasEsign ? 'text-green-700' : ($hasConfirmation ? 'text-[#0049FF]' : 'text-gray-400') }}">
                             Tanda Tangan Digital
@@ -409,17 +410,25 @@
                             @endif
                         </div>
                     </div>
+
+                    {{-- BAGIAN YANG DIPERBARUI: Mengubah ikon menjadi tombol solid --}}
                     @if ($hasEsign)
-                        <a href="{{ route('agreement.download') }}" download>
-                        <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        <a href="{{ route('agreement.download') }}" 
+                        download
+                        class="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-bold px-3 py-2 rounded-lg transition-colors duration-200 shadow-sm flex-shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                            <span>Unduh</span>
                         </a>
                     @endif
+
                     @if (!$hasEsign && $hasConfirmation)
-                    <a href="{{ route('client.esign.show') }}"
-                       id="btn-esign-status"
-                       class="text-[10px] font-bold bg-[#0049FF] text-white px-2 py-1 rounded-lg whitespace-nowrap flex-shrink-0">
-                        Tanda Tangan
-                    </a>
+                        <a href="{{ route('client.esign.show') }}" 
+                        id="btn-esign-status" 
+                        class="text-[10px] font-bold bg-[#0049FF] text-white px-2 py-1 rounded-lg whitespace-nowrap flex-shrink-0">
+                            Tanda Tangan
+                        </a>
                     @endif
                 </div>
                 @endif
@@ -433,7 +442,7 @@
                         </svg>
                     </div>
                     <div class="flex-1">
-                        <div class="font-semibold text-sm {{ $hasDocuments ? 'text-green-700' : 'text-gray-400' }}">Dokumen Diterima</div>
+                        <div class="font-semibold text-sm {{ $hasDocuments ? 'text-green-700' : 'text-gray-400' }}">Kwitansi Pencairan Nenkin Diterima</div>
                         <div class="text-xs {{ $hasDocuments ? 'text-green-600' : 'text-gray-400' }}">
                             {{ $hasDocuments ? $documents->count() . ' dokumen tersedia' : 'Belum ada dokumen' }}
                         </div>
