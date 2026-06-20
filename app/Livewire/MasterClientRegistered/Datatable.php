@@ -19,6 +19,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Crypt;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 
 
@@ -33,8 +34,12 @@ class Datatable extends Component
 
     public $isCanGetAll = false;
     public $status;
-    public $selectedBatch = 'all';
+
+    #[Url(except: '')]
+    public $selectedBatch;
     public $batches = [];
+
+    #[Url(except: '')]
     public $bulkPic;
 
     public $batch_name;
@@ -48,13 +53,6 @@ class Datatable extends Component
     {
         $this->selectedBatch = $batchName;
         $this->resetPage();
-
-        $this->dispatch('modal-filter', [
-            'batch_name' => $batchName,
-        ]);
-        if ($batchName !== 'all') {
-            $this->dispatch('openBatchModal', batchName: $batchName);
-        }
     }
 
     public function loadBatches()
@@ -75,7 +73,12 @@ class Datatable extends Component
         $this->isCanUpdate = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE));
         $this->isCanDelete = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_DELETE));
         $this->isCanGetAll = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE));
-        $this->bulkPic =  $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE)) ? null : auth()->user()->pic;
+        if (!$this->selectedBatch) {
+            $this->selectedBatch = 'all';
+        }
+        if (!$this->bulkPic) {
+            $this->bulkPic = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE)) ? null : auth()->user()->pic;
+        }
     }
 
     #[On('on-delete-confirmation-dialog-confirm')]
@@ -508,7 +511,7 @@ class Datatable extends Component
     {
         $fileName = "Data Client Registered " . Carbon::now()->format('Y-m-d H:i:s');
         $query = ClientRepository::getClientRegistered(
-            $this->batch_name,
+            $this->selectedBatch,
             $this->filter_claim_type,
             $this->bulkPic
         );

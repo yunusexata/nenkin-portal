@@ -14,6 +14,7 @@ use App\Traits\Livewire\WithDatatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Crypt;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 
 
@@ -28,10 +29,16 @@ class Datatable extends Component
 
     public $isAdmin = false;
     public $status;
-    public $selectedBatch = 'all';
+
+    #[Url(except: '')]
+    public $selectedBatch;
     public $filter_claim_type;
+
+    #[Url(except: '')]
     public $filter_data_type;
     public $batches = [];
+
+    #[Url(except: '')]
     public $bulkPic;
 
     // Delete Dialog
@@ -75,7 +82,12 @@ class Datatable extends Component
         $this->isCanDelete = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_IMPORT_DATA_JEPANG, PermissionHelper::TYPE_DELETE));
         $this->loadBatches();
         $this->isAdmin = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE));
-        $this->bulkPic = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE)) ? null : auth()->user()->pic;
+        if (!$this->selectedBatch) {
+            $this->selectedBatch = 'all';
+        }
+        if (!$this->bulkPic) {
+            $this->bulkPic = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE)) ? null : auth()->user()->pic;
+        }
     }
 
     #[On('on-delete-dialog-confirm')]

@@ -283,7 +283,17 @@
                             </td>
                             
                             <td class="text-center px-6 py-5 text-2xl font-semibold text-red-500 dark:text-white hidden sm:table-cell">
-                                {{ number_format($item['not_registered']) }}
+                                <a
+                                    href="{{ route('master_client.index', [
+                                        'bulkPic' => $item['pic'],
+                                        'filter_data_type' =>  App\Models\Client\Client::FILTER_DATA_TYPE_NOT_REGISTERED,
+                                        'selectedBatch' => $selectedBatch
+                                    ]) }}"
+                                    target="_BLANK"
+                                    class="hover:underline hover:text-red-600"
+                                >
+                                    {{ number_format($item['not_registered']) }}
+                                </a>
                             </td>
                             
                             <td class="text-center px-6 py-5 text-2xl font-semibold text-green-500 dark:text-white hidden sm:table-cell">
@@ -378,10 +388,30 @@
                             </td>
                             
                             <td class="text-center px-6 py-5 text-2xl text-red-500 font-semibold text-meta-1 hidden sm:table-cell">
-                                {{ number_format($item['not_confirmed']) }}
+                                 <a
+                                    href="{{ route('master_client.index', [
+                                        'bulkPic' => $item['pic'],
+                                        'filter_data_type' =>  App\Models\Client\Client::FILTER_DATA_TYPE_NOT_CONFIRMATION,
+                                        'selectedBatch' => $selectedBatch
+                                    ]) }}"
+                                    target="_BLANK"
+                                    class="hover:underline hover:text-red-600"
+                                >
+                                    {{ number_format($item['not_confirmed']) }}
+                                 </a>
                             </td>
                             <td class="text-center px-6 py-5 text-2xl text-green-500 font-semibold text-meta-1 hidden sm:table-cell">
-                                {{ number_format($item['total_client'] - $item['kokumin'] - $item['not_confirmed']) }}
+                                <a
+                                    href="{{ route('master_client_registered.index', [
+                                        'bulkPic' => $item['pic'],
+                                        'filter_data_type' =>  App\Models\Client\Client::FILTER_DATA_TYPE_CONFIRMATION,
+                                        'selectedBatch' => $selectedBatch
+                                    ]) }}"
+                                    target="_BLANK"
+                                    class="hover:underline hover:text-green-600"
+                                >
+                                    {{ number_format($item['total_client'] - $item['kokumin'] - $item['not_confirmed']) }}
+                                </a>
                             </td>
                             <td class="text-center px-6 py-5 text-2xl text-[#FF00FE] font-semibold text-meta-1 hidden sm:table-cell">
                                 {{ number_format($item['kokumin']) }}

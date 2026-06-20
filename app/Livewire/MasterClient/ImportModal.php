@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
@@ -24,9 +25,12 @@ class ImportModal extends Component
     use WithFileUploads;
 
     public $input_file;
-    public $batch_name = 'all';
+    #[Url(except: '')]
+    public $batch_name;
     public $filter_claim_type;
+    #[Url(except: '')]
     public $filter_data_type;
+    #[Url(except: '')]
     public $bulkPic;
 
     // Import Pipeline
@@ -36,7 +40,12 @@ class ImportModal extends Component
     public function mount()
     {
         $authUser = UserRepository::authenticatedUser();
-        $this->bulkPic = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE)) ? null : auth()->user()->pic;
+        if (!$this->batch_name) {
+            $this->batch_name = 'all';
+        }
+        if (!$this->bulkPic) {
+            $this->bulkPic = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE)) ? null : auth()->user()->pic;
+        }
     }
     // IMPORT PIPELINE
     public function updatedInputFile()
