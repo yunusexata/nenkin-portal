@@ -131,7 +131,37 @@
             </div>
         </div>
 
-        <div class="rounded-2xl border border-rose-100 bg-pink-500 p-5 dark:border-rose-900/40 dark:bg-rose-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+        <div class="rounded-2xl border border-rose-100 bg-red-500 p-5 dark:border-rose-900/40 dark:bg-rose-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-sm text-white dark:text-white font-semibold uppercase tracking-wider">BELUM REGISTRASI</span>
+                    <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
+                        {{ number_format($total_achievements['total_clients'] - $total_achievements['registered_total'] - $total_achievements['kokumin_total']) }}
+                    </h4>
+                </div>
+                <div class="flex items-center justify-center w-12 h-12 bg-white text-white rounded-xl shadow-sm">
+                    <svg class="fill-red-500 w-6 h-6" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="rounded-2xl border border-rose-100 bg-green-500 p-5 dark:border-rose-900/40 dark:bg-rose-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-sm text-white dark:text-rose-400 font-semibold uppercase tracking-wider">SUDAH REGISTRASI</span>
+                    <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
+                        {{ number_format($total_achievements['registered_total']) }}
+                    </h4>
+                </div>
+                <div class="flex items-center justify-center w-12 h-12 bg-white text-white rounded-xl shadow-sm">
+                    <svg class="fill-green-500 w-6 h-6" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="rounded-2xl border border-rose-100 bg-red-500 p-5 dark:border-rose-900/40 dark:bg-rose-950/10 md:p-6 shadow-xs hover:shadow-md transition">
             <div class="flex items-center justify-between">
                 <div>
                     <span class="text-sm text-white dark:text-rose-400 font-semibold uppercase tracking-wider">BELUM KONFIRMASI</span>
@@ -140,7 +170,7 @@
                     </h4>
                 </div>
                 <div class="flex items-center justify-center w-12 h-12 bg-white text-white rounded-xl shadow-sm">
-                    <svg class="fill-pink-500 w-6 h-6" viewBox="0 0 24 24">
+                    <svg class="fill-red-500 w-6 h-6" viewBox="0 0 24 24">
                         <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                     </svg>
                 </div>
@@ -152,7 +182,7 @@
                 <div>
                     <span class="text-sm text-white dark:text-emerald-400 font-semibold uppercase tracking-wider">SUDAH KONFIRMASI</span>
                     <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
-                        {{ number_format($total_achievements['total_clients'] - $total_achievements['not_confirmed_total']  - $total_achievements['kokumin_total']) }}
+                        {{ number_format($total_achievements['registered_total'] - $total_achievements['not_confirmed_total']) }}
                     </h4>
                 </div>
                 <div class="flex items-center justify-center w-12 h-12 bg-white text-white rounded-xl shadow-sm">
@@ -162,6 +192,37 @@
                 </div>
             </div>
         </div>
+        <div class="rounded-2xl border border-rose-100 bg-red-500 p-5 dark:border-rose-900/40 dark:bg-rose-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-sm text-white dark:text-rose-400 font-semibold uppercase tracking-wider">PENDING</span>
+                    <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
+                        {{ number_format($total_achievements['pending_total']) }}
+                    </h4>
+                </div>
+                <div class="flex items-center justify-center w-12 h-12 bg-white text-white rounded-xl shadow-sm">
+                    <svg class="fill-red-500 w-6 h-6" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="rounded-2xl border border-rose-100 bg-green-500 p-5 dark:border-rose-900/40 dark:bg-rose-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-sm text-white dark:text-rose-400 font-semibold uppercase tracking-wider">Sudah E-Sign</span>
+                    <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
+                        {{ number_format($total_achievements['speed_total'] + $total_achievements['adjustment_total']) }}
+                    </h4>
+                </div>
+                <div class="flex items-center justify-center w-12 h-12 bg-white text-white rounded-xl shadow-sm">
+                    <svg class="fill-green-500 w-6 h-6" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div class="my-6">
@@ -360,7 +421,7 @@
                             KOKUMIN
                         </th>
                         <th class="text-center px-6 py-4.5 font-extrabold uppercase text-primary dark:text-white text-lg tracking-wider ">
-                            Total
+                            Total Registered
                         </th>
                     </tr>
                 </thead>
@@ -376,7 +437,7 @@
                     @php
                         $total_pic_not_confirmed += $item['not_confirmed'];
                         $total_pic_kokumin += $item['kokumin'];
-                        $total_pic_total += $item['total_client'];
+                        $total_pic_total += $item['total_registered'];
                     @endphp
                         <tr class="border-b border-stroke dark:border-strokedark bg-gradient-to-r from-orange-50/30 to-transparent dark:from-meta-4/20 transition hover:bg-gray-50 dark:hover:bg-meta-4/40">
                             <td class="text-center px-6 py-5">
@@ -401,23 +462,13 @@
                                  </a>
                             </td>
                             <td class="text-center px-6 py-5 text-2xl text-green-500 font-semibold text-meta-1 hidden sm:table-cell">
-                                <a
-                                    href="{{ route('master_client_registered.index', [
-                                        'bulkPic' => $item['pic'],
-                                        'filter_data_type' =>  App\Models\Client\Client::FILTER_DATA_TYPE_CONFIRMATION,
-                                        'selectedBatch' => $selectedBatch
-                                    ]) }}"
-                                    target="_BLANK"
-                                    class="hover:underline hover:text-green-600"
-                                >
-                                    {{ number_format($item['total_client'] - $item['kokumin'] - $item['not_confirmed']) }}
-                                </a>
+                                {{ number_format($item['total_registered'] - $item['kokumin'] - $item['not_confirmed']) }}
                             </td>
                             <td class="text-center px-6 py-5 text-2xl text-[#FF00FE] font-semibold text-meta-1 hidden sm:table-cell">
                                 {{ number_format($item['kokumin']) }}
                             </td>
                             <td class="text-center px-6 py-5 text-3xl font-black text-meta-3 tracking-tight">
-                                {{ number_format($item['total_client']) }}
+                                {{ number_format($item['total_registered']) }}
                             </td>
                             
                         </tr>
@@ -442,6 +493,107 @@
                             </td>
                             <td class="text-center px-6 py-5 text-3xl font-black text-meta-3 tracking-tight">
                                 {{ number_format($total_pic_total) }}
+                            </td>
+                            
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="my-6">
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-white/90">Detail Data PIC Pending E-Sign</h1>
+    </div>
+    <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+        <div class="max-w-full overflow-x-auto">
+            <table class="w-full table-auto">
+                
+                <thead>
+                    <tr class="bg-gray-2 text-left dark:bg-meta-4 border-b border-stroke dark:border-strokedark">
+                        <th class="text-center min-w-[150px] px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider">
+                            PIC
+                        </th>
+                        <th class="text-center px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider  hidden sm:table-cell">
+                            Belum E-Sign
+                        </th>
+                        <th class="text-center px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider  hidden sm:table-cell">
+                            Sudah E-Sign
+                        </th>
+                        <th class="text-center px-6 py-4.5 font-bold uppercase text-black dark:text-white text-base tracking-wider  hidden sm:table-cell">
+                            KOKUMIN
+                        </th>
+                        <th class="text-center px-6 py-4.5 font-extrabold uppercase text-primary dark:text-white text-lg tracking-wider ">
+                            Total Speed / Adjusment
+                        </th>
+                    </tr>
+                </thead>
+
+                @php
+                    $total_pic_pending = 0;
+                    $total_pic_kokumin = 0;
+                    $total_pic_total_speed = 0;
+                @endphp
+                
+                <tbody class="bg-white dark:bg-boxdark">
+                    @foreach ($pic_achievements as $item)
+                    @php
+                        $total_pic_pending += $item['pending'];
+                        $total_pic_kokumin += $item['kokumin'];
+                        $total_pic_total_speed += $item['total_speed'];
+                    @endphp
+                        <tr class="border-b border-stroke dark:border-strokedark bg-gradient-to-r from-orange-50/30 to-transparent dark:from-meta-4/20 transition hover:bg-gray-50 dark:hover:bg-meta-4/40">
+                            <td class="text-center px-6 py-5">
+                                <div class="flex flex-col gap-1">
+                                    <h3 class="text-xl font-bold text-black dark:text-white">
+                                        {{ strtoupper($item['pic']) }}
+                                    </h3>
+                                </div>
+                            </td>
+                            
+                            <td class="text-center px-6 py-5 text-2xl text-red-500 font-semibold text-meta-1 hidden sm:table-cell">
+                                 <a
+                                    href="{{ route('master_client_registered.index', [
+                                        'bulkPic' => $item['pic'],
+                                        'filter_claim_type' =>  App\Models\Client\Client::CLAIM_TYPE_PENDING,
+                                        'selectedBatch' => $selectedBatch
+                                    ]) }}"
+                                    target="_BLANK"
+                                    class="hover:underline hover:text-red-600"
+                                >
+                                    {{ number_format($item['pending']) }}
+                                 </a>
+                            </td>
+                            <td class="text-center px-6 py-5 text-2xl text-green-500 font-semibold text-meta-1 hidden sm:table-cell">
+                                {{ number_format($item['total_speed'] - $item['pending']) }}
+                            </td>
+                            <td class="text-center px-6 py-5 text-2xl text-[#FF00FE] font-semibold text-meta-1 hidden sm:table-cell">
+                                {{ number_format($item['kokumin']) }}
+                            </td>
+                            <td class="text-center px-6 py-5 text-3xl font-black text-meta-3 tracking-tight">
+                                {{ number_format($item['total_speed']) }}
+                            </td>
+                            
+                        </tr>
+                    @endforeach
+                        <tr class="border-t-2 border-slate-300 dark:border-slate-600 bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-900">
+                            <td class="text-center px-6 py-5">
+                                <div class="flex flex-col gap-1">
+                                    <h3 class="text-xl font-bold text-black dark:text-white">
+                                        TOTAL
+                                    </h3>
+                                </div>
+                            </td>
+                            
+                            <td class="text-center px-6 py-5 text-2xl text-red-500 font-semibold text-meta-1 hidden sm:table-cell">
+                                {{ number_format($total_pic_pending) }}
+                            </td>
+                            <td class="text-center px-6 py-5 text-2xl text-green-500 font-semibold text-meta-1 hidden sm:table-cell">
+                                {{ number_format($total_pic_total_speed - $total_pic_pending) }}
+                            </td>
+                            <td class="text-center px-6 py-5 text-2xl text-[#FF00FE] font-semibold text-meta-1 hidden sm:table-cell">
+                                {{ number_format($total_pic_kokumin) }}
+                            </td>
+                            <td class="text-center px-6 py-5 text-3xl font-black text-meta-3 tracking-tight">
+                                {{ number_format($total_pic_total_speed) }}
                             </td>
                             
                         </tr>

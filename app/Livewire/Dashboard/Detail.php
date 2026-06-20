@@ -21,6 +21,7 @@ class Detail extends Component
         $this->loadBatches();
         $this->getDashboardStats();
         $this->getDashboardStatsPIC();
+        // $this->getDashboardStatsPICPending();
     }
     private function getDashboardStatsPIC()
     {
@@ -30,28 +31,52 @@ class Detail extends Component
                 $join->on('client_confirmations.client_id', '=', 'clients.id')
                     ->whereNull('client_confirmations.deleted_at');
             })
+            ->leftJoin('client_esigns', function ($join) {
+                $join->on('client_esigns.client_id', '=', 'clients.id')
+                    ->whereNull('client_esigns.deleted_at');
+            })
             ->when($this->selectedBatch != 'all', function ($q) {
                 $q->where('clients.source_file_name', $this->selectedBatch);
             })
             ->selectRaw("
-        clients.pic,
-        
-        COUNT(DISTINCT clients.id) as total_client,
+                clients.pic,
+                
+                COUNT(DISTINCT clients.id) as total_client,
 
-        COUNT(DISTINCT clients.id) FILTER (
-            WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "'
-            AND users.id IS NULL
-        ) as not_registered,
+                COUNT(DISTINCT clients.id) FILTER (
+                    WHERE users.id IS NOT NULL
+                ) as total_registered,
 
-        COUNT(DISTINCT clients.id) FILTER (
-            WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "'
-            AND client_confirmations.id IS NULL
-        ) as not_confirmed,
+                COUNT(DISTINCT clients.id) FILTER (
+                    WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "'
+                    AND users.id IS NULL
+                ) as not_registered,
 
-        COUNT(DISTINCT clients.id) FILTER (
-            WHERE clients.claim_type = '" . Client::CLAIM_TYPE_KOKUMIN . "'
-        ) as kokumin
-    ")
+                COUNT(DISTINCT clients.id) FILTER (
+                    WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "'
+                    AND client_confirmations.id IS NULL
+                    AND users.id IS NOT NULL
+                ) as not_confirmed,
+                 
+                COUNT(DISTINCT clients.id) FILTER (
+                    WHERE client_confirmations.claim_type IN (
+                        '" . Client::CLAIM_TYPE_SPEED . "',
+                        '" . Client::CLAIM_TYPE_ADJUSTMENT . "'
+                    )
+                ) as total_speed,
+
+                COUNT(DISTINCT clients.id) FILTER (
+                    WHERE client_confirmations.claim_type IN (
+                        '" . Client::CLAIM_TYPE_SPEED . "',
+                        '" . Client::CLAIM_TYPE_ADJUSTMENT . "'
+                    )
+                    AND client_esigns.id IS NULL
+                ) as pending,
+
+                COUNT(DISTINCT clients.id) FILTER (
+                    WHERE clients.claim_type = '" . Client::CLAIM_TYPE_KOKUMIN . "'
+                ) as kokumin
+            ")
             ->groupBy('clients.pic')
             ->orderBy('clients.pic')
             ->get()
@@ -61,9 +86,14 @@ class Detail extends Component
     private function getDashboardStats()
     {
         $this->total_achievements = Client::query()
+            ->leftJoin('users', 'users.client_id', '=', 'clients.id')
             ->leftJoin('client_confirmations', function ($join) {
                 $join->on('client_confirmations.client_id', '=', 'clients.id')
                     ->whereNull('client_confirmations.deleted_at');
+            })
+            ->leftJoin('client_esigns', function ($join) {
+                $join->on('client_esigns.client_id', '=', 'clients.id')
+                    ->whereNull('client_esigns.deleted_at');
             })
             ->when($this->selectedBatch != 'all', function ($q) {
                 $q->where('clients.source_file_name', $this->selectedBatch);
@@ -72,22 +102,32 @@ class Detail extends Component
             COUNT(clients.id) AS total_clients,
 
             COUNT(*) FILTER (
-                WHERE client_confirmations.id IS NULL
-                AND clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "'
-            ) AS not_confirmed_total,
-
-            COUNT(*) FILTER (
                 WHERE clients.claim_type = '" . Client::CLAIM_TYPE_KOKUMIN . "'
             ) AS kokumin_total,
 
             COUNT(*) FILTER (
-                WHERE client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_JEPANG . "'
-            ) AS jpn_total,
+                WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "'
+                AND users.id IS NOT NULL
+            ) AS registered_total,
 
             COUNT(*) FILTER (
-                WHERE client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_INDONESIA . "'
-                AND client_confirmations.back_to_jp_type = '" . ClientConfirmation::BACK_TO_JP_TYPE_NO . "'
-            ) AS speed_total,
+                WHERE client_confirmations.id IS NULL
+                AND clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "'
+                AND users.id IS NOT NULL
+            ) AS not_confirmed_total,
+
+            COUNT(*) FILTER (
+                WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "'
+                AND client_confirmations.claim_type IN (
+                    '" . Client::CLAIM_TYPE_SPEED . "',
+                    '" . Client::CLAIM_TYPE_ADJUSTMENT . "'
+                )
+                AND client_esigns.id IS NULL
+            ) AS pending_total,
+            
+            COUNT(*) FILTER (
+                WHERE client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_JEPANG . "'
+            ) AS jpn_total,
 
             COUNT(*) FILTER (
                 WHERE client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_INDONESIA . "'
@@ -102,15 +142,13 @@ class Detail extends Component
             ) AS re_total,
 
             COUNT(*) FILTER (
-                WHERE client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_INDONESIA . "'
-                AND client_confirmations.back_to_jp_type = '" . ClientConfirmation::BACK_TO_JP_TYPE_YES . "'
-                AND make_date(
-                    client_confirmations.departure_year::int,
-                    client_confirmations.departure_month::int,
-                    1
-                ) >= (
-                    clients.created_at::date + interval '6 months'
-                )
+                WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_SPEED . "'
+                AND client_esigns.id IS NOT NULL
+            ) AS speed_total,
+
+            COUNT(*) FILTER (
+                WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_ADJUSTMENT . "'
+                AND client_esigns.id IS NOT NULL
             ) AS adjustment_total
         ")
             ->first()->toArray();

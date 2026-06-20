@@ -312,7 +312,7 @@
                                             
                                             @if (isset($col['render']) && is_callable($col['render']))
                                                 <td class="px-4 py-2 {!! $cell_class !!}" style="{!! $cell_style !!}">
-                                                    {!! call_user_func($col['render'], $item) !!}
+                                                    {!! call_user_func($col['render'], $item, $index) !!}
                                                 </td>
                                             @elseif (isset($col['key']))
                                                 <td class="px-4 py-2 {!! $cell_class !!}" style="{!! $cell_style !!}">

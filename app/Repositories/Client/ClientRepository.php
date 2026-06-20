@@ -33,7 +33,8 @@ class ClientRepository extends MasterDataRepository
                 $q->whereHas('confirmation');
             })
             ->when($data_type && $data_type === Client::FILTER_DATA_TYPE_NOT_CONFIRMATION, function ($q) {
-                $q->whereDoesntHave('confirmation');
+                $q->whereDoesntHave('confirmation')
+                    ->whereHas('user');
             })
             ->when($data_type && $data_type === Client::FILTER_DATA_TYPE_REGISTERED, function ($q) {
                 $q->whereHas('user');

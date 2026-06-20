@@ -177,6 +177,16 @@ class Datatable extends Component
             //     },
             // ],
             [
+                'searchable' => false,
+                'sortable' => false,
+                'name' => 'No',
+                'render' => function ($item, $index) {
+                    $page = $this->getPage();
+
+                    return (($page - 1) * $this->length) + $index + 1;
+                }
+            ],
+            [
                 'key' => 'no_jp',
                 'name' => 'No Input JPN',
                 'render' => function ($item) {
@@ -383,7 +393,8 @@ class Datatable extends Component
                 $q->whereHas('confirmation');
             })
             ->when($this->filter_data_type && $this->filter_data_type === Client::FILTER_DATA_TYPE_NOT_CONFIRMATION, function ($q) {
-                $q->whereDoesntHave('confirmation');
+                $q->whereDoesntHave('confirmation')
+                    ->whereHas('user');
             })
             ->when($this->filter_data_type && $this->filter_data_type === Client::FILTER_DATA_TYPE_REGISTERED, function ($q) {
                 $q->whereHas('user');

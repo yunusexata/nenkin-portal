@@ -13,6 +13,11 @@ class MenuHelper
         $items = [
             [
                 'icon' => 'dashboard',
+                'name' => 'Dashboard',
+                'path' => 'dashboard.index',
+            ],
+            [
+                'icon' => 'dashboard',
                 'name' => 'Master Data Client',
                 'path' => 'master_client.index',
             ],

@@ -43,6 +43,8 @@ class Datatable extends Component
     public $bulkPic;
 
     public $batch_name;
+
+    #[Url(except: '')]
     public $filter_claim_type;
     public $filter_export_status;
 
@@ -172,6 +174,16 @@ class Datatable extends Component
             //         return $html;
             //     },
             // ],
+            [
+                'searchable' => false,
+                'sortable' => false,
+                'name' => 'No',
+                'render' => function ($item, $index) {
+                    $page = $this->getPage();
+
+                    return (($page - 1) * $this->length) + $index + 1;
+                }
+            ],
             [
                 'key' => 'clients.no_jp',
                 'name' => 'No Input JPN',
