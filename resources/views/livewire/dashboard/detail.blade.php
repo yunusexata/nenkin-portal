@@ -2,8 +2,8 @@
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4 md:gap-6">
         <div class="w-auto">
             <!-- Filter by Batch Dropdown Select -->
-            <div class="px-5 mb-5 sm:px-6">
-                <div class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Batch:</div>
+            <div class="mb-5">
+                <div class="text-md font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Batch:</div>
                 
                 <div x-data="{ 
                     open: false, 
@@ -22,7 +22,7 @@
                         <button 
                             type="button" 
                             @click="open = !open"
-                            class="flex h-[42px] w-full items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 shadow-theme-xs focus:border-brand-500 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white"
+                            class="flex h-[42px] w-full items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-lg text-gray-800 shadow-theme-xs focus:border-brand-500 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white"
                         >
                             <span>
                                 @if($selectedBatch && $selectedBatch !== 'all')
@@ -67,7 +67,7 @@
                                 x-model="search" 
                                 type="text" 
                                 placeholder="Cari nama batch..." 
-                                class="h-[36px] w-full rounded-md border border-gray-200 bg-gray-50 px-3 text-xs text-gray-800 placeholder:text-gray-400 focus:border-brand-500 focus:outline-none dark:border-gray-800 dark:bg-gray-950 dark:text-white"
+                                class="h-[36px] w-full rounded-md border border-gray-200 bg-gray-50 px-3 text-md text-gray-800 placeholder:text-gray-400 focus:border-brand-500 focus:outline-none dark:border-gray-800 dark:bg-gray-950 dark:text-white"
                                 @click.stop
                             >
                         </div>
