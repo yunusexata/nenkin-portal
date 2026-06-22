@@ -455,7 +455,7 @@
                                     {{ number_format($item['not_confirmed']) }}
                                  </a>
                             </td>
-                            <td class="border border-stroke border-gray-400 dark:border-strokedark text-center px-6 py-5 text-2xl font-semibold text-red-500 dark:text-white hidden sm:table-cell">
+                            <td class="border border-stroke border-gray-400 dark:border-strokedark text-center px-6 py-5 text-2xl font-semibold text-green-500 dark:text-white hidden sm:table-cell">
                                 {{ number_format($item['total_registered'] - $item['not_confirmed']) }}
                             </td>
                             <td class="border border-stroke border-gray-400 dark:border-strokedark text-center px-6 py-5 text-3xl font-black text-meta-3 tracking-tight">
@@ -473,10 +473,10 @@
                                 </div>
                             </td>
                             
-                            <td class="border border-stroke border-gray-400 dark:border-strokedark text-center px-6 py-5 text-2xl text-[#FF00FE] font-semibold text-meta-1 hidden sm:table-cell">
+                            <td class="border border-stroke border-gray-400 dark:border-strokedark text-center px-6 py-5 text-2xl text-red-500 font-semibold text-meta-1 hidden sm:table-cell">
                                 {{ number_format($total_pic_not_confirmed) }}
                             </td>
-                            <td class="border border-stroke border-gray-400 dark:border-strokedark text-center px-6 py-5 text-2xl text-[#FF00FE] font-semibold text-meta-1 hidden sm:table-cell">
+                            <td class="border border-stroke border-gray-400 dark:border-strokedark text-center px-6 py-5 text-2xl text-green-500 font-semibold text-meta-1 hidden sm:table-cell">
                                 {{ number_format($total_pic_total - $total_pic_not_confirmed) }}
                             </td>
                             <td class="border border-stroke border-gray-400 dark:border-strokedark text-center px-6 py-5 text-3xl font-black text-meta-3 tracking-tight">
@@ -545,7 +545,7 @@
                                     {{ number_format($item['pending']) }}
                                  </a>
                             </td>
-                            <td class="border border-stroke border-gray-400 dark:border-strokedark text-center px-6 py-5 text-2xl font-semibold text-red-500 dark:text-white hidden sm:table-cell">
+                            <td class="border border-stroke border-gray-400 dark:border-strokedark text-center px-6 py-5 text-2xl font-semibold text-green-500 dark:text-white hidden sm:table-cell">
                                 {{ number_format($item['total_speed'] - $item['pending']) }}
                             </td>
                             <td class="border border-stroke border-gray-400 dark:border-strokedark text-center px-6 py-5 text-3xl font-black text-meta-3 tracking-tight">
@@ -563,10 +563,10 @@
                                 </div>
                             </td>
                             
-                            <td class="border border-stroke border-gray-400 dark:border-strokedark text-center px-6 py-5 text-2xl text-[#FF00FE] font-semibold text-meta-1 hidden sm:table-cell">
+                            <td class="border border-stroke border-gray-400 dark:border-strokedark text-center px-6 py-5 text-2xl text-red-500 font-semibold text-meta-1 hidden sm:table-cell">
                                 {{ number_format($total_pic_pending) }}
                             </td>
-                            <td class="border border-stroke border-gray-400 dark:border-strokedark text-center px-6 py-5 text-2xl text-[#FF00FE] font-semibold text-meta-1 hidden sm:table-cell">
+                            <td class="border border-stroke border-gray-400 dark:border-strokedark text-center px-6 py-5 text-2xl text-green-500 font-semibold text-meta-1 hidden sm:table-cell">
                                 {{ number_format($total_pic_total_speed - $total_pic_pending) }}
                             </td>
                             <td class="border border-stroke border-gray-400 dark:border-strokedark text-center px-6 py-5 text-3xl font-black text-meta-3 tracking-tight">
