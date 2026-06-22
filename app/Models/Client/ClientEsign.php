@@ -40,7 +40,11 @@ class ClientEsign extends Model
     protected static function onBoot()
     {
         self::created(function ($model) {
-            $model->client->update(['claim_type' => $model->client->confirmation->claim_type]);
+            $model->client->update([
+                'claim_type' => $model->client->confirmation->claim_type,
+                'is_exported' => false,
+                'exported_at' => null,
+            ]);
         });
     }
 

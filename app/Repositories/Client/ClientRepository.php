@@ -82,7 +82,8 @@ class ClientRepository extends MasterDataRepository
                 WHERE client_esigns.client_id = clients.id
             ) as esign_exists
         ")
-            ->orderByDesc('clients.is_exported');
+            ->orderByDesc('clients.is_exported')
+            ->orderByDesc('clients.no_jp');
     }
 
     public static function getClientUpodSurvey($batchName = null, $claimType = null, $pic = null)
