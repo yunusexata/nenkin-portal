@@ -460,17 +460,17 @@ class Datatable extends Component
                 'client_confirmations.indonesia_address',
             )
             ->selectRaw("
-        EXISTS (
-            SELECT 1
-            FROM client_esigns
-            WHERE client_esigns.client_id = clients.id
-        ) as esign_exists,
-        EXISTS (
-            SELECT 1
-            FROM client_confirmations
-            WHERE client_confirmations.client_id = clients.id
-        ) as confirmation_exists
-    ")
+            EXISTS (
+                SELECT 1
+                FROM client_esigns
+                WHERE client_esigns.client_id = clients.id
+            ) as esign_exists,
+            EXISTS (
+                SELECT 1
+                FROM client_confirmations
+                WHERE client_confirmations.client_id = clients.id
+            ) as confirmation_exists
+        ")
             ->join('client_confirmations', function ($j) {
                 $j->on('client_confirmations.client_id', '=', 'clients.id')
                     ->whereNull('client_confirmations.deleted_at');
@@ -517,6 +517,84 @@ class Datatable extends Component
             $this->$key = $value;
         }
     }
+
+    #[On('showLockConfirmation')]
+    public function showLockConfirmation()
+    {
+        if (!auth()->user()->hasRole(\App\Models\User::ROLE_HS3) && !auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN)) {
+            return;
+        }
+        if (blank($this->selectedBatch) || $this->selectedBatch === 'all') {
+
+            Alert::fail($this, "Gagal", 'Silakan pilih batch terlebih dahulu');
+            return;
+        }
+
+        Alert::confirmation(
+            $this,
+            Alert::ICON_QUESTION,
+            "Hapus Data",
+            "Apakah Anda Yakin Ingin Mengunci Batch Ini ?",
+            "on-lock-confirmation-dialog-confirm",
+            "on-lock-confirmation-dialog-cancel",
+            "Kunci",
+            "Batal",
+        );
+    }
+
+    #[On('on-lock-confirmation-dialog-confirm')]
+    public function onDialogLockConfirmationConfirm()
+    {
+        if (!auth()->user()->hasRole(\App\Models\User::ROLE_HS3) && !auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN)) {
+            return;
+        }
+        if (blank($this->selectedBatch) || $this->selectedBatch === 'all') {
+
+            Alert::fail($this, "Gagal", 'Silakan pilih batch terlebih dahulu');
+            return;
+        }
+        $clientsWithoutConfirmation = Client::query()
+            ->where('clients.claim_type', '!=', Client::CLAIM_TYPE_KOKUMIN)
+            ->where('clients.source_file_name', $this->selectedBatch)
+            ->whereDoesntHave('confirmation')
+            ->get();
+        foreach ($clientsWithoutConfirmation as $client) {
+
+            $client_confirmation = ClientConfirmation::firstOrCreate([
+                'client_id' => $client->id,
+            ], [
+                'client_id' => $client->id,
+                'nenkin_80_received_type' => ClientConfirmation::NENKIN_80_RECEIVED_TYPE_RECEIVED,
+                'current_position' => ClientConfirmation::CURRENT_POSITION_JEPANG,
+                'back_to_jp_type' => null,
+                'departure_month' => null,
+                'departure_year' => null,
+                'estimated_return_month' => now()->addMonth()->format('m'),
+                'estimated_return_year' => now()->addYear()->format('Y'),
+                'indonesia_address' => null,
+                'nik' => null,
+            ]);
+        }
+        ClientConfirmation::query()
+            ->whereIn('client_confirmations.claim_type', [
+                Client::CLAIM_TYPE_SPEED,
+                Client::CLAIM_TYPE_ADJUSTMENT,
+            ])
+            ->whereHas('client', function ($q) {
+                $q->whereDoesntHave('esign')
+                    ->where('source_file_name', $this->selectedBatch);
+            })
+            ->each(function ($confirmation) {
+                $confirmation->update([
+                    'claim_type' => Client::CLAIM_TYPE_NORMAL,
+                ]);
+            });
+
+        Alert::information($this, 'Data Berhasil Disimpan');
+    }
+
+    #[On('on-lock-confirmation-dialog-cancel')]
+    public function onDialogLockConfirmationCancel() {}
 
     #[On('export')]
     public function export($type)

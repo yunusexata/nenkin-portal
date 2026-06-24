@@ -4,12 +4,16 @@
     
     <x-common.component-card title="">
         
-        @can(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE))
-            <div data-slot="card-content" class="group-data-[size=sm]/card:px-3 p-0">
-                <x-ui.button size="sm" variant="success" @click="$dispatch('export', { type: '{{ App\Helpers\ExportHelper::TYPE_EXCEL }}' })">Export Excel
+        <div data-slot="card-content" class="group-data-[size=sm]/card:px-3 p-0">
+            @can(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE))
+                <x-ui.button size="sm" variant="primary" @click="$dispatch('export', { type: '{{ App\Helpers\ExportHelper::TYPE_EXCEL }}' })">Export Excel
                 </x-ui.button>
-            </div>
-        @endCan
+            @endCan
+            @if(auth()->user()->hasRole(\App\Models\User::ROLE_HS3) || auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN))
+                <x-ui.button size="sm" variant="warning" @click="$dispatch('showLockConfirmation')">Tutup Pengisian
+                </x-ui.button>
+            @endif
+        </div>
         <livewire:master-client-registered.datatable />
     </x-common.component-card>
  
