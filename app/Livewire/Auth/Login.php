@@ -27,6 +27,7 @@ class Login extends Component
             Alert::fail($this, 'Login Gagal', 'Akun Belum Terdaftar');
             return;
         }
+
         if (!Hash::check($this->password, $user->password)) {
             Alert::fail($this, 'Login Gagal', 'Password Tidak Sesuai');
             return;

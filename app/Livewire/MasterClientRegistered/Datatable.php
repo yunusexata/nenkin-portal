@@ -485,23 +485,23 @@ class Datatable extends Component
                 'client_confirmations.indonesia_address',
             )
             ->selectRaw("
-            EXISTS (
-                SELECT 1
-                FROM client_esigns
-                WHERE client_esigns.client_id = clients.id
-            ) as esign_exists,
-            EXISTS (
-                SELECT 1
-                FROM client_confirmations
-                WHERE client_confirmations.client_id = clients.id
-            ) as confirmation_exists,
-            EXISTS (
-                SELECT 1
-                FROM users
-                WHERE users.client_id = clients.id
-                    AND users.deleted_at IS NULL
-            ) as user_exists
-        ")
+                EXISTS (
+                    SELECT 1
+                    FROM client_esigns
+                    WHERE client_esigns.client_id = clients.id
+                ) as esign_exists,
+                EXISTS (
+                    SELECT 1
+                    FROM client_confirmations
+                    WHERE client_confirmations.client_id = clients.id
+                ) as confirmation_exists,
+                EXISTS (
+                    SELECT 1
+                    FROM users
+                    WHERE users.client_id = clients.id
+                        AND users.deleted_at IS NULL
+                ) as user_exists
+            ")
             ->join('client_confirmations', function ($j) {
                 $j->on('client_confirmations.client_id', '=', 'clients.id')
                     ->whereNull('client_confirmations.deleted_at');
