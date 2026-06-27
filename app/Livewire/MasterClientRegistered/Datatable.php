@@ -506,7 +506,7 @@ class Datatable extends Component
                 $j->on('client_confirmations.client_id', '=', 'clients.id')
                     ->whereNull('client_confirmations.deleted_at');
             })
-            ->whereHas('user')
+            ->whereHas('confirmation')
             ->when($this->selectedBatch != 'all', function ($q) {
                 $q->where('clients.source_file_name', $this->selectedBatch);
             })
