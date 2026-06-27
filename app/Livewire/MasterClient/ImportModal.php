@@ -25,11 +25,15 @@ class ImportModal extends Component
     use WithFileUploads;
 
     public $input_file;
+
     #[Url(except: '')]
     public $batch_name;
+
     public $filter_claim_type;
+
     #[Url(except: '')]
     public $filter_data_type;
+
     #[Url(except: '')]
     public $bulkPic;
 
