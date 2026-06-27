@@ -233,6 +233,78 @@ class Datatable extends Component
             ],
             [
                 'searchable' => false,
+                'key' => 'user_exists',
+                'name' => 'Buat Akun',
+                'render' => function ($item) {
+                    $style = 'success';
+                    $text = 'belum';
+                    switch ($item->user_exists) {
+                        case true:
+                            $style = 'success';
+                            $text = 'sudah';
+                            break;
+                        case false:
+                            $style = 'warning';
+                            $text = 'belum';
+                            break;
+
+                        default:
+                            # code...
+                            break;
+                    }
+                    return '<span class="bg-' . $style . '-50 dark:bg-' . $style . '-500/15 text-' . $style . '-700 dark:text-' . $style . '-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">' . strtoupper($text) . '</span>';
+                }
+            ],
+            [
+                'searchable' => false,
+                'key' => 'confirmation_exists',
+                'name' => 'Form Konfirmasi',
+                'render' => function ($item) {
+                    $style = 'primary';
+                    $text = 'belum';
+                    switch ($item->confirmation_exists) {
+                        case true:
+                            $style = 'success';
+                            $text = 'sudah';
+                            break;
+                        case false:
+                            $style = 'warning';
+                            $text = 'belum';
+                            break;
+
+                        default:
+                            # code...
+                            break;
+                    }
+                    return '<span class="bg-' . $style . '-50 dark:bg-' . $style . '-500/15 text-' . $style . '-700 dark:text-' . $style . '-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">' . strtoupper($text) . '</span>';
+                }
+            ],
+            [
+                'searchable' => false,
+                'key' => 'esign_exists',
+                'name' => 'Tanda Tangan',
+                'render' => function ($item) {
+                    $style = 'primary';
+                    $text = 'belum';
+                    switch ($item->esign_exists) {
+                        case true:
+                            $style = 'success';
+                            $text = 'sudah';
+                            break;
+                        case false:
+                            $style = 'warning';
+                            $text = 'belum';
+                            break;
+
+                        default:
+                            # code...
+                            break;
+                    }
+                    return '<span class="bg-' . $style . '-50 dark:bg-' . $style . '-500/15 text-' . $style . '-700 dark:text-' . $style . '-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">' . strtoupper($text) . '</span>';
+                }
+            ],
+            [
+                'searchable' => false,
                 'sortable' => false,
                 'name' => 'Jenis Pencairan',
                 'render' => function ($item) {
@@ -283,54 +355,6 @@ class Datatable extends Component
                         return '<span class="bg-success-50 dark:bg-success-500/15 text-success-600 dark:text-success-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">EXPORTED</span>';
                     }
                     return '<span class="bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 text-theme-xs rounded-full px-2 py-0.5 font-medium">UN-EXPORTED</span>';
-                }
-            ],
-            [
-                'searchable' => false,
-                'key' => 'esign_exists',
-                'name' => 'Tanda Tangan',
-                'render' => function ($item) {
-                    $style = 'primary';
-                    $text = 'belum';
-                    switch ($item->esign_exists) {
-                        case true:
-                            $style = 'success';
-                            $text = 'sudah';
-                            break;
-                        case false:
-                            $style = 'warning';
-                            $text = 'belum';
-                            break;
-
-                        default:
-                            # code...
-                            break;
-                    }
-                    return '<span class="bg-' . $style . '-50 dark:bg-' . $style . '-500/15 text-' . $style . '-700 dark:text-' . $style . '-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">' . strtoupper($text) . '</span>';
-                }
-            ],
-            [
-                'searchable' => false,
-                'key' => 'confirmation_exists',
-                'name' => 'Form Konfirmasi',
-                'render' => function ($item) {
-                    $style = 'primary';
-                    $text = 'belum';
-                    switch ($item->confirmation_exists) {
-                        case true:
-                            $style = 'success';
-                            $text = 'sudah';
-                            break;
-                        case false:
-                            $style = 'warning';
-                            $text = 'belum';
-                            break;
-
-                        default:
-                            # code...
-                            break;
-                    }
-                    return '<span class="bg-' . $style . '-50 dark:bg-' . $style . '-500/15 text-' . $style . '-700 dark:text-' . $style . '-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">' . strtoupper($text) . '</span>';
                 }
             ],
             [
@@ -469,7 +493,13 @@ class Datatable extends Component
                 SELECT 1
                 FROM client_confirmations
                 WHERE client_confirmations.client_id = clients.id
-            ) as confirmation_exists
+            ) as confirmation_exists,
+            EXISTS (
+                SELECT 1
+                FROM users
+                WHERE users.client_id = clients.id
+                    AND users.deleted_at IS NULL
+            ) as user_exists
         ")
             ->join('client_confirmations', function ($j) {
                 $j->on('client_confirmations.client_id', '=', 'clients.id')
