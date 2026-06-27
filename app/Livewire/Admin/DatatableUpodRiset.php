@@ -41,6 +41,7 @@ class DatatableUpodRiset extends Component
         $this->dispatch('modal-filter', [
             'batch_name' => $batchName,
         ]);
+
         if ($batchName !== 'all') {
             $this->dispatch('openBatchModal', batchName: $batchName);
         }

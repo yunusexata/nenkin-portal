@@ -18,7 +18,10 @@ class ReviewTable extends Component
     public $isModalOpen = false;
 
     protected $queryString = [
-        'statusFilter' => ['except' => 'all', 'as' => 'status'],
+        'statusFilter' => [
+            'except' => 'all',
+            'as' => 'status'
+        ],
     ];
 
     public function updatingStatusFilter()
@@ -47,7 +50,7 @@ class ReviewTable extends Component
         }
 
         $review = Review::findOrFail($this->selectedReviewId);
-        
+
         if ($review->status !== 'intercepted') {
             $this->closeResolveModal();
             return;
