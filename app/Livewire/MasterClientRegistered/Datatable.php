@@ -456,6 +456,7 @@ class Datatable extends Component
                             </button>
                         </div>";
                     }
+
                     $html = "<div class='flex flex-nowrap justify-start p-0 m-0 gap-1'>
                         $destroyHtml
                     </div>";
