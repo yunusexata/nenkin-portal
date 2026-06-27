@@ -47,6 +47,7 @@ class ImportModal extends Component
         if (!$this->batch_name) {
             $this->batch_name = 'all';
         }
+
         if (!$this->bulkPic) {
             $this->bulkPic = $authUser->hasPermissionTo(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE)) ? null : auth()->user()->pic;
         }
@@ -55,8 +56,7 @@ class ImportModal extends Component
     public function updatedInputFile()
     {
         ini_set('memory_limit', '1024M');
-        set_time_limit(300); // 5 minutes
-
+        set_time_limit(300);
         consoleLog($this, 'con');
         $import = new ExcelImportBulk();
         Excel::import($import, $this->input_file);

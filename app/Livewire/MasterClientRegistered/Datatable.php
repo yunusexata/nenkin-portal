@@ -658,7 +658,6 @@ class Datatable extends Component
                 'exported_at' => now(),
             ]);
         }
-
         return $export;
     }
 

@@ -19,7 +19,6 @@ class EmailVerification extends Component
     {
         $this->dispatch('reload-captcha');
         $this->validate();
-
         $user = UserRepository::findByEmail($this->email);
         if (empty($user)) {
             Alert::fail($this, 'Kirim Ulang Email Gagal', 'Email Belum Terdaftar');
