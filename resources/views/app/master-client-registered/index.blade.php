@@ -5,7 +5,7 @@
     <x-common.component-card title="">
         
         <div data-slot="card-content" class="group-data-[size=sm]/card:px-3 p-0">
-            @can(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE))
+            @can(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_READ))
                 <x-ui.button size="sm" variant="primary" @click="$dispatch('export', { type: '{{ App\Helpers\ExportHelper::TYPE_EXCEL }}' })">Export Excel
                 </x-ui.button>
             @endCan

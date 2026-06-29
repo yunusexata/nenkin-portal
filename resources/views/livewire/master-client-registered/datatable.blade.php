@@ -172,7 +172,7 @@
                 </div>
             </div>
             
-            @can(PermissionHelper::transform(PermissionHelper::ACCESS_MASTER_CLIENT_REGISTERED, PermissionHelper::TYPE_UPDATE))
+            @can(PermissionHelper::transform(PermissionHelper::ACCESS_FILTER_ALL_PIC, PermissionHelper::TYPE_READ))
                 <div class="w-1/4">
                     <div class="px-5 mb-5 sm:px-6">
                         <div class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Pilih PIC (Sales Agent)</div>

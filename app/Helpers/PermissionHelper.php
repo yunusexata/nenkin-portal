@@ -32,6 +32,7 @@ class PermissionHelper
     const ACCESS_ROLE = "role";
 
     // Form Gensen
+    const ACCESS_FILTER_ALL_PIC = 'filter_all_pic';
     const ACCESS_IMPORT_DATA_JEPANG = 'import_data_jepang';
     const ACCESS_MASTER_CLIENT = 'master_client';
     const ACCESS_MASTER_CLIENT_REGISTERED = 'master_client_registered';
@@ -49,6 +50,7 @@ class PermissionHelper
         self::ACCESS_ROLE,
 
         // 
+        self::ACCESS_FILTER_ALL_PIC,
         self::ACCESS_IMPORT_DATA_JEPANG,
         self::ACCESS_MASTER_CLIENT,
         self::ACCESS_MASTER_CLIENT_REGISTERED,
@@ -66,9 +68,10 @@ class PermissionHelper
         self::ACCESS_ROLE => "Jabatan",
 
         // 
+        self::ACCESS_FILTER_ALL_PIC => 'Filter - Semua PIC',
         self::ACCESS_IMPORT_DATA_JEPANG => 'Import Data Jepang',
         self::ACCESS_MASTER_CLIENT => 'Master Data Klien',
-        self::ACCESS_MASTER_CLIENT_REGISTERED => 'Master Klien - Registered',
+        self::ACCESS_MASTER_CLIENT_REGISTERED => 'Master Klien Konfirmasi',
         self::ACCESS_CLIENT => 'Master Klien',
         self::ACCESS_CLIENT_DOCUMENT => 'Document Klien',
         self::ACCESS_CLIENT_AGREEMENT => 'Surat Perjanjian Klien',
@@ -82,6 +85,7 @@ class PermissionHelper
         self::ACCESS_ROLE => self::TYPE_ALL,
         self::ACCESS_PERMISSION => self::TYPE_ALL,
 
+        self::ACCESS_FILTER_ALL_PIC => [self::TYPE_READ],
         self::ACCESS_IMPORT_DATA_JEPANG => self::TYPE_ALL,
         self::ACCESS_MASTER_CLIENT => self::TYPE_ALL,
         self::ACCESS_MASTER_CLIENT_REGISTERED => self::TYPE_ALL,
