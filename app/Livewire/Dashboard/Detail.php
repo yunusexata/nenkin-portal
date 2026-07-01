@@ -134,15 +134,8 @@ class Detail extends Component
             ) AS jpn_total,
 
             COUNT(DISTINCT clients.id) FILTER (
-                WHERE client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_INDONESIA . "'
-                AND client_confirmations.back_to_jp_type = '" . ClientConfirmation::BACK_TO_JP_TYPE_YES . "'
-                AND make_date(
-                    client_confirmations.departure_year::int,
-                    client_confirmations.departure_month::int,
-                    1
-                ) < (
-                    clients.created_at::date + interval '6 months'
-                )
+                WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_NORMAL . "'
+                AND client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_INDONESIA . "'
             ) AS re_total,
 
             COUNT(DISTINCT clients.id) FILTER (
