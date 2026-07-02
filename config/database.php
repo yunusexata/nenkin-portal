@@ -99,6 +99,21 @@ return [
             'sslmode' => env('DB_SSLMODE', 'prefer'),
         ],
 
+        'pgsql_queue' => [
+            'driver' => 'pgsql',
+            'url' => env('DB_URL'),
+            'host' => env('DB_QUEUE_HOST', env('DB_HOST', '127.0.0.1')),
+            'port' => env('DB_QUEUE_PORT', '5432'), // Force port 5432 (session mode) by default
+            'database' => env('DB_QUEUE_DATABASE', env('DB_DATABASE', 'laravel')),
+            'username' => env('DB_QUEUE_USERNAME', env('DB_USERNAME', 'root')),
+            'password' => env('DB_QUEUE_PASSWORD', env('DB_PASSWORD', '')),
+            'charset' => env('DB_CHARSET', 'utf8'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => env('DB_SSLMODE', 'prefer'),
+        ],
+
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DB_URL'),

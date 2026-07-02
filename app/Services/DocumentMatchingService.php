@@ -114,7 +114,7 @@ class DocumentMatchingService
      *     'best_candidate' => Client|null
      * ]
      */
-    public function matchFilename(string $filename, ?array $allowedClientIds = null, ?string $type = null): array
+    public function matchFilename(string $filename, $clients = null, ?string $type = null): array
     {
         $isFallback = false;
         $extractedName = '';
@@ -132,10 +132,13 @@ class DocumentMatchingService
             $filenameNormalized = $this->normalize($extractedName, false);
         }
 
-        // Fetch all active clients or filter by allowed IDs
-        $clients = $allowedClientIds !== null 
-            ? Client::whereIn('id', $allowedClientIds)->get() 
-            : Client::all();
+        // Fetch all active clients or filter by allowed IDs if clients is not passed as pre-loaded collection
+        if ($clients === null) {
+            $clients = Client::all();
+        } elseif (is_array($clients) && !empty($clients) && is_numeric(reset($clients))) {
+            // Backward compatibility if an array of IDs is passed:
+            $clients = Client::whereIn('id', $clients)->get();
+        }
 
         // 1. Find all exact matches
         $exactMatches = [];

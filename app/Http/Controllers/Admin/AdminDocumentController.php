@@ -127,13 +127,16 @@ class AdminDocumentController extends Controller
     public function upload(Request $request, DocumentMatchingService $matchingService)
     {
         $request->validate([
-            'ichijikin_files.*' => 'nullable|file|mimes:jpg,jpeg,png',
-            'resi_files.*' => 'nullable|file|mimes:jpg,jpeg,png',
-            'kwitansi_files.*' => 'nullable|file|mimes:jpg,jpeg,png',
+            'ichijikin_files.*' => 'nullable|file|mimes:jpg,jpeg,png|max:3072',
+            'resi_files.*' => 'nullable|file|mimes:jpg,jpeg,png|max:3072',
+            'kwitansi_files.*' => 'nullable|file|mimes:jpg,jpeg,png|max:3072',
         ], [
             'ichijikin_files.*.mimes' => 'Format file Ichijikin harus berupa jpg, jpeg, atau png.',
+            'ichijikin_files.*.max' => 'Ukuran file Ichijikin tidak boleh lebih dari 3MB.',
             'resi_files.*.mimes' => 'Format file Resi Transfer harus berupa jpg, jpeg, atau png.',
+            'resi_files.*.max' => 'Ukuran file Resi Transfer tidak boleh lebih dari 3MB.',
             'kwitansi_files.*.mimes' => 'Format file Kwitansi harus berupa jpg, jpeg, atau png.',
+            'kwitansi_files.*.max' => 'Ukuran file Kwitansi tidak boleh lebih dari 3MB.',
         ]);
 
         $adminId = auth()->id();
@@ -171,6 +174,11 @@ class AdminDocumentController extends Controller
             ->filter()
             ->toArray();
 
+        // Pre-load clients once for the entire batch to avoid N+1 queries
+        $preloadedClients = empty($allowedClientIds)
+            ? Client::all()
+            : Client::whereIn('id', $allowedClientIds)->get();
+
         $matchedFiles = [];
         $failedFiles = [];
 
@@ -186,8 +194,8 @@ class AdminDocumentController extends Controller
                     $tempPath = "tmp_uploads/pending_{$adminId}_{$tempBatchId}/{$type}/{$safeName}";
                     Storage::disk('local')->putFileAs("tmp_uploads/pending_{$adminId}_{$tempBatchId}/{$type}", $file, $safeName);
 
-                    // Run the name matching engine with document type specified
-                    $matchResult = $matchingService->matchFilename($originalName, $allowedClientIds, $type);
+                    // Run the name matching engine with pre-loaded clients and document type specified
+                    $matchResult = $matchingService->matchFilename($originalName, $preloadedClients, $type);
 
                     // Determine classification
                     if ($matchResult['status'] === 'matched') {
