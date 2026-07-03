@@ -14,23 +14,20 @@ class DocumentObserver
 {
     public function created(Document $document): void
     {
-        $this->notifyClient($document);
+        if ($document->client) {
+            self::notifyIfComplete($document->client);
+        }
     }
 
     public function updated(Document $document): void
     {
-        if ($document->isDirty('bucket_path') || $document->isDirty('original_filename')) {
-            $this->notifyClient($document);
+        if (($document->isDirty('bucket_path') || $document->isDirty('original_filename')) && $document->client) {
+            self::notifyIfComplete($document->client);
         }
     }
 
-    protected function notifyClient(Document $document): void
+    public static function notifyIfComplete(Client $client): void
     {
-        $client = $document->client;
-        if (!$client) {
-            return;
-        }
-
         // We only notify the client when all 3 required documents are available
         $documentTypes = $client->documents()->pluck('type')->toArray();
         $requiredTypes = ['ichijikin', 'resi', 'kwitansi'];

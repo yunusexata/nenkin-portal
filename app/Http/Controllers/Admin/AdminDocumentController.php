@@ -7,11 +7,13 @@ use App\Models\Client\Client;
 use App\Models\Document;
 use App\Models\DocumentUploadBatch;
 use App\Models\DocumentUploadFailure;
-use App\Jobs\ProcessDocumentBatch;
+use App\Jobs\ProcessDocumentChunk;
 use App\Services\DocumentMatchingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Bus;
+use Throwable;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -385,8 +387,8 @@ class AdminDocumentController extends Controller
         $batch = DocumentUploadBatch::create([
             'uploaded_by' => $adminId,
             'total_files' => $totalFiles,
-            'matched_files' => 0,
-            'failed_files' => 0,
+            'matched_files' => count($matchedFiles),
+            'failed_files' => count($failedFiles),
             'status' => 'processing',
         ]);
 
@@ -441,8 +443,77 @@ class AdminDocumentController extends Controller
             ];
         }
 
-        // 4. Dispatch the updated ProcessDocumentBatch Job (only with matched/assigned files)
-        ProcessDocumentBatch::dispatch($batch->id, $filesDataForQueue);
+        // 4. Dispatch the ProcessDocumentChunk Job via Bus::batch()
+        if (count($filesDataForQueue) > 0) {
+            $chunkSize = (int) env('DOCUMENT_CHUNK_SIZE', 50);
+            $chunks = array_chunk($filesDataForQueue, $chunkSize);
+            $jobs = [];
+
+            foreach ($chunks as $chunk) {
+                $jobs[] = new ProcessDocumentChunk($batch->id, $chunk);
+            }
+
+            $laravelBatch = Bus::batch($jobs)
+                ->then(function ($innerBatch) use ($batch) {
+                    logger()->info("Batch upload #{$batch->id} selesai diproses di background.");
+                })
+                ->catch(function ($innerBatch, Throwable $e) use ($batch) {
+                    logger()->error("Batch upload #{$batch->id} gagal: " . $e->getMessage());
+                })
+                ->finally(function ($innerBatch) use ($batch) {
+                    // Cleanup batch directory
+                    $batchTempDir = "tmp_uploads/{$batch->id}";
+                    if (Storage::disk('local')->exists($batchTempDir)) {
+                        Storage::disk('local')->deleteDirectory($batchTempDir);
+                    }
+
+                    // Hitung jumlah sukses dan gagal dari DB riil
+                    $failedCount = \App\Models\DocumentUploadFailure::where('batch_id', $batch->id)->count();
+                    $successCount = \App\Models\Document::where('batch_id', $batch->id)->count();
+
+                    $status = 'completed';
+                    if ($failedCount > 0 && $successCount > 0) {
+                        $status = 'partial_failed';
+                    } elseif ($failedCount > 0 && $successCount === 0) {
+                        $status = 'failed';
+                    }
+
+                    $batch->update([
+                        'matched_files' => $successCount,
+                        'failed_files' => $failedCount,
+                        'status' => $status,
+                        'completed_at' => now(),
+                    ]);
+
+                    // Trigger consolidated notification check for all clients in this batch
+                    try {
+                        $clientIds = \App\Models\Document::where('batch_id', $batch->id)
+                            ->distinct()
+                            ->pluck('client_id');
+
+                        foreach ($clientIds as $clientId) {
+                            $client = \App\Models\Client\Client::find($clientId);
+                            if ($client) {
+                                \App\Observers\DocumentObserver::notifyIfComplete($client);
+                            }
+                        }
+                    } catch (Throwable $notifEx) {
+                        logger()->error("Gagal mengirimkan notifikasi konsolidasi untuk batch #{$batch->id}: " . $notifEx->getMessage());
+                    }
+                })
+                ->dispatch();
+
+            // Simpan Laravel Batch ID ke DB
+            $batch->update([
+                'laravel_batch_id' => $laravelBatch->id,
+            ]);
+        } else {
+            // Skenario semua file gagal matched, status langsung failed/completed
+            $batch->update([
+                'status' => 'failed',
+                'completed_at' => now(),
+            ]);
+        }
 
         // 5. Clean up local draft folders and Cache
         Storage::disk('local')->deleteDirectory("tmp_uploads/pending_{$adminId}_{$tempBatchId}");

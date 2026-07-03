@@ -15,6 +15,7 @@ class DocumentUploadBatch extends Model
 
     protected $fillable = [
         'uploaded_by',
+        'laravel_batch_id',
         'total_files',
         'matched_files',
         'failed_files',
