@@ -15,7 +15,11 @@ use Throwable;
 class SendEmailJob implements ShouldQueue
 {
     use Dispatchable, Queueable, SerializesModels;
-    public function __construct(public SendEmailLog $log) {}
+
+    public function __construct(public SendEmailLog $log)
+    {
+        $this->onQueue('email');
+    }
 
     public function handle()
     {

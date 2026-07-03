@@ -21,6 +21,23 @@ class DummyRedisIntegrationJob implements ShouldQueue
     }
 }
 
+// Define upload and email priority jobs
+class DummyUploadQueueJob implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, SerializesModels;
+    public $queue = 'upload';
+    public static $processed = false;
+    public function handle() { self::$processed = true; }
+}
+
+class DummyEmailQueueJob implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, SerializesModels;
+    public $queue = 'email';
+    public static $processed = false;
+    public function handle() { self::$processed = true; }
+}
+
 test('real redis queue integration pushes job to redis and worker processes it', function () {
     // 1. Verify Redis is accessible before proceeding
     try {
@@ -57,4 +74,46 @@ test('real redis queue integration pushes job to redis and worker processes it',
     // Verify that the job was popped and queue is now empty
     $finalQueueLength = Redis::connection()->llen('queues:default');
     expect($finalQueueLength)->toBe(0);
+});
+
+test('real redis queue prioritizes and processes separated queues', function () {
+    try {
+        Redis::connection()->ping();
+    } catch (\Exception $e) {
+        $this->markTestSkipped('Redis server is not running or accessible: ' . $e->getMessage());
+    }
+
+    Config::set('queue.default', 'redis');
+
+    DummyUploadQueueJob::$processed = false;
+    DummyEmailQueueJob::$processed = false;
+
+    Redis::connection()->del('queues:upload');
+    Redis::connection()->del('queues:email');
+
+    DummyUploadQueueJob::dispatch();
+    DummyEmailQueueJob::dispatch();
+
+    expect(Redis::connection()->llen('queues:upload'))->toBeGreaterThan(0);
+    expect(Redis::connection()->llen('queues:email'))->toBeGreaterThan(0);
+
+    // Run the worker with multiple queues
+    Artisan::call('queue:work', [
+        'connection' => 'redis',
+        '--queue' => 'upload,email,default',
+        '--once' => true,
+    ]);
+
+    // First worker run processes 'upload' first (since it's first in priorities)
+    expect(DummyUploadQueueJob::$processed)->toBeTrue();
+    expect(DummyEmailQueueJob::$processed)->toBeFalse();
+
+    // Run worker a second time to process 'email'
+    Artisan::call('queue:work', [
+        'connection' => 'redis',
+        '--queue' => 'upload,email,default',
+        '--once' => true,
+    ]);
+
+    expect(DummyEmailQueueJob::$processed)->toBeTrue();
 });

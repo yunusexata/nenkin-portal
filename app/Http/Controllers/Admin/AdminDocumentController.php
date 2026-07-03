@@ -454,6 +454,7 @@ class AdminDocumentController extends Controller
             }
 
             $laravelBatch = Bus::batch($jobs)
+                ->allowFailures()
                 ->then(function ($innerBatch) use ($batch) {
                     logger()->info("Batch upload #{$batch->id} selesai diproses di background.");
                 })

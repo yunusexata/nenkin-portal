@@ -31,7 +31,9 @@ class ProcessDocumentChunk implements ShouldQueue
     public function __construct(
         protected int $uploadBatchId,
         protected array $filesData
-    ) {}
+    ) {
+        $this->onQueue('upload');
+    }
 
     /**
      * Execute the job.
