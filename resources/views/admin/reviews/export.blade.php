@@ -30,16 +30,16 @@
                 <th class="text-center">NAMA</th>
                 <th class="text-center">PIC</th>
                 <th class="text-center">Jenis Pencairan</th>
-                <th class="">Berangkat dari LPK / SO / PT?</th>
-                <th class="">Tahu Exata dari mana?</th>
-                <th class="">Kenapa memutuskan untuk urus nenkin di Exata?</th>
-                <th class="">Apakah kamu pernah dapat penawaran dari konsultan nenkin lain?</th>
-                <th class="">Jika Ya, apa nama konsultan nenkin lain tersebut?'</th>
-                <th class="">Jika Ya, kenapa tetap memilih Exata dan bukan konsultan nenkin lain?</th>
-                <th class="">Menurut kamu, hal apa yang paling disukai dari Exata Indonesia?</th>
-                <th class="">Dari segi "Pemberkasan dokumen, informasi/edukasi, dan responsibility staff kami" — apa yang harus kami perbaiki agar pelayanan sesuai harapan? </th>
-                <th class="">Apakah kamu bersedia merekomendasikan Exata Indonesia ke teman/kohai?</th>
-                <th class="">Jika MERCY terkenal sebagai mobil Mewah, Elegan, untuk Kaum Berkelas, dan IPHONE terkenal sebagai HP Eksklusif, Keren, Cepat, dan Kamera Bagus — maka bagaimana kamu mendeskripsikan Exata Indonesia dalam beberapa kata?</th>
+                <th class="">1. Seberapa puas Anda dengan kecepatan layanan kami?</th>
+                <th class="">2. Seberapa puas Anda dengan keramahan dan responsifitas staff kami?</th>
+                <th class="">3. Apakah informasi yang kami berikan cukup jelas dan mudah dipahami?</th>
+                <th class="">4. Apakah Anda bersedia merekomendasikan layanan kami kepada rekan atau keluarga Anda?</th>
+                <th class="">5. Apa alasan utama Anda bersedia merekomendasikan kami?</th>
+                <th class="">6. Apakah ada saran agar layanan kami bisa lebih baik lagi?</th>
+                <th class="">7. Bagaimana pengalaman Anda menggunakan Portal Online Nenkin ini?</th>
+                <th class="">8. Apakah Anda merasa proses pencairan dana Nenkin kami transparan?</th>
+                <th class="">9. Seberapa besar tingkat kepercayaan Anda terhadap PT Sumber Rezeki Exata Indonesia?</th>
+                <th class="">10. Secara keseluruhan, seberapa puas Anda dengan seluruh rangkaian layanan kami?</th>
 
             </tr>
         </thead>
