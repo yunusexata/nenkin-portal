@@ -144,7 +144,10 @@ class Client extends Model
     {
         $type = null;
 
-        if ($this->upod_type) {
+        // 1. Priority: agentPic->upod_type
+        if ($this->agentPic?->upod_type) {
+            $type = $this->agentPic->upod_type;
+        } elseif ($this->upod_type) {
             $type = $this->upod_type;
         } elseif ($this->pic) {
             $picKey = strtolower($this->pic);
