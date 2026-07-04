@@ -51,32 +51,65 @@ class DocumentMatchingService
 
         switch (strtolower($type)) {
             case 'ichijikin':
-                // Pola: {angka}_{NAMA LENGKAP}.jpg
-                // 1. Hapus token pertama jika berupa angka murni
+                // Pola Baru: {NAMA LENGKAP}_{NO NENKIN}.jpg (contoh: AAN ULIN NUHA_3858043907.jpg)
+                // Pola Lama: {angka}_{NAMA LENGKAP}.jpg (contoh: 123_Budi Santoso.jpg)
+                
+                // 1. Hapus token pertama jika berupa angka murni (pola lama)
                 if (ctype_digit($tokens[0]) || preg_match('/^\d+$/', $tokens[0])) {
                     array_shift($tokens);
                 }
-                break;
-
-            case 'resi':
-                // Pola: {kode}_{BANK}_{NAMA LENGKAP}_{angka}.jpg
-                // 1. Hapus token pertama (kode)
-                array_shift($tokens);
                 
-                // 2. Hapus token kedua (nama bank — deteksi: semua huruf, panjang <= 5)
-                if (!empty($tokens)) {
-                    if (preg_match('/^[a-zA-Z]+$/', $tokens[0]) && strlen($tokens[0]) <= 5) {
-                        array_shift($tokens);
-                    }
-                }
-                
-                // 3. Hapus token terakhir jika berupa angka murni
+                // 2. Hapus token terakhir jika berupa angka murni (pola baru / nomor nenkin)
                 if (!empty($tokens)) {
                     $last = end($tokens);
                     if (ctype_digit($last) || preg_match('/^\d+$/', $last)) {
                         array_pop($tokens);
                     }
                 }
+                break;
+
+            case 'resi':
+                // Pola Baru: [PREFIX/BATCH]_[BANK]_[NAMA LENGKAP]_[NOMOR].jpg
+                // Contoh: SPEED JUN 26 KL2_BRI_YUDA MAREDO MANULLANG_736301024206536.jpg
+                // Pisahkan berdasarkan underscore (_) untuk menjaga integritas nama lengkap
+                $parts = explode('_', $filenameNoExt);
+                $parts = array_filter(array_map('trim', $parts));
+                $parts = array_values($parts);
+                
+                if (!empty($parts)) {
+                    // 1. Hapus bagian terakhir jika berupa angka murni (nomor transaksi/rekening)
+                    $last = end($parts);
+                    if (ctype_digit($last) || preg_match('/^\d+$/', $last)) {
+                        array_pop($parts);
+                    }
+                }
+                
+                if (!empty($parts)) {
+                    // 2. Cari separator BANK. Bank adalah token yang cocok dengan list bank indonesia
+                    $banks = ['bri', 'bca', 'bni', 'mandiri', 'bsi', 'danamon', 'cimb', 'permata', 'btpn', 'panin', 'ocbc', 'maybank', 'jago', 'sea'];
+                    $bankIndex = null;
+                    foreach ($parts as $index => $part) {
+                        if (in_array(strtolower($part), $banks)) {
+                            $bankIndex = $index;
+                            break;
+                        }
+                    }
+                    
+                    if ($bankIndex !== null && $bankIndex < count($parts) - 1) {
+                        // Jika ditemukan bank, ambil semua bagian setelah bank
+                        $parts = array_slice($parts, $bankIndex + 1);
+                    } else {
+                        // Fallback: jika tidak ada bank, ambil bagian terakhir (kemungkinan besar adalah NAMA LENGKAP)
+                        $parts = [end($parts)];
+                    }
+                }
+                
+                // Gabungkan kembali sebagai tokens untuk normalizer
+                $tokens = [];
+                foreach ($parts as $part) {
+                    $tokens = array_merge($tokens, preg_split('/[\s]+/', $part));
+                }
+                $tokens = array_filter($tokens);
                 break;
 
             case 'kwitansi':

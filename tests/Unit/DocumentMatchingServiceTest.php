@@ -99,20 +99,56 @@ test('matchFilename matches correctly based on document type patterns', function
         'pic' => 'sg',
     ]);
 
+    $client2 = Client::create([
+        'no_jp' => 'JP444',
+        'name' => 'Aan Ulin Nuha',
+        'name_normalized' => 'aan ulin nuha',
+        'dob' => '1988-08-08',
+        'claim_type' => 'normal',
+        'status' => 'pending',
+        'raw_data' => '{}',
+        'source_file_name' => 'ref.xlsx',
+        'imported_at' => now(),
+        'pic' => 'sg',
+    ]);
+
+    $client3 = Client::create([
+        'no_jp' => 'JP555',
+        'name' => 'Yuda Maredo Manullang',
+        'name_normalized' => 'yuda maredo manullang',
+        'dob' => '1989-09-09',
+        'claim_type' => 'normal',
+        'status' => 'pending',
+        'raw_data' => '{}',
+        'source_file_name' => 'ref.xlsx',
+        'imported_at' => now(),
+        'pic' => 'sg',
+    ]);
+
     $service = new DocumentMatchingService();
     $preloaded = Client::all();
 
-    // Test pattern Ichijikin: {angka}_{NAMA LENGKAP}.jpg
-    $resIchijikin = $service->matchFilename('123_John Doe.jpg', $preloaded, 'ichijikin');
-    expect($resIchijikin['status'])->toBe('matched');
-    expect($resIchijikin['matched_client']->name)->toBe('John Doe');
+    // Test pattern Ichijikin: Old pattern ({angka}_{NAMA LENGKAP})
+    $resIchijikinOld = $service->matchFilename('123_John Doe.jpg', $preloaded, 'ichijikin');
+    expect($resIchijikinOld['status'])->toBe('matched');
+    expect($resIchijikinOld['matched_client']->name)->toBe('John Doe');
 
-    // Test pattern Resi: {kode}_{BANK}_{NAMA LENGKAP}_{angka}.jpg
-    $resResi = $service->matchFilename('ABC_BCA_John Doe_999.jpg', $preloaded, 'resi');
-    expect($resResi['status'])->toBe('matched');
-    expect($resResi['matched_client']->name)->toBe('John Doe');
+    // Test pattern Ichijikin: New pattern ({NAMA LENGKAP}_{NO NENKIN})
+    $resIchijikinNew = $service->matchFilename('AAN ULIN NUHA_3858043907.jpg', $preloaded, 'ichijikin');
+    expect($resIchijikinNew['status'])->toBe('matched');
+    expect($resIchijikinNew['matched_client']->name)->toBe('Aan Ulin Nuha');
 
-    // Test pattern Kwitansi: {angka}_{tanggal}_{NAMA LENGKAP}_NENKIN_{tipe}.jpg
+    // Test pattern Resi: Old pattern ({kode}_{BANK}_{NAMA LENGKAP}_{angka})
+    $resResiOld = $service->matchFilename('ABC_BCA_John Doe_999.jpg', $preloaded, 'resi');
+    expect($resResiOld['status'])->toBe('matched');
+    expect($resResiOld['matched_client']->name)->toBe('John Doe');
+
+    // Test pattern Resi: New pattern ([PREFIX]_[BANK]_[NAMA LENGKAP]_[NOMOR])
+    $resResiNew = $service->matchFilename('SPEED JUN 26 KL2_BRI_YUDA MAREDO MANULLANG_736301024206536.jpg', $preloaded, 'resi');
+    expect($resResiNew['status'])->toBe('matched');
+    expect($resResiNew['matched_client']->name)->toBe('Yuda Maredo Manullang');
+
+    // Test pattern Kwitansi: {angka}_{tanggal}_{NAMA LENGKAP}_NENKIN_{tipe}.jpg (unmodified)
     $resKwitansi = $service->matchFilename('456_12-12-2023_John Doe_NENKIN_final.jpg', $preloaded, 'kwitansi');
     expect($resKwitansi['status'])->toBe('matched');
     expect($resKwitansi['matched_client']->name)->toBe('John Doe');
