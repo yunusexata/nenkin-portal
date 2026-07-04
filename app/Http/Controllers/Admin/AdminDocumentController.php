@@ -128,6 +128,9 @@ class AdminDocumentController extends Controller
      */
     public function upload(Request $request, DocumentMatchingService $matchingService)
     {
+        // ponytail: temporary request timeout override to 300s. ceiling: sync request timeout under extreme file count; upgrade path: chunked frontend uploads.
+        set_time_limit(300);
+
         $request->validate([
             'ichijikin_files.*' => 'nullable|file|mimes:jpg,jpeg,png|max:3072',
             'resi_files.*' => 'nullable|file|mimes:jpg,jpeg,png|max:3072',

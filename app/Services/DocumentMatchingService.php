@@ -7,6 +7,11 @@ use App\Models\Client\Client;
 class DocumentMatchingService
 {
     /**
+     * Cache of normalized client names to avoid redundant normalizations.
+     */
+    private array $normalizedClientsCache = [];
+
+    /**
      * Normalize a given string (filename or client name).
      */
     public function normalize(string $name, bool $isFilename = false): string
@@ -143,7 +148,12 @@ class DocumentMatchingService
         // 1. Find all exact matches
         $exactMatches = [];
         foreach ($clients as $client) {
-            $clientNameNormalized = $this->normalize($client->name, false);
+            $clientId = $client->id;
+            if (!isset($this->normalizedClientsCache[$clientId])) {
+                $this->normalizedClientsCache[$clientId] = $this->normalize($client->name, false);
+            }
+            $clientNameNormalized = $this->normalizedClientsCache[$clientId];
+
             if ($filenameNormalized === $clientNameNormalized) {
                 $exactMatches[] = $client;
             }
@@ -179,13 +189,27 @@ class DocumentMatchingService
         $bestMatchScore = 0.0;
 
         foreach ($clients as $client) {
-            $clientNameNormalized = $this->normalize($client->name, false);
+            $clientId = $client->id;
+            if (!isset($this->normalizedClientsCache[$clientId])) {
+                $this->normalizedClientsCache[$clientId] = $this->normalize($client->name, false);
+            }
+            $clientNameNormalized = $this->normalizedClientsCache[$clientId];
 
             $lenA = strlen($filenameNormalized);
             $lenB = strlen($clientNameNormalized);
             $maxLen = max($lenA, $lenB);
+            $minLen = min($lenA, $lenB);
 
             if ($maxLen > 0) {
+                // Mathematical optimization: if the maximum possible score is less than or equal to the best score found so far, skip similar_text
+                $maxPossibleScore = $minLen / $maxLen;
+                if ($isFallback) {
+                    $maxPossibleScore = min(0.850, $maxPossibleScore);
+                }
+                if ($maxPossibleScore <= $bestMatchScore) {
+                    continue;
+                }
+
                 $similarChars = similar_text($filenameNormalized, $clientNameNormalized);
                 $score = $similarChars / $maxLen;
             } else {
