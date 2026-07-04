@@ -120,7 +120,7 @@ class DatatableUpodRiset extends Component
             [
                 'searchable' => false,
                 'sortable' => false,
-                'name' => 'Berangkat dari LPK / SO / PT?',
+                'name' => '1. Seberapa puas Anda dengan kecepatan layanan kami?',
                 'render' => function ($item) {
                     return $item->upodSurveyResponse->responses['q1'];
                 }
@@ -128,7 +128,7 @@ class DatatableUpodRiset extends Component
             [
                 'searchable' => false,
                 'sortable' => false,
-                'name' => 'Tahu Exata dari mana?',
+                'name' => '2. Seberapa puas Anda dengan keramahan dan responsifitas staff kami?',
                 'render' => function ($item) {
                     return $item->upodSurveyResponse->responses['q2'];
                 }
@@ -136,7 +136,7 @@ class DatatableUpodRiset extends Component
             [
                 'searchable' => false,
                 'sortable' => false,
-                'name' => 'Kenapa memutuskan untuk urus nenkin di Exata?',
+                'name' => '3. Apakah informasi yang kami berikan cukup jelas dan mudah dipahami?',
                 'render' => function ($item) {
                     return $item->upodSurveyResponse->responses['q3'];
                 }
@@ -144,7 +144,7 @@ class DatatableUpodRiset extends Component
             [
                 'searchable' => false,
                 'sortable' => false,
-                'name' => 'Apakah kamu pernah dapat penawaran dari konsultan nenkin lain?',
+                'name' => '4. Apakah Anda bersedia merekomendasikan layanan kami kepada rekan atau keluarga Anda?',
                 'render' => function ($item) {
                     return $item->upodSurveyResponse->responses['q4'];
                 }
@@ -152,7 +152,7 @@ class DatatableUpodRiset extends Component
             [
                 'searchable' => false,
                 'sortable' => false,
-                'name' => 'Jika Ya, apa nama konsultan nenkin lain tersebut?',
+                'name' => '5. Apa alasan utama Anda bersedia merekomendasikan kami?',
                 'render' => function ($item) {
                     return $item->upodSurveyResponse->responses['q5'];
                 }
@@ -160,7 +160,7 @@ class DatatableUpodRiset extends Component
             [
                 'searchable' => false,
                 'sortable' => false,
-                'name' => 'Jika Ya, kenapa tetap memilih Exata dan bukan konsultan nenkin lain?',
+                'name' => '6. Apakah ada saran agar layanan kami bisa lebih baik lagi?',
                 'render' => function ($item) {
                     return $item->upodSurveyResponse->responses['q6'];
                 }
@@ -168,7 +168,7 @@ class DatatableUpodRiset extends Component
             [
                 'searchable' => false,
                 'sortable' => false,
-                'name' => 'Menurut kamu, hal apa yang paling disukai dari Exata Indonesia?',
+                'name' => '7. Bagaimana pengalaman Anda menggunakan Portal Online Nenkin ini?',
                 'render' => function ($item) {
                     return $item->upodSurveyResponse->responses['q7'];
                 }
@@ -176,7 +176,7 @@ class DatatableUpodRiset extends Component
             [
                 'searchable' => false,
                 'sortable' => false,
-                'name' => 'Dari segi "Pemberkasan dokumen, informasi/edukasi, dan responsibility staff kami" — apa yang harus kami perbaiki agar pelayanan sesuai harapan?',
+                'name' => '8. Apakah Anda merasa proses pencairan dana Nenkin kami transparan?',
                 'render' => function ($item) {
                     return $item->upodSurveyResponse->responses['q8'];
                 }
@@ -184,7 +184,7 @@ class DatatableUpodRiset extends Component
             [
                 'searchable' => false,
                 'sortable' => false,
-                'name' => 'Apakah kamu bersedia merekomendasikan Exata Indonesia ke teman/kohai?',
+                'name' => '9. Seberapa besar tingkat kepercayaan Anda terhadap PT Sumber Rezeki Exata Indonesia?',
                 'render' => function ($item) {
                     return $item->upodSurveyResponse->responses['q9'];
                 }
@@ -192,7 +192,7 @@ class DatatableUpodRiset extends Component
             [
                 'searchable' => false,
                 'sortable' => false,
-                'name' => 'Jika MERCY terkenal sebagai mobil Mewah, Elegan, untuk Kaum Berkelas, dan IPHONE terkenal sebagai HP Eksklusif, Keren, Cepat, dan Kamera Bagus — maka bagaimana kamu mendeskripsikan Exata Indonesia dalam beberapa kata?',
+                'name' => '10. Secara keseluruhan, seberapa puas Anda dengan seluruh rangkaian layanan kami?',
                 'render' => function ($item) {
                     return $item->upodSurveyResponse->responses['q10'];
                 }
