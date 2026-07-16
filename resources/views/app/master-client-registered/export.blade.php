@@ -89,6 +89,8 @@
                             }
                         }
 
+                        // WHITE = MATRIKS SPEED/ADJUSMENT NOT ESIGNED
+
                         $rowStyle = $rowColor ? "background-color: {$rowColor};" : '';
 
                         // Alasan re entry text

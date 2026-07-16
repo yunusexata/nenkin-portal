@@ -6,16 +6,16 @@
                 <div class="text-md font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Batch:</div>
                 
                 <div x-data="{ 
-                    open: false, 
-                    search: '',
-                    batches: @entangle('batches'),
-                    get filtered() { 
-                        if (!this.search) return this.batches;
-                        return this.batches.filter(b => 
-                            b.name.toLowerCase().includes(this.search.toLowerCase())
-                        )
-                    }
-                }" @click.away="open = false" class="relative inline-block text-left w-full">
+                        open: false, 
+                        search: '',
+                        batches: @entangle('batches'),
+                        get filtered() { 
+                            if (!this.search) return this.batches;
+                            return this.batches.filter(b => 
+                                b.name.toLowerCase().includes(this.search.toLowerCase())
+                            )
+                        }
+                    }" @click.away="open = false" class="relative inline-block text-left w-full">
                     
                     {{-- Dropdown Trigger Button --}}
                     <div class="relative">

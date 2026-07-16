@@ -141,41 +141,6 @@ class Datatable extends Component
     public function getColumns(): array
     {
         return [
-            // [
-            //     'name' => 'Action',
-            //     'sortable' => false,
-            //     'searchable' => false,
-            //     'render' => function ($item) {
-            //         $editHtml = "";
-
-            //         $id = Crypt::encrypt($item->id);
-            //         if ($this->isCanUpdate) {
-            //             // $editUrl = route('gensen_form_link.edit', $id);
-            //             $editUrl = '';
-            //             $editHtml = "<div class='col-auto'>
-            //                 <a type='button' href='$editUrl' class='inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-4 py-3 text-sm bg-brand-500 text-white shadow-theme-xs hover:bg-brand-600 disabled:bg-brand-300'>
-            //                     <span class='material-symbols-outlined text-lg' data-icon='edit'>edit</span>
-            //                 </a>
-            //             </div>";
-            //         }
-
-            //         $destroyHtml = "";
-            //         $destroyHtml = "";
-            //         if ($this->isCanDelete) {
-            //             $destroyHtml = "<div class='col-auto'>
-            //                 <button type='button' class='inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-4 py-3 text-sm bg-red-500 text-white shadow-theme-xs hover:bg-red-600 disabled:bg-brand-300' wire:click=\"showDeleteDialog($item->id)\">
-            //                     <span class='material-symbols-outlined text-lg' data-icon='delete'>delete</span>
-            //                 </button>
-            //             </div>";
-            //         }
-            //         $html = "<div class='row p-0 m-0 d-flex justify-content-start flex-nowrap'>
-            //             $editHtml $destroyHtml
-            //         </div>";
-
-
-            //         return $html;
-            //     },
-            // ],
             [
                 'searchable' => false,
                 'sortable' => false,

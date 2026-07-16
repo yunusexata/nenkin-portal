@@ -8,5 +8,5 @@ use Livewire\Component;
 #[Title('Appearance settings')]
 class Appearance extends Component
 {
-    //
+    // Appearance
 }
