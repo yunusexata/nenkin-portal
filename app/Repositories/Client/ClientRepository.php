@@ -44,13 +44,16 @@ class ClientRepository extends MasterDataRepository
             });
     }
 
-    public static function getClientRegistered($batchName = null, $claimType = null, $pic = null)
+    public static function getClientRegistered($batchName = null, $claimType = null, $pic = null, $closing_id = null, $orderByClaimType = false)
     {
         return Client::query()
             ->where('clients.claim_type', '!=', Client::CLAIM_TYPE_KOKUMIN)
             ->join('client_confirmations', function ($j) {
                 $j->on('client_confirmations.client_id', '=', 'clients.id')
                     ->whereNull('client_confirmations.deleted_at');
+            })
+            ->when($closing_id, function ($q) use ($closing_id) {
+                $q->where('client_confirmations.client_closing_history_id', $closing_id);
             })
             ->when($batchName && $batchName != 'all', function ($q) use ($batchName) {
                 $q->where('clients.source_file_name', $batchName);
@@ -83,6 +86,9 @@ class ClientRepository extends MasterDataRepository
             ) as esign_exists
         ")
             ->orderByDesc('clients.is_exported')
+            ->when($orderByClaimType, function ($q) {
+                $q->orderByDesc('client_confirmations.claim_type', 'DESC');
+            })
             ->orderByDesc('clients.no_jp');
     }
 

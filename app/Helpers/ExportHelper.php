@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\CollectionExport;
+use App\Exports\CollectionMultiSheetExport;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpWord\TemplateProcessor;
 use PhpOffice\PhpWord\SimpleType\TblWidth;
@@ -27,9 +28,10 @@ class ExportHelper
         $view,
         $request,
         $paperOption = null,
+        $isMultiSheet = false,
     ) {
         if (self::TYPE_EXCEL == $type) {
-            return Excel::download(new CollectionExport($request, $data, $view), "$fileName.xlsx");
+            return $isMultiSheet ? Excel::download(new CollectionMultiSheetExport($request, $data, $view), "$fileName.xlsx") : Excel::download(new CollectionExport($request, $data, $view), "$fileName.xlsx");
         } elseif (self::TYPE_WORD == $type) {
             // $publicPath = $view;
             // $template = new TemplateProcessor($publicPath);

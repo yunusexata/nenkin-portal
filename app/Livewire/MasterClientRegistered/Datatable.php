@@ -6,9 +6,11 @@ use App\Helpers\Alert;
 use App\Helpers\ExportHelper;
 use App\Helpers\PermissionHelper;
 use App\Models\Client\Client;
+use App\Models\Client\ClientClosingHistory;
 use App\Models\Client\ClientConfirmation;
 use App\Models\GensenForm\GensenFormLink;
 use App\Repositories\Account\UserRepository;
+use App\Repositories\Client\ClientClosingHistoryRepository;
 use App\Repositories\Client\ClientConfirmationRepository;
 use App\Repositories\Client\ClientEsignRepository;
 use App\Repositories\Client\ClientRepository;
@@ -18,6 +20,7 @@ use App\Traits\Livewire\WithDatatable;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -444,6 +447,16 @@ class Datatable extends Component
                 'render' => fn($item) => $item->indonesia_address ?? '',
             ],
             [
+                'key' => 'client_confirmations.client_closing_batch_number',
+                'name' => 'Nomor Closing',
+                'render' => fn($item) => $item->client_closing_batch_number ?? 'Belum Masuk Closing',
+            ],
+            [
+                'key' => 'client_confirmations.closed_at',
+                'name' => 'Waktu Closing',
+                'render' => fn($item) => $item->closed_at ?? 'Belum Masuk Closing',
+            ],
+            [
                 'name' => 'Action',
                 'sortable' => false,
                 'searchable' => false,
@@ -483,6 +496,8 @@ class Datatable extends Component
                 'client_confirmations.estimated_return_year',
                 'client_confirmations.nik',
                 'client_confirmations.indonesia_address',
+                'client_confirmations.client_closing_batch_number',
+                'client_confirmations.closed_at',
             )
             ->selectRaw("
                 EXISTS (
@@ -553,6 +568,7 @@ class Datatable extends Component
     public function showLockConfirmation()
     {
         if (!auth()->user()->hasRole(\App\Models\User::ROLE_HS3) && !auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN)) {
+            Alert::fail($this, "Gagal", 'Gagal Menutup Pengisian');
             return;
         }
         if (blank($this->selectedBatch) || $this->selectedBatch === 'all') {
@@ -564,7 +580,7 @@ class Datatable extends Component
         Alert::confirmation(
             $this,
             Alert::ICON_QUESTION,
-            "Hapus Data",
+            "Tutup Pengisian Data",
             "Apakah Anda Yakin Ingin Mengunci Batch Ini ?",
             "on-lock-confirmation-dialog-confirm",
             "on-lock-confirmation-dialog-cancel",
@@ -627,29 +643,164 @@ class Datatable extends Component
     #[On('on-lock-confirmation-dialog-cancel')]
     public function onDialogLockConfirmationCancel() {}
 
+    #[On('showClosingConfirmation')]
+    public function showClosingConfirmation()
+    {
+        if (!auth()->user()->hasRole(\App\Models\User::ROLE_HS3) && !auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN)) {
+            Alert::fail($this, "Gagal", 'Gagal Membuat Closing');
+            return;
+        }
+        if (blank($this->selectedBatch) || $this->selectedBatch === 'all') {
+
+            Alert::fail($this, "Gagal", 'Silakan pilih batch terlebih dahulu');
+            return;
+        }
+
+        Alert::confirmation(
+            $this,
+            Alert::ICON_QUESTION,
+            "Buat Kloter Closing",
+            "Apakah Anda Yakin Ingin Closing Batch Ini ?",
+            "on-closing-confirmation-dialog-confirm",
+            "on-closing-confirmation-dialog-cancel",
+            "Buat Closing",
+            "Batal",
+        );
+    }
+
+    #[On('on-closing-confirmation-dialog-confirm')]
+    public function onDialogClosingConfirmationConfirm()
+    {
+        if (!auth()->user()->hasRole(\App\Models\User::ROLE_HS3) && !auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN)) {
+            Alert::fail($this, "Gagal", 'Gagal Membuat Closing');
+            return;
+        }
+        if (blank($this->selectedBatch) || $this->selectedBatch === 'all') {
+            Alert::fail($this, "Gagal", 'Silakan pilih batch terlebih dahulu');
+            return;
+        }
+
+        $history = ClientClosingHistory::create([
+            'source_file_name' => $this->selectedBatch,
+        ]);
+        DB::update("
+            UPDATE client_confirmations cc
+            SET
+                client_closing_history_id = ?,
+                client_closing_source_file_name = ?,
+                client_closing_batch_number = ?,
+                closed_at = NOW()
+            FROM clients c
+            WHERE cc.client_id = c.id
+            AND cc.client_closing_history_id IS NULL
+            AND cc.client_closing_source_file_name IS NULL
+            AND cc.client_closing_batch_number IS NULL
+            AND cc.closed_at IS NULL
+            AND cc.deleted_at IS NULL
+            AND c.source_file_name = ?
+        ", [
+            $history->id,
+            $history->source_file_name,
+            $history->batch_number,
+            $history->source_file_name,
+        ]);
+
+        Alert::information($this, 'Data Berhasil Disimpan');
+    }
+
+    #[On('on-closing-confirmation-dialog-cancel')]
+    public function onDialogClosingConfirmationCancel() {}
+
+    // #[On('export')]
+    // public function export($type)
+    // {
+    //     $fileName = "Data Client Registered " . Carbon::now()->format('Y-m-d H:i:s');
+    //     $query = ClientRepository::getClientRegistered(
+    //         $this->selectedBatch,
+    //         $this->filter_claim_type,
+    //         $this->bulkPic
+    //     );
+
+    //     $export = ExportHelper::export(
+    //         $type,
+    //         $fileName,
+    //         $query,
+    //         'app.master-client-registered.export',
+    //         [
+    //             'title' => 'Data Client Registered',
+    //             'type' => $type,
+    //         ],
+    //         [
+    //             'size' => 'legal',
+    //             'orientation' => 'landscape',
+    //         ]
+    //     );
+
+    //     if (auth()->user()->hasRole(\App\Models\User::ROLE_HS3)) {
+    //         $query->update([
+    //             'is_exported' => true,
+    //             'exported_at' => now(),
+    //         ]);
+    //     }
+    //     return $export;
+    // }
     #[On('export')]
     public function export($type)
     {
+        if (blank($this->selectedBatch) || $this->selectedBatch === 'all') {
+            Alert::fail($this, "Gagal", 'Silakan pilih batch terlebih dahulu');
+            return;
+        }
         $fileName = "Data Client Registered " . Carbon::now()->format('Y-m-d H:i:s');
-        $query = ClientRepository::getClientRegistered(
+
+        $data['query'][] = ClientRepository::getClientRegistered(
             $this->selectedBatch,
             $this->filter_claim_type,
             $this->bulkPic
         );
+        $data['view'][] = 'app.master-client-registered.export';
+        $data['request'][] = [
+            'title' => 'Data Client Registered',
+            'type' => $type,
+        ];
+
+        $closingHistories = ClientClosingHistoryRepository::getBy([
+            ['source_file_name', $this->selectedBatch]
+        ]);
+
+        $kl_number = 1;
+        foreach ($closingHistories as $index => $closing) {
+            $q = ClientRepository::getClientRegistered(
+                $this->selectedBatch,
+                $this->filter_claim_type,
+                $this->bulkPic,
+                $closing->id,
+                true
+            );
+            if ($q->count()) {
+                $data['query'][] = $q;
+
+                $data['view'][] = 'app.master-client-registered.export-closing';
+                $data['request'][] = [
+                    'title' => "Closing " . ($kl_number) . " " . $closing->created_at->format('Ymd H_i_s'),
+                    'type' => $type,
+                ];
+                $kl_number++;
+            }
+        }
+        // dd($data['request'][0]);
 
         $export = ExportHelper::export(
             $type,
             $fileName,
-            $query,
-            'app.master-client-registered.export',
-            [
-                'title' => 'Data Client Registered',
-                'type' => $type,
-            ],
+            $data['query'],
+            $data['view'],
+            $data['request'],
             [
                 'size' => 'legal',
                 'orientation' => 'landscape',
-            ]
+            ],
+            true
         );
 
         if (auth()->user()->hasRole(\App\Models\User::ROLE_HS3)) {

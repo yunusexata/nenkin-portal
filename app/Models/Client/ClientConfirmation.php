@@ -29,6 +29,11 @@ class ClientConfirmation extends Model
         'indonesia_address',
         'nik',
         'claim_type',
+
+        'client_closing_history_id',
+        'client_closing_source_file_name',
+        'client_closing_batch_number',
+        'closed_at',
     ];
 
     protected $guarded = ['id'];
@@ -156,5 +161,10 @@ class ClientConfirmation extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+
+    public function closing()
+    {
+        return $this->belongsTo(ClientClosingHistory::class, 'client_closing_history_id', 'id');
     }
 }

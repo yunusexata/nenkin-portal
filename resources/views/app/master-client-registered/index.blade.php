@@ -10,6 +10,10 @@
                 </x-ui.button>
             @endCan
             @if(auth()->user()->hasRole(\App\Models\User::ROLE_HS3) || auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN))
+                <x-ui.button size="sm" variant="success" @click="$dispatch('showClosingConfirmation')">Buat Closing
+                </x-ui.button>
+            @endif
+            @if(auth()->user()->hasRole(\App\Models\User::ROLE_HS3) || auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN))
                 <x-ui.button size="sm" variant="warning" @click="$dispatch('showLockConfirmation')">Tutup Pengisian
                 </x-ui.button>
             @endif
