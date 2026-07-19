@@ -99,7 +99,17 @@ class User extends Authenticatable implements MustVerifyEmail
                 ]
             );
         });
+
+        static::deleted(function (User $user) {
+            $user->client?->magicLink()
+                ->update([
+                    'email' => null,
+                    'password' => null,
+                    'used_at' => null,
+                ]);
+        });
     }
+
 
     public function sendPasswordResetNotification($token)
     {

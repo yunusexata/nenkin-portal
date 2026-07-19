@@ -112,6 +112,7 @@ class Client extends Model
     {
         return $this->hasOne(ClientMagicLink::class);
     }
+
     public function user()
     {
         return $this->hasOne(User::class);
