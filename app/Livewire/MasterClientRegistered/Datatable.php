@@ -747,6 +747,7 @@ class Datatable extends Component
     #[On('export')]
     public function export($type)
     {
+        sleep(10);
         if (blank($this->selectedBatch) || $this->selectedBatch === 'all') {
             Alert::fail($this, "Gagal", 'Silakan pilih batch terlebih dahulu');
             return;
