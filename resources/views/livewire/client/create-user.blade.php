@@ -15,15 +15,31 @@
                 </div>
                 @enderror
 
-                <!-- Nama Lengkap -->
+                 <!-- Nama Lengkap -->
                 <div>
-                    <input type="text" 
+                    <label for="name" class="block text-sm font-semibold text-gray-700 mb-1">Nama Lengkap</label>
+                    <input type="name" 
                            id="name" 
                            name="name" 
-                           value="{{ $name }}"
-                           class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-center text-[#111827] uppercase placeholder-gray-400"
-                           readonly>
-                    
+                           required 
+                           placeholder="CONTOH: exata indonesia"
+                           wire:model.defer="name"
+                           class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-[#111827] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#F97316] focus:border-transparent transition">
+                    @error('name')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+                 <!-- DOB -->
+                <div>
+                    <label for="dob" class="block text-sm font-semibold text-gray-700 mb-1">Tanggal Lahir</label>
+                    <input type="date" 
+                        id="dob" 
+                        wire:model="dob" 
+                        required
+                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#F97316] focus:border-transparent transition">
+                    @error('dob')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
                  <!-- Email -->
                 <div>

@@ -307,16 +307,6 @@
 .dark .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: #344054;
 }
-@layer utilities {
-  /* For Remove Date Icon */
-  input[type='date']::-webkit-inner-spin-button,
-  input[type='time']::-webkit-inner-spin-button,
-  input[type='date']::-webkit-calendar-picker-indicator,
-  input[type='time']::-webkit-calendar-picker-indicator {
-    display: none;
-    -webkit-appearance: none;
-  }
-}
 
 .sidebar:hover {
   width: 290px;
@@ -701,12 +691,6 @@ span.flatpickr-weekday,
 }
 .fc .fc-timegrid-axis-cushion {
   @apply text-sm font-medium text-gray-500 dark:text-gray-400;
-}
-
-.input-date-icon::-webkit-inner-spin-button,
-.input-date-icon::-webkit-calendar-picker-indicator {
-  opacity: 0;
-  -webkit-appearance: none;
 }
 
 .swiper-button-prev svg,

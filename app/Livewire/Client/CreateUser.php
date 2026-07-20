@@ -20,7 +20,10 @@ class CreateUser extends Component
 {
 
     public $token;
+    #[Validate('required', message: 'Nama Lengkap Harus Diisi', onUpdate: false)]
     public $name;
+    #[Validate('required', message: 'Tanggal Lahir Harus Diisi', onUpdate: false)]
+    public $dob;
     #[Validate('required', message: 'Email Harus Diisi', onUpdate: false)]
     #[Validate('email', message: "Format Email Tidak Sesuai", onUpdate: false)]
     public $email;
@@ -44,12 +47,20 @@ class CreateUser extends Component
         if ($magicLink->used_at && $magicLink->email) {
             return redirect()->route('login');
         }
-        $this->name = $magicLink->client->name;
     }
 
     public function store()
     {
         $this->validate();
+
+        $client = ClientMagicLinkRepository::findBy([
+            ['token', $this->token]
+        ])->client;
+
+        if ($client->name != $this->name && $client->dob != $this->dob) {
+            Alert::fail($this, 'Register Gagal', 'Akun Tidak Sesuai, hubungi PIC');
+            return;
+        }
 
         if ($this->password != $this->retypePassword) {
             Alert::fail($this, 'Register Gagal', 'Pengetikan Ulang Password Tidak Sama');
