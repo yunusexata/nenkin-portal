@@ -801,6 +801,16 @@ class Datatable extends Component
             'title' => 'Data Client Belum Konfirmasi',
             'type' => $type,
         ];
+        $data['query'][] = ClientRepository::getClientKokumin(
+            $this->selectedBatch,
+            $this->filter_claim_type,
+            $this->bulkPic
+        );
+        $data['view'][] = 'app.master-client-registered.export';
+        $data['request'][] = [
+            'title' => 'Data Client Kokumin',
+            'type' => $type,
+        ];
         // dd($data['request'][0]);
 
         $export = ExportHelper::export(
