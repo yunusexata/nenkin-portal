@@ -754,11 +754,12 @@ class Datatable extends Component
         }
         $fileName = "Data Client Registered " . Carbon::now()->format('Y-m-d H:i:s');
 
-        $data['query'][] = ClientRepository::getClientRegistered(
+        $qhs3 =  ClientRepository::getClientRegistered(
             $this->selectedBatch,
             $this->filter_claim_type,
             $this->bulkPic
         );
+        $data['query'][] = $qhs3;
         $data['view'][] = 'app.master-client-registered.export';
         $data['request'][] = [
             'title' => 'Data Client Registered',
@@ -805,7 +806,7 @@ class Datatable extends Component
         );
 
         if (auth()->user()->hasRole(\App\Models\User::ROLE_HS3)) {
-            $query->update([
+            $qhs3->update([
                 'is_exported' => true,
                 'exported_at' => now(),
             ]);
