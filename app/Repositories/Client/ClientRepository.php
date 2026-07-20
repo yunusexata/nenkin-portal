@@ -89,6 +89,7 @@ class ClientRepository extends MasterDataRepository
             ->when($orderByClaimType, function ($q) {
                 $q->orderByDesc('client_confirmations.claim_type', 'DESC');
             })
+            ->orderBy('clients.exported_at', 'ASC')
             ->orderByDesc('clients.no_jp');
     }
     public static function getClientUnregistered($batchName = null, $claimType = null, $pic = null, $closing_id = null, $orderByClaimType = false)

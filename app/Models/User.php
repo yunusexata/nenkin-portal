@@ -14,6 +14,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Muhammadyunus1072\TrackHistory\HasTrackHistory;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -103,6 +104,7 @@ class User extends Authenticatable implements MustVerifyEmail
         static::deleted(function (User $user) {
             $user->client?->magicLink()
                 ->update([
+                    'token' => Str::uuid(),
                     'email' => null,
                     'password' => null,
                     'used_at' => null,

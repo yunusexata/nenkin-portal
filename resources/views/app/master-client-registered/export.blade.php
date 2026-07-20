@@ -136,7 +136,7 @@
                         <td style="{{ $rowStyle }}">{{ mb_strtoupper($data->confirmation?->current_position) }}</td>
                         <td style="{{ $rowStyle }}">{{ mb_strtoupper($data->confirmation?->departure_month ? Carbon\Carbon::createFromFormat('n-Y', $data->confirmation?->departure_month.'-'.$data->confirmation?->departure_year)->locale('id')->translatedFormat('F Y') : '') }}</td>
                         <td style="{{ $rowStyle }}">{{ mb_strtoupper($alasanReEntry) }}</td>
-                        <td style="{{ $rowStyle }}">{{ $data['is_exported'] ? 'EXPORTED' : 'UN-EXPORTED' }}</td>
+                        <td style="{{ $rowStyle }}">{{ $data['is_exported'] ? 'EXPORTED' : 'UN-EXPORTED' }}</td><td style="{{ $rowStyle }}">{{ $data['exported_at'] ? Carbon\Carbon::parse($data['exported_at'])->format('Ymd H:i:s') : '-' }}</td>
                     </tr>
                 @endforeach
             @endif

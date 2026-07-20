@@ -140,7 +140,7 @@ class Datatable extends Component
 
     public function getColumns(): array
     {
-        return [
+        $column = [
             [
                 'searchable' => false,
                 'sortable' => false,
@@ -305,7 +305,21 @@ class Datatable extends Component
             ],
 
         ];
+
+        if (auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN)) {
+            $column[] = [
+                'searchable' => false,
+                'sortable' => false,
+                'name' => 'Link',
+                'render' => function ($item, $index) {
+                    return route('client.create', $item->magicLink->token ?? '-');
+                }
+            ];
+        }
+
+        return $column;
     }
+
 
     public function updatedFilterClaimType($value)
     {
