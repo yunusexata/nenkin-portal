@@ -37,7 +37,10 @@
         <table class="w-full">
             <tr>
                 <td style="width: 150px;">Nama</td>
-                <td>: {{ $client->name }}</td>
+                <td>: {{ Str::of($client->name)
+    ->replaceMatches('/[^A-Za-z0-9\s]/u', '')
+    ->squish()
+    ->toString() }}</td>
             </tr>
             <tr>
                 <td>NIK</td>

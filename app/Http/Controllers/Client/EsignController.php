@@ -13,6 +13,7 @@ class EsignController extends Controller
     public function show()
     {
         $user = Auth::user();
+        // dd($user);
         $client = $user->client;
 
         if (!$client) {
@@ -42,6 +43,14 @@ class EsignController extends Controller
         // Ambil NIK dan Alamat dari tabel client_confirmations
         $nik = $client->confirmation->nik ?? '';
         $address = $client->confirmation->indonesia_address ?? '';
+        // dd(auth()->user()->hasRole(\App\Models\User::ROLE_CLIENT));
+        // dd([
+        //     $client,
+        //     $dateFormatted,
+        //     $letterNumber,
+        //     $nik,
+        //     $address
+        // ]);
 
         return view('client.esign', compact('client', 'dateFormatted', 'letterNumber', 'nik', 'address'));
     }

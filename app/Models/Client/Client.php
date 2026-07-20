@@ -112,6 +112,10 @@ class Client extends Model
     {
         return $this->hasOne(ClientMagicLink::class);
     }
+    public function historyMagicLink()
+    {
+        return $this->hasMany(ClientMagicLink::class)->latestOfMany();
+    }
 
     public function user()
     {

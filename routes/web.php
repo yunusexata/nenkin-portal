@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MasterClient\ClientController;
 use App\Models\Client\Client;
 use App\Models\Gensen\GensenExportImportHistory;
+use App\Models\User;
 use App\Repositories\Client\ClientRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
@@ -27,7 +28,12 @@ Route::group([], __DIR__ . '/web/MasterClient.php');
 
 
 // Route::get('/generate-ai', function () {
-
+//     return User::query()
+//         ->whereHas('client', function ($query) {
+//             $query->where('pic', 'ainul')
+//                 ->doesntHave('magicLink');
+//         })
+//         ->get();
 //     $c =
 //         Client::where('pic', 'ainul')
 //         ->where('source_file_name', '8B 2607')
@@ -35,10 +41,12 @@ Route::group([], __DIR__ . '/web/MasterClient.php');
 //             $query->where(
 //                 'created_at',
 //                 '<',
-//                 Carbon::parse('2026-07-18 12:00:00')
+//                 Carbon::parse('2026-07-18 12
+//                 :00:00')
 //             );
 //         });
 
+//     return $c->get()->toArray();
 //     // return $c->get()->toArray();
 
 //     $fileName = "Data Client AI";
