@@ -57,8 +57,21 @@ class CreateUser extends Component
             ['token', $this->token]
         ])->client;
 
-        if ($client->name != $this->name || $client->dob != $this->dob) {
-            Alert::fail($this, 'Register Gagal', 'Akun Tidak Sesuai, hubungi PIC');
+        $nameMatched =
+            mb_strtolower(trim($client->name))
+            ===
+            mb_strtolower(trim($this->name));
+
+        $dobMatched = Carbon::parse($client->dob)
+            ->isSameDay(Carbon::parse($this->dob));
+
+        if (! $nameMatched || ! $dobMatched) {
+            Alert::fail(
+                $this,
+                'Register Gagal',
+                'Akun Tidak Sesuai, hubungi PIC'
+            );
+
             return;
         }
 

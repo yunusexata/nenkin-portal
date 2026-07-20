@@ -3,8 +3,10 @@
 use App\Helpers\ExportHelper;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MasterClient\ClientController;
+use App\Models\Client\Client;
 use App\Models\Gensen\GensenExportImportHistory;
 use App\Repositories\Client\ClientRepository;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,28 +26,37 @@ Route::group([], __DIR__ . '/web/Account.php');
 Route::group([], __DIR__ . '/web/MasterClient.php');
 
 
-Route::get('/generate-ai', function () {
-    return ClientRepository::getBy([
-        ['pic', 'ainul']
-    ]);
-    $fileName = "Data Client AI";
-    return ExportHelper::export(
-        ExportHelper::TYPE_EXCEL,
-        $fileName,
-        ClientRepository::getBy([
-            ['pic', 'ainul']
-        ]),
-        'app.master-client.export',
-        [
-            'title' => 'Data Client',
-            'type' => ExportHelper::TYPE_EXCEL,
-        ],
-        [
-            'size' => 'legal',
-            'orientation' => 'landscape',
-        ]
-    );
-});
+// Route::get('/generate-ai', function () {
+
+//     $c =
+//         Client::where('pic', 'ainul')
+//         ->where('source_file_name', '8B 2607')
+//         ->whereHas('user', function ($query) {
+//             $query->where(
+//                 'created_at',
+//                 '<',
+//                 Carbon::parse('2026-07-18 12:00:00')
+//             );
+//         });
+
+//     // return $c->get()->toArray();
+
+//     $fileName = "Data Client AI";
+//     return ExportHelper::export(
+//         ExportHelper::TYPE_EXCEL,
+//         $fileName,
+//         $c,
+//         'app.master-client.export-ainul',
+//         [
+//             'title' => 'Data Client',
+//             'type' => ExportHelper::TYPE_EXCEL,
+//         ],
+//         [
+//             'size' => 'legal',
+//             'orientation' => 'landscape',
+//         ]
+//     );
+// });
 
 Route::middleware(['auth', 'access_permission', 'esign_required'])->group(function () {
     Route::group(["controller" => DashboardController::class, "prefix" => "dashboard", "as" => "dashboard."], function () {
