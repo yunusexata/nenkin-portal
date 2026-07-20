@@ -34,6 +34,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'pic',
         'is_active',
         'upod_type',
+
+        'subject_id',
+        'subject_type',
     ];
 
     /**

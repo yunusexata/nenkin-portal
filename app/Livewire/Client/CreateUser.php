@@ -4,6 +4,7 @@ namespace App\Livewire\Client;
 
 use App\Helpers\Alert;
 use App\Models\Client\Client;
+use App\Models\Client\ClientMagicLink;
 use App\Models\User;
 use App\Repositories\Account\UserRepository;
 use App\Repositories\Client\ClientMagicLinkRepository;
@@ -104,7 +105,9 @@ class CreateUser extends Component
                 'no_whatsapp' => $magicLink->client->phone,
                 'email' => $this->email,
                 'password' => Hash::make($this->password),
-                'pic' => $magicLink->client->pic
+                'pic' => $magicLink->client->pic,
+                'subject_id' => $magicLink->id,
+                'subject_type' => ClientMagicLink::class,
             ]);
 
             $user->assignRole(User::ROLE_CLIENT);
