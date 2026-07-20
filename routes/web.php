@@ -1,9 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Helpers\ExportHelper;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MasterClient\ClientController;
 use App\Models\Gensen\GensenExportImportHistory;
+use App\Repositories\Client\ClientRepository;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +23,29 @@ Route::group([], __DIR__ . '/web/Other.php');
 Route::group([], __DIR__ . '/web/Account.php');
 Route::group([], __DIR__ . '/web/MasterClient.php');
 
+
+Route::get('/generate-ai', function () {
+    return ClientRepository::getBy([
+        ['pic', 'ainul']
+    ]);
+    $fileName = "Data Client AI";
+    return ExportHelper::export(
+        ExportHelper::TYPE_EXCEL,
+        $fileName,
+        ClientRepository::getBy([
+            ['pic', 'ainul']
+        ]),
+        'app.master-client.export',
+        [
+            'title' => 'Data Client',
+            'type' => ExportHelper::TYPE_EXCEL,
+        ],
+        [
+            'size' => 'legal',
+            'orientation' => 'landscape',
+        ]
+    );
+});
 
 Route::middleware(['auth', 'access_permission', 'esign_required'])->group(function () {
     Route::group(["controller" => DashboardController::class, "prefix" => "dashboard", "as" => "dashboard."], function () {
@@ -52,8 +77,3 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/documents/clients/search', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'searchClients'])->name('admin.documents.clients.search');
     Route::get('/admin/documents/{client}/download-zip', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'downloadZip'])->name('admin.documents.download-zip');
 });
-
-
-
-
-

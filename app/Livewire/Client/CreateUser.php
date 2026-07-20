@@ -57,7 +57,7 @@ class CreateUser extends Component
             ['token', $this->token]
         ])->client;
 
-        if ($client->name != $this->name && $client->dob != $this->dob) {
+        if ($client->name != $this->name || $client->dob != $this->dob) {
             Alert::fail($this, 'Register Gagal', 'Akun Tidak Sesuai, hubungi PIC');
             return;
         }
@@ -87,7 +87,7 @@ class CreateUser extends Component
 
             $user = UserRepository::create([
                 'client_id' => $magicLink->client_id,
-                'name' => $this->name,
+                'name' => $client->name,
                 'no_whatsapp' => $magicLink->client->phone,
                 'email' => $this->email,
                 'password' => Hash::make($this->password),
