@@ -92,6 +92,48 @@ class ClientRepository extends MasterDataRepository
             ->orderBy('clients.exported_at', 'ASC')
             ->orderByDesc('clients.no_jp');
     }
+    public static function getClientUnclosing($batchName = null, $claimType = null, $pic = null, $closing_id = null, $orderByClaimType = false)
+    {
+        return Client::query()
+            ->where('clients.claim_type', '!=', Client::CLAIM_TYPE_KOKUMIN)
+            ->join('client_confirmations', function ($j) {
+                $j->on('client_confirmations.client_id', '=', 'clients.id')
+                    ->whereNull('client_confirmations.deleted_at');
+            })
+            ->where('client_confirmations.client_closing_history_id', null)
+            ->when($batchName && $batchName != 'all', function ($q) use ($batchName) {
+                $q->where('clients.source_file_name', $batchName);
+            })
+            ->when($claimType && $claimType === Client::CLAIM_TYPE_NORMAL, function ($q) {
+                $q->where('client_confirmations.claim_type', Client::CLAIM_TYPE_NORMAL);
+            })
+            ->when($claimType &&
+                in_array(
+                    $claimType,
+                    [Client::CLAIM_TYPE_SPEED, Client::CLAIM_TYPE_ADJUSTMENT]
+                ), function ($q) use ($claimType) {
+                $q->where('client_confirmations.claim_type', $claimType)
+                    ->whereHas('esign');
+            })
+            ->when($claimType && $claimType === Client::STATUS_PENDING, function ($q) {
+                $q->whereIn('client_confirmations.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
+                    ->whereDoesntHave('esign');
+            })
+            ->when($pic, function ($q) use ($pic) {
+                $q->where('clients.pic', 'ILIKE', '%' . $pic . '%');
+            })
+            ->select('clients.*')
+            ->selectRaw("
+            EXISTS (
+                SELECT 1
+                FROM client_esigns
+                WHERE client_esigns.client_id = clients.id
+            ) as esign_exists
+        ")
+            ->orderByDesc('clients.is_exported')
+            ->orderBy('clients.exported_at', 'ASC')
+            ->orderByDesc('clients.no_jp');
+    }
     public static function getClientUnregistered($batchName = null, $claimType = null, $pic = null, $closing_id = null, $orderByClaimType = false)
     {
         return Client::query()

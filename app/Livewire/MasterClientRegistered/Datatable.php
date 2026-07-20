@@ -791,6 +791,16 @@ class Datatable extends Component
             }
         }
 
+        $data['query'][] = ClientRepository::getClientUnclosing(
+            $this->selectedBatch,
+            $this->filter_claim_type,
+            $this->bulkPic
+        );
+        $data['view'][] = 'app.master-client-registered.export-closing';
+        $data['request'][] = [
+            'title' => 'Data Client Belum Closing',
+            'type' => $type,
+        ];
         $data['query'][] = ClientRepository::getClientUnregistered(
             $this->selectedBatch,
             $this->filter_claim_type,
