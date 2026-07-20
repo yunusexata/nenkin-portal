@@ -91,6 +91,49 @@ class ClientRepository extends MasterDataRepository
             })
             ->orderByDesc('clients.no_jp');
     }
+    public static function getClientUnregistered($batchName = null, $claimType = null, $pic = null, $closing_id = null, $orderByClaimType = false)
+    {
+        return Client::query()
+            ->where('clients.claim_type', '!=', Client::CLAIM_TYPE_KOKUMIN)
+            ->when($closing_id, function ($q) use ($closing_id) {
+                $q->where('client_confirmations.client_closing_history_id', $closing_id);
+            })
+            ->when($batchName && $batchName != 'all', function ($q) use ($batchName) {
+                $q->where('clients.source_file_name', $batchName);
+            })
+            ->when($claimType && $claimType === Client::CLAIM_TYPE_NORMAL, function ($q) {
+                $q->where('client_confirmations.claim_type', Client::CLAIM_TYPE_NORMAL);
+            })
+            ->when($claimType &&
+                in_array(
+                    $claimType,
+                    [Client::CLAIM_TYPE_SPEED, Client::CLAIM_TYPE_ADJUSTMENT]
+                ), function ($q) use ($claimType) {
+                $q->where('client_confirmations.claim_type', $claimType)
+                    ->whereHas('esign');
+            })
+            ->when($claimType && $claimType === Client::STATUS_PENDING, function ($q) {
+                $q->whereIn('client_confirmations.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
+                    ->whereDoesntHave('esign');
+            })
+            ->when($pic, function ($q) use ($pic) {
+                $q->where('clients.pic', 'ILIKE', '%' . $pic . '%');
+            })
+            ->whereDoesntHave('confirmation')
+            ->select('clients.*')
+            ->selectRaw("
+            EXISTS (
+                SELECT 1
+                FROM client_esigns
+                WHERE client_esigns.client_id = clients.id
+            ) as esign_exists
+        ")
+            ->orderByDesc('clients.is_exported')
+            ->when($orderByClaimType, function ($q) {
+                $q->orderByDesc('client_confirmations.claim_type', 'DESC');
+            })
+            ->orderByDesc('clients.no_jp');
+    }
 
     public static function getClientUpodSurvey($batchName = null, $claimType = null, $pic = null)
     {

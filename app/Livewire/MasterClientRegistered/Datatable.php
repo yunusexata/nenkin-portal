@@ -790,6 +790,17 @@ class Datatable extends Component
                 $kl_number++;
             }
         }
+
+        $data['query'][] = ClientRepository::getClientUnregistered(
+            $this->selectedBatch,
+            $this->filter_claim_type,
+            $this->bulkPic
+        );
+        $data['view'][] = 'app.master-client-registered.export';
+        $data['request'][] = [
+            'title' => 'Data Client Belum Konfirmasi',
+            'type' => $type,
+        ];
         // dd($data['request'][0]);
 
         $export = ExportHelper::export(
