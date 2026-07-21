@@ -747,7 +747,6 @@ class Datatable extends Component
     #[On('export')]
     public function export($type)
     {
-        sleep(10);
         if (blank($this->selectedBatch) || $this->selectedBatch === 'all') {
             Alert::fail($this, "Gagal", 'Silakan pilih batch terlebih dahulu');
             return;
@@ -837,10 +836,12 @@ class Datatable extends Component
         );
 
         if (auth()->user()->hasRole(\App\Models\User::ROLE_HS3)) {
-            $qhs3->update([
-                'is_exported' => true,
-                'exported_at' => now(),
-            ]);
+            $qhs3->where('is_exported', false)
+                ->whereNull('exported_at')
+                ->update([
+                    'is_exported' => true,
+                    'exported_at' => now(),
+                ]);
         }
         return $export;
     }
