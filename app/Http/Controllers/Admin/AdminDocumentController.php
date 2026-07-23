@@ -10,6 +10,9 @@ use App\Models\DocumentUploadFailure;
 use App\Jobs\ProcessDocumentChunk;
 use App\Services\DocumentMatchingService;
 use Illuminate\Http\Request;
+use App\Helpers\PermissionHelper;
+use App\Helpers\ExportHelper;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Bus;
@@ -836,5 +839,47 @@ class AdminDocumentController extends Controller
             logger()->error("Failed to generate ZIP", ['exception' => $e->getMessage(), 'client_id' => $client->id]);
             return redirect()->back()->with('error', 'Terjadi kesalahan sistem saat membuat file ZIP: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Export Excel download status report for a specific document upload batch for PT Sumber Rezeki Exata Indonesia.
+     */
+    public function exportDownloadStatus(DocumentUploadBatch $batch)
+    {
+        if (auth()->user() && !auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN)) {
+            $permission = PermissionHelper::transform(PermissionHelper::ACCESS_ADMIN_UPLOAD_DOCUMENT, PermissionHelper::TYPE_READ);
+            if (!auth()->user()->hasPermissionTo($permission)) {
+                abort(403, 'Akses ditolak: Anda tidak memiliki izin untuk mengunduh laporan status batch.');
+            }
+        }
+
+        $query = DB::table('document_downloads as dd')
+            ->join('clients as c', 'c.id', '=', 'dd.client_id')
+            ->leftJoin('documents as d', 'd.id', '=', 'dd.document_id')
+            ->leftJoin('document_upload_batchs as b', 'b.id', '=', 'dd.batch_id')
+            ->select([
+                'dd.id',
+                'c.no_jp',
+                'c.name as client_name',
+                'c.pic as client_pic',
+                'b.id as batch_id',
+                'b.created_at as batch_created_at',
+                'd.type as document_type',
+                'dd.downloaded_at',
+            ])
+            ->where('dd.batch_id', $batch->id)
+            ->orderBy('dd.id', 'asc');
+
+        $fileName = "Laporan_Status_Download_Batch_" . $batch->id . "_" . now()->format('Ymd_His');
+
+        return ExportHelper::export(
+            ExportHelper::TYPE_EXCEL,
+            $fileName,
+            $query,
+            'admin.documents.export-download-status',
+            [
+                'title' => "Batch #{$batch->id} Status Download",
+            ]
+        );
     }
 }

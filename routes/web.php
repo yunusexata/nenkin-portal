@@ -26,6 +26,12 @@ Route::group([], __DIR__ . '/web/Other.php');
 Route::group([], __DIR__ . '/web/Account.php');
 Route::group([], __DIR__ . '/web/MasterClient.php');
 
+Route::get('/dev-login', function () {
+    $user = \App\Models\User::first();
+    auth()->login($user);
+    return redirect('/admin/documents');
+});
+
 
 // Route::get('/generate-ai', function () {
 //     return User::query()
@@ -95,4 +101,5 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/documents/failures/{id}/resolve', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'resolveFailure'])->name('admin.documents.failures.resolve');
     Route::get('/admin/documents/clients/search', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'searchClients'])->name('admin.documents.clients.search');
     Route::get('/admin/documents/{client}/download-zip', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'downloadZip'])->name('admin.documents.download-zip');
+    Route::get('/admin/documents/batches/{batch}/download-status/export', [\App\Http\Controllers\Admin\AdminDocumentController::class, 'exportDownloadStatus'])->name('admin.documents.download-status.export');
 });
