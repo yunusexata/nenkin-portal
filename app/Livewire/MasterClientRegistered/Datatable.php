@@ -57,6 +57,10 @@ class Datatable extends Component
     public function selectBatch($batchName)
     {
         $this->selectedBatch = $batchName;
+
+        $this->dispatch('modal-filter', [
+            'selectedBatch' => $batchName,
+        ]);
         $this->resetPage();
     }
 
