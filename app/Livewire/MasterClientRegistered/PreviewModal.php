@@ -13,7 +13,6 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class PreviewModal extends Component
 {
-
     public $collection;
     #[Url(except: '')]
     public $selectedBatch;
@@ -53,51 +52,13 @@ class PreviewModal extends Component
         }
 
         $this->dispatch('open-regular-modal');
-        $this->getData('registered', 'fix');
+        $this->dispatch('getData', 'registered', 'fix');
     }
 
     public function getData($name, $type)
     {
-        if ($type === 'fix') {
-            if ($name === 'registered') {
-                $this->collection = ClientRepository::getClientRegistered(
-                    $this->selectedBatch,
-                    $this->filter_claim_type,
-                    $this->bulkPic
-                )->get();
-            }
-            if ($name === 'unclosed') {
-                $this->collection = ClientRepository::getClientUnclosing(
-                    $this->selectedBatch,
-                    $this->filter_claim_type,
-                    $this->bulkPic
-                )->get();
-            }
-            if ($name === 'unconfirmed') {
-                $this->collection = ClientRepository::getClientUnregistered(
-                    $this->selectedBatch,
-                    $this->filter_claim_type,
-                    $this->bulkPic
-                )->get();
-            }
-            if ($name === 'kokumin') {
-                $this->collection = ClientRepository::getClientKokumin(
-                    $this->selectedBatch,
-                    $this->filter_claim_type,
-                    $this->bulkPic
-                )->get();
-            }
-        }
 
-        if ($type === 'closing') {
-            $this->collection = ClientRepository::getClientRegistered(
-                $this->selectedBatch,
-                $this->filter_claim_type,
-                $this->bulkPic,
-                $name,
-                true
-            )->get();
-        }
+        $this->dispatch('getData', $name, $type);
     }
 
     public function render()
