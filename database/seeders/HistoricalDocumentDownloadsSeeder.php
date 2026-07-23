@@ -37,12 +37,21 @@ class HistoricalDocumentDownloadsSeeder extends Seeder
                 ->get()
                 ->keyBy('client_id');
 
+            // Fetch latest document batch IDs per client
+            $clientBatches = DB::table('documents')
+                ->select('client_id', DB::raw('MAX(batch_id) as batch_id'))
+                ->whereNotNull('batch_id')
+                ->groupBy('client_id')
+                ->get()
+                ->keyBy('client_id');
+
             $proofHighCount = 0;
             $notifiedOnlyCount = 0;
             $now = now();
 
             foreach ($emailAnchors as $clientId => $anchor) {
                 $notifSentAt = $anchor->notification_sent_at;
+                $batchId = $clientBatches->has($clientId) ? $clientBatches[$clientId]->batch_id : null;
 
                 $reviewAt = $reviewActivities->has($clientId) ? $reviewActivities[$clientId]->first_review_at : null;
                 $upodAt = $upodActivities->has($clientId) ? $upodActivities[$clientId]->first_upod_at : null;
@@ -62,6 +71,7 @@ class HistoricalDocumentDownloadsSeeder extends Seeder
                     DB::table('document_downloads')->insert([
                         'client_id'     => $clientId,
                         'document_id'   => null,
+                        'batch_id'      => $batchId,
                         'ip_address'    => null,
                         'user_agent'    => null,
                         'downloaded_at' => $surveyReviewAt,
@@ -74,6 +84,7 @@ class HistoricalDocumentDownloadsSeeder extends Seeder
                     DB::table('document_downloads')->insert([
                         'client_id'     => $clientId,
                         'document_id'   => null,
+                        'batch_id'      => $batchId,
                         'ip_address'    => null,
                         'user_agent'    => null,
                         'downloaded_at' => $notifSentAt,

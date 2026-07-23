@@ -33,6 +33,7 @@ class DocumentController extends Controller
             DB::table('document_downloads')->insert([
                 'client_id'     => $clientId,
                 'document_id'   => $document->id,
+                'batch_id'      => $document->batch_id,
                 'ip_address'    => request()->ip(),
                 'user_agent'    => request()->userAgent(),
                 'downloaded_at' => now(),
