@@ -26,7 +26,10 @@ class Detail extends Component
     private function getDashboardStatsPIC()
     {
         $this->pic_achievements = Client::query()
-            ->leftJoin('users', 'users.client_id', '=', 'clients.id')
+            ->leftJoin('users', function ($join) {
+                $join->on('users.client_id', '=', 'clients.id')
+                    ->whereNull('users.deleted_at');
+            })
             ->leftJoin('client_confirmations', function ($join) {
                 $join->on('client_confirmations.client_id', '=', 'clients.id')
                     ->whereNull('client_confirmations.deleted_at');
