@@ -262,6 +262,6 @@ class EksportModal extends Component
 
     public function render()
     {
-        return view('livewire.master-client.import-modal');
+        return view('livewire.master-client-registered.import-modal');
     }
 }

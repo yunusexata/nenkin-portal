@@ -504,11 +504,14 @@ class Datatable extends Component
                     SELECT 1
                     FROM client_esigns
                     WHERE client_esigns.client_id = clients.id
+                    AND client_esigns.deleted_at IS NULL
+                    
                 ) as esign_exists,
                 EXISTS (
                     SELECT 1
                     FROM client_confirmations
                     WHERE client_confirmations.client_id = clients.id
+                    AND client_confirmations.deleted_at IS NULL
                 ) as confirmation_exists,
                 EXISTS (
                     SELECT 1

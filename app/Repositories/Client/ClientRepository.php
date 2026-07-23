@@ -83,6 +83,7 @@ class ClientRepository extends MasterDataRepository
                 SELECT 1
                 FROM client_esigns
                 WHERE client_esigns.client_id = clients.id
+                    AND client_esigns.deleted_at IS NULL
             ) as esign_exists
         ")
             ->orderByDesc('clients.is_exported')
@@ -128,6 +129,7 @@ class ClientRepository extends MasterDataRepository
                 SELECT 1
                 FROM client_esigns
                 WHERE client_esigns.client_id = clients.id
+                    AND client_esigns.deleted_at IS NULL
             ) as esign_exists
         ")
             ->orderByDesc('clients.is_exported')
@@ -169,6 +171,7 @@ class ClientRepository extends MasterDataRepository
                 SELECT 1
                 FROM client_esigns
                 WHERE client_esigns.client_id = clients.id
+                    AND client_esigns.deleted_at IS NULL
             ) as esign_exists
         ")
             ->orderByDesc('clients.is_exported')
@@ -212,6 +215,7 @@ class ClientRepository extends MasterDataRepository
                 SELECT 1
                 FROM client_esigns
                 WHERE client_esigns.client_id = clients.id
+                    AND client_esigns.deleted_at IS NULL
             ) as esign_exists
         ")
             ->orderByDesc('clients.is_exported')
