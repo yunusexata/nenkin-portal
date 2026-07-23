@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Document;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class DocumentController extends Controller
@@ -26,6 +27,26 @@ class DocumentController extends Controller
             ->where('type', $type)
             ->firstOrFail();
         $content = Storage::disk('supabase')->get($document->bucket_path);
+
+        // Record live download activity for PT Sumber Rezeki Exata Indonesia payroll audit
+        try {
+            DB::table('document_downloads')->insert([
+                'client_id'     => $clientId,
+                'document_id'   => $document->id,
+                'batch_id'      => $document->batch_id,
+                'ip_address'    => request()->ip(),
+                'user_agent'    => request()->userAgent(),
+                'downloaded_at' => now(),
+                'source'        => 'live_tracked',
+                'created_at'    => now(),
+                'updated_at'    => now(),
+            ]);
+        } catch (\Throwable $e) {
+            logger()->warning('Failed to record document download activity: ' . $e->getMessage(), [
+                'client_id'   => $clientId,
+                'document_id' => $document->id,
+            ]);
+        }
 
         return response($content)
             ->header('Content-Type', Storage::disk('supabase')->mimeType($document->bucket_path))
