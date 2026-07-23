@@ -687,20 +687,30 @@ class Datatable extends Component
             'source_file_name' => $this->selectedBatch,
         ]);
         DB::update("
-            UPDATE client_confirmations cc
+            UPDATE client_confirmations AS cc
             SET
                 client_closing_history_id = ?,
                 client_closing_source_file_name = ?,
                 client_closing_batch_number = ?,
                 closed_at = NOW()
-            FROM clients c
+            FROM clients AS c
             WHERE cc.client_id = c.id
+            AND cc.deleted_at IS NULL
+            AND c.deleted_at IS NULL
             AND cc.client_closing_history_id IS NULL
             AND cc.client_closing_source_file_name IS NULL
             AND cc.client_closing_batch_number IS NULL
             AND cc.closed_at IS NULL
-            AND cc.deleted_at IS NULL
             AND c.source_file_name = ?
+            AND (
+                    cc.claim_type NOT IN ('speed', 'adjustment')
+                    OR EXISTS (
+                        SELECT 1
+                        FROM client_esigns AS ce
+                        WHERE ce.client_id = c.id
+                        AND ce.deleted_at IS NULL
+                    )
+                );
         ", [
             $history->id,
             $history->source_file_name,
