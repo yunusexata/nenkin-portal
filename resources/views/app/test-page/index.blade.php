@@ -17,7 +17,7 @@
                 <x-ui.button size="sm" variant="warning" @click="$dispatch('showLockConfirmation')">Tutup Pengisian
                 </x-ui.button>
             @endif
-            <x-ui.button size="sm" variant="primary" @click="$dispatch('validate-modal')">
+            <x-ui.button size="sm" variant="primary" @click="$dispatch('open-regular-modal')">
                 Preview Data
             </x-ui.button>
         </div>
