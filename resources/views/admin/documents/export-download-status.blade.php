@@ -6,6 +6,7 @@
             <th style="font-weight: bold; background-color: #001B5E; color: #ffffff;">Nama Klien</th>
             <th style="font-weight: bold; background-color: #001B5E; color: #ffffff;">PIC</th>
             <th style="font-weight: bold; background-color: #001B5E; color: #ffffff;">Batch ID &amp; Tanggal Upload</th>
+            <th style="font-weight: bold; background-color: #001B5E; color: #ffffff;">Status</th>
             <th style="font-weight: bold; background-color: #001B5E; color: #ffffff;">Document Type</th>
             <th style="font-weight: bold; background-color: #001B5E; color: #ffffff;">Timestamp</th>
         </tr>
@@ -13,18 +14,22 @@
     <tbody>
         @foreach ($collection as $index => $item)
             @php
-                $docTypeLabel = $item->document_type ? strtoupper(str_replace('_', ' ', $item->document_type)) : 'Semua Dokumen (General)';
+                $isDownloaded = !empty($item->download_id) || !empty($item->downloaded_at);
+                $statusText = $isDownloaded ? 'Mendownload' : 'Belum Download';
+                $rowStyle = !$isDownloaded ? 'background-color: #FFC7CE; color: #9C0006; font-weight: bold;' : '';
+                $docTypeLabel = 'Semua Dokumen (General)';
                 $batchInfo = 'Batch #' . ($item->batch_id ?? '-') . ' (' . ($item->batch_created_at ? \Carbon\Carbon::parse($item->batch_created_at)->format('Y-m-d H:i') : '-') . ')';
                 $picLabel = $item->client_pic ? strtoupper($item->client_pic) : '-';
             @endphp
-            <tr>
-                <td>{{ $index + 1 }}</td>
-                <td>{{ $item->no_jp ?? '-' }}</td>
-                <td>{{ $item->client_name }}</td>
-                <td>{{ $picLabel }}</td>
-                <td>{{ $batchInfo }}</td>
-                <td>{{ $docTypeLabel }}</td>
-                <td>{{ $item->downloaded_at ? \Carbon\Carbon::parse($item->downloaded_at)->format('Y-m-d H:i:s') : '-' }}</td>
+            <tr style="{{ $rowStyle }}">
+                <td style="{{ $rowStyle }}">{{ $index + 1 }}</td>
+                <td style="{{ $rowStyle }}">{{ $item->no_jp ?? '-' }}</td>
+                <td style="{{ $rowStyle }}">{{ $item->client_name }}</td>
+                <td style="{{ $rowStyle }}">{{ $picLabel }}</td>
+                <td style="{{ $rowStyle }}">{{ $batchInfo }}</td>
+                <td style="{{ $rowStyle }}">{{ $statusText }}</td>
+                <td style="{{ $rowStyle }}">{{ $docTypeLabel }}</td>
+                <td style="{{ $rowStyle }}">{{ $item->downloaded_at ? \Carbon\Carbon::parse($item->downloaded_at)->format('Y-m-d H:i:s') : '-' }}</td>
             </tr>
         @endforeach
     </tbody>

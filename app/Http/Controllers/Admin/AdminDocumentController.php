@@ -853,22 +853,32 @@ class AdminDocumentController extends Controller
             }
         }
 
-        $query = DB::table('document_downloads as dd')
-            ->join('clients as c', 'c.id', '=', 'dd.client_id')
-            ->leftJoin('documents as d', 'd.id', '=', 'dd.document_id')
-            ->leftJoin('document_upload_batchs as b', 'b.id', '=', 'dd.batch_id')
+        $query = DB::table('clients as c')
+            ->join('documents as d', function ($join) use ($batch) {
+                $join->on('d.client_id', '=', 'c.id')
+                    ->where('d.batch_id', '=', $batch->id);
+            })
+            ->join('document_upload_batchs as b', 'b.id', '=', 'd.batch_id')
+            ->leftJoin('document_downloads as dd', function ($join) use ($batch) {
+                $join->on('dd.client_id', '=', 'c.id')
+                    ->where(function ($q) use ($batch) {
+                        $q->where('dd.batch_id', '=', $batch->id)
+                          ->orWhereNull('dd.batch_id');
+                    });
+            })
             ->select([
-                'dd.id',
+                'c.id as client_id',
                 'c.no_jp',
                 'c.name as client_name',
                 'c.pic as client_pic',
                 'b.id as batch_id',
                 'b.created_at as batch_created_at',
-                'd.type as document_type',
-                'dd.downloaded_at',
+                DB::raw('MAX(d.type) as document_type'),
+                DB::raw('MAX(dd.id) as download_id'),
+                DB::raw('MAX(dd.downloaded_at) as downloaded_at'),
             ])
-            ->where('dd.batch_id', $batch->id)
-            ->orderBy('dd.id', 'asc');
+            ->groupBy('c.id', 'c.no_jp', 'c.name', 'c.pic', 'b.id', 'b.created_at')
+            ->orderBy('c.id', 'asc');
 
         $fileName = "Laporan_Status_Download_Batch_" . $batch->id . "_" . now()->format('Ymd_His');
 
