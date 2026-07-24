@@ -140,6 +140,10 @@ class ClientRepository extends MasterDataRepository
     {
         return Client::query()
             ->where('clients.claim_type', '!=', Client::CLAIM_TYPE_KOKUMIN)
+            ->leftJoin('client_confirmations', function ($j) {
+                $j->on('client_confirmations.client_id', '=', 'clients.id')
+                    ->whereNull('client_confirmations.deleted_at');
+            })
             ->when($closing_id, function ($q) use ($closing_id) {
                 $q->where('client_confirmations.client_closing_history_id', $closing_id);
             })
@@ -184,6 +188,10 @@ class ClientRepository extends MasterDataRepository
     {
         return Client::query()
             ->where('clients.claim_type', '=', Client::CLAIM_TYPE_KOKUMIN)
+            ->leftJoin('client_confirmations', function ($j) {
+                $j->on('client_confirmations.client_id', '=', 'clients.id')
+                    ->whereNull('client_confirmations.deleted_at');
+            })
             ->when($closing_id, function ($q) use ($closing_id) {
                 $q->where('client_confirmations.client_closing_history_id', $closing_id);
             })

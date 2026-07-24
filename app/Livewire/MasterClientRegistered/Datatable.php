@@ -768,7 +768,7 @@ class Datatable extends Component
             Alert::fail($this, "Gagal", 'Silakan pilih batch terlebih dahulu');
             return;
         }
-        $fileName = "Data Client Registered " . Carbon::now()->format('Y-m-d H:i:s');
+        $fileName = "Data Client Konfirmasi " . Carbon::now()->format('Y-m-d H:i:s');
 
         $qhs3 =  ClientRepository::getClientRegistered(
             $this->selectedBatch,

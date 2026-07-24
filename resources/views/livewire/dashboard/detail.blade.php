@@ -94,27 +94,40 @@
             </div>
         </div>
     </div>
-    <div class="my-6">
+    <div class="my-4">
         <h1 class="text-2xl font-bold text-gray-800 dark:text-white/90">Detail Data Klien</h1>
     </div>
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4 md:gap-6">
-        
         <div class="rounded-2xl border border-blue-100 bg-blue-500 p-5 dark:border-blue-900/40 dark:bg-blue-950/10 md:p-6 shadow-xs hover:shadow-md transition">
             <div class="flex items-center justify-between">
+                
+                <!-- Left Side: Main Total -->
                 <div>
                     <span class="text-sm text-white dark:text-blue-400 font-semibold uppercase tracking-wider">Total Klien</span>
                     <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
                         {{ number_format($total_achievements['total_clients']) }}
                     </h4>
                 </div>
-                <div class="flex items-center justify-center w-12 h-12 bg-white text-white rounded-xl shadow-sm">
-                    <svg class="fill-blue-500 w-6 h-6" viewBox="0 0 24 24">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
+
+                <!-- Right Side: PIC Breakdown -->
+                <div class="flex flex-col text-xs md:text-sm text-blue-100 dark:text-blue-300 space-y-1 border-l border-blue-400/50 dark:border-blue-800 pl-4">
+                    <div class="flex items-center justify-between gap-4">
+                        <span class="font-medium text-white">AI</span>
+                        <span class="font-bold text-white">{{ number_format($total_achievements['total_clients_ainul']) }}</span>
+                    </div>
+                    <div class="flex items-center justify-between gap-4">
+                        <span class="font-medium text-white">MT</span>
+                        <span class="font-bold text-white">{{ number_format($total_achievements['total_clients_kim']) }}</span>
+                    </div>
+                    <div class="flex items-center justify-between gap-4">
+                        <span class="font-medium text-white">SN</span>
+                        <span class="font-bold text-white">{{ number_format($total_achievements['total_clients_slamet']) }}</span>
+                    </div>
                 </div>
+                
             </div>
         </div>
-
+        <!-- KOKUMIN -->
         <div class="rounded-2xl border border-cyan-100 bg-[#FF00FE] p-5 dark:border-cyan-900/40 dark:bg-cyan-950/10 md:p-6 shadow-xs hover:shadow-md transition">
             <div class="flex items-center justify-between">
                 <div>
@@ -123,10 +136,284 @@
                         {{ number_format($total_achievements['kokumin_total']) }}
                     </h4>
                 </div>
-                <div class="flex items-center justify-center w-12 h-12 bg-white text-white rounded-xl shadow-sm">
-                    <svg class="fill-[#FF00FE] w-6 h-6" viewBox="0 0 24 24">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
+                <div class="flex flex-col text-xs md:text-sm text-white/90 space-y-1 border-l border-white/30 pl-4">
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">AI</span><span class="font-bold text-white">{{ number_format($total_achievements['kokumin_ainul']) }}</span></div>
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">MT</span><span class="font-bold text-white">{{ number_format($total_achievements['kokumin_kim']) }}</span></div>
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">SN</span><span class="font-bold text-white">{{ number_format($total_achievements['kokumin_slamet']) }}</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UNREGISTERED -->
+        <div class="rounded-2xl border border-rose-100 bg-red-500 p-5 dark:border-rose-900/40 dark:bg-rose-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-sm text-white dark:text-white font-semibold uppercase tracking-wider">UNREGISTERED</span>
+                    <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
+                        {{ number_format($total_achievements['total_clients'] - $total_achievements['registered_total'] - $total_achievements['kokumin_total']) }}
+                    </h4>
+                </div>
+                <div class="flex flex-col text-xs md:text-sm text-white/90 space-y-1 border-l border-white/30 pl-4">
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">AI</span><span class="font-bold text-white">{{ number_format($total_achievements['total_clients_ainul'] - $total_achievements['registered_ainul'] - $total_achievements['kokumin_ainul']) }}</span></div>
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">MT</span><span class="font-bold text-white">{{ number_format($total_achievements['total_clients_kim'] - $total_achievements['registered_kim'] - $total_achievements['kokumin_kim']) }}</span></div>
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">SN</span><span class="font-bold text-white">{{ number_format($total_achievements['total_clients_slamet'] - $total_achievements['registered_slamet'] - $total_achievements['kokumin_slamet']) }}</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REGISTERED -->
+        <div class="rounded-2xl border border-rose-100 bg-green-500 p-5 dark:border-rose-900/40 dark:bg-rose-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-sm text-white dark:text-rose-400 font-semibold uppercase tracking-wider">REGISTERED</span>
+                    <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
+                        {{ number_format($total_achievements['registered_total']) }}
+                    </h4>
+                </div>
+                <div class="flex flex-col text-xs md:text-sm text-white/90 space-y-1 border-l border-white/30 pl-4">
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">AI</span><span class="font-bold text-white">{{ number_format($total_achievements['registered_ainul']) }}</span></div>
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">MT</span><span class="font-bold text-white">{{ number_format($total_achievements['registered_kim']) }}</span></div>
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">SN</span><span class="font-bold text-white">{{ number_format($total_achievements['registered_slamet']) }}</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UNCONFIRMED -->
+        <div class="rounded-2xl border border-rose-100 bg-red-500 p-5 dark:border-rose-900/40 dark:bg-rose-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-sm text-white dark:text-rose-400 font-semibold uppercase tracking-wider">UNCONFIRMED</span>
+                    <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
+                        {{ number_format($total_achievements['not_confirmed_total']) }}
+                    </h4>
+                </div>
+                <div class="flex flex-col text-xs md:text-sm text-white/90 space-y-1 border-l border-white/30 pl-4">
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">AI</span><span class="font-bold text-white">{{ number_format($total_achievements['not_confirmed_ainul']) }}</span></div>
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">MT</span><span class="font-bold text-white">{{ number_format($total_achievements['not_confirmed_kim']) }}</span></div>
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">SN</span><span class="font-bold text-white">{{ number_format($total_achievements['not_confirmed_slamet']) }}</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONFIRMED -->
+        <div class="rounded-2xl border border-emerald-100 bg-green-500 p-5 dark:border-emerald-900/40 dark:bg-emerald-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-sm text-white dark:text-emerald-400 font-semibold uppercase tracking-wider">CONFIRMED</span>
+                    <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
+                        {{ number_format($total_achievements['registered_total'] - $total_achievements['not_confirmed_total']) }}
+                    </h4>
+                </div>
+                <div class="flex flex-col text-xs md:text-sm text-white/90 space-y-1 border-l border-white/30 pl-4">
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">AI</span><span class="font-bold text-white">{{ number_format($total_achievements['registered_ainul'] - $total_achievements['not_confirmed_ainul']) }}</span></div>
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">MT</span><span class="font-bold text-white">{{ number_format($total_achievements['registered_kim'] - $total_achievements['not_confirmed_kim']) }}</span></div>
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">SN</span><span class="font-bold text-white">{{ number_format($total_achievements['registered_slamet'] - $total_achievements['not_confirmed_slamet']) }}</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PENDING -->
+        <div class="rounded-2xl border border-rose-100 bg-red-500 p-5 dark:border-rose-900/40 dark:bg-rose-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-sm text-white dark:text-rose-400 font-semibold uppercase tracking-wider">PENDING</span>
+                    <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
+                        {{ number_format($total_achievements['pending_total']) }}
+                    </h4>
+                </div>
+                <div class="flex flex-col text-xs md:text-sm text-white/90 space-y-1 border-l border-white/30 pl-4">
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">AI</span><span class="font-bold text-white">{{ number_format($total_achievements['pending_ainul']) }}</span></div>
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">MT</span><span class="font-bold text-white">{{ number_format($total_achievements['pending_kim']) }}</span></div>
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">SN</span><span class="font-bold text-white">{{ number_format($total_achievements['pending_slamet']) }}</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- E-SIGNED -->
+        <div class="rounded-2xl border border-rose-100 bg-green-500 p-5 dark:border-rose-900/40 dark:bg-rose-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-sm text-white dark:text-rose-400 font-semibold uppercase tracking-wider">E-Signed</span>
+                    <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
+                        {{ number_format($total_achievements['speed_total'] + $total_achievements['adjustment_total']) }}
+                    </h4>
+                </div>
+                <div class="flex flex-col text-xs md:text-sm text-white/90 space-y-1 border-l border-white/30 pl-4">
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">AI</span><span class="font-bold text-white">{{ number_format($total_achievements['speed_ainul'] + $total_achievements['adjustment_ainul']) }}</span></div>
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">MT</span><span class="font-bold text-white">{{ number_format($total_achievements['speed_kim'] + $total_achievements['adjustment_kim']) }}</span></div>
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">SN</span><span class="font-bold text-white">{{ number_format($total_achievements['speed_slamet'] + $total_achievements['adjustment_slamet']) }}</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="mt-3 border border-2">
+
+    <!-- SECTION DIVIDER -->
+    <div class="my-4">
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-white/90">Detail Sudah Konfirmasi</h1>
+    </div>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4 md:gap-6">
+        <!-- JPN -->
+        <div class="rounded-2xl border border-indigo-100 bg-[#FE9900] p-5 dark:border-indigo-900/40 dark:bg-indigo-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-sm text-white dark:text-indigo-400 font-semibold uppercase tracking-wider">JPN</span>
+                    <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
+                        {{ number_format($total_achievements['jpn_total']) }}
+                    </h4>
+                </div>
+                <div class="flex flex-col text-xs md:text-sm text-white/90 space-y-1 border-l border-white/30 pl-4">
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">AI</span><span class="font-bold text-white">{{ number_format($total_achievements['jpn_ainul']) }}</span></div>
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">MT</span><span class="font-bold text-white">{{ number_format($total_achievements['jpn_kim']) }}</span></div>
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">SN</span><span class="font-bold text-white">{{ number_format($total_achievements['jpn_slamet']) }}</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RE - ENTRY -->
+        <div class="rounded-2xl border border-amber-100 bg-[#FE0000] p-5 dark:border-amber-900/40 dark:bg-amber-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-sm text-white dark:text-amber-400 font-semibold uppercase tracking-wider">RE - ENTRY</span>
+                    <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
+                        {{ number_format($total_achievements['re_total']) }}
+                    </h4>
+                </div>
+                <div class="flex flex-col text-xs md:text-sm text-white/90 space-y-1 border-l border-white/30 pl-4">
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">AI</span><span class="font-bold text-white">{{ number_format($total_achievements['re_ainul']) }}</span></div>
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">MT</span><span class="font-bold text-white">{{ number_format($total_achievements['re_kim']) }}</span></div>
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">SN</span><span class="font-bold text-white">{{ number_format($total_achievements['re_slamet']) }}</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SPEED -->
+        <div class="rounded-2xl border border-violet-100 bg-[#00FF01] p-5 dark:border-violet-900/40 dark:bg-violet-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-sm text-white dark:text-violet-400 font-semibold uppercase tracking-wider">SPEED</span>
+                    <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
+                        {{ number_format($total_achievements['speed_total']) }}
+                    </h4>
+                </div>
+                <div class="flex flex-col text-xs md:text-sm text-white/90 space-y-1 border-l border-white/30 pl-4">
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">AI</span><span class="font-bold text-white">{{ number_format($total_achievements['speed_ainul']) }}</span></div>
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">MT</span><span class="font-bold text-white">{{ number_format($total_achievements['speed_kim']) }}</span></div>
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">SN</span><span class="font-bold text-white">{{ number_format($total_achievements['speed_slamet']) }}</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADJUSTMENT -->
+        <div class="rounded-2xl border border-fuchsia-100 bg-[#FFDF20] p-5 dark:border-fuchsia-900/40 dark:bg-fuchsia-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-sm text-white dark:text-fuchsia-400 font-semibold uppercase tracking-wider">ADJUSTMENT</span>
+                    <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
+                        {{ number_format($total_achievements['adjustment_total']) }}
+                    </h4>
+                </div>
+                <div class="flex flex-col text-xs md:text-sm text-white/90 space-y-1 border-l border-white/30 pl-4">
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">AI</span><span class="font-bold text-white">{{ number_format($total_achievements['adjustment_ainul']) }}</span></div>
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">MT</span><span class="font-bold text-white">{{ number_format($total_achievements['adjustment_kim']) }}</span></div>
+                    <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">SN</span><span class="font-bold text-white">{{ number_format($total_achievements['adjustment_slamet']) }}</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="mt-3 border border-2">
+
+    @foreach ($batch_achievements as $index => $item)
+        <!-- SECTION DIVIDER -->
+        <div class="my-4">
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-white/90">
+                @if(empty($item['client_closing_batch_number']))
+                    Data Belum Closing
+                @else
+                    Data Closing {{ $item['client_closing_batch_number'] }}
+                @endif
+            </h1>
+        </div>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4 md:gap-6">
+            <!-- JPN -->
+            <div class="rounded-2xl border border-indigo-100 bg-[#FE9900] p-5 dark:border-indigo-900/40 dark:bg-indigo-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-sm text-white dark:text-indigo-400 font-semibold uppercase tracking-wider">JPN</span>
+                        <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
+                            {{ number_format($item['jpn_total']) }}
+                        </h4>
+                    </div>
+                    <div class="flex flex-col text-xs md:text-sm text-white/90 space-y-1 border-l border-white/30 pl-4">
+                        <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">AI</span><span class="font-bold text-white">{{ number_format($item['jpn_ainul']) }}</span></div>
+                        <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">MT</span><span class="font-bold text-white">{{ number_format($item['jpn_kim']) }}</span></div>
+                        <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">SN</span><span class="font-bold text-white">{{ number_format($item['jpn_slamet']) }}</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RE - ENTRY -->
+            <div class="rounded-2xl border border-amber-100 bg-[#FE0000] p-5 dark:border-amber-900/40 dark:bg-amber-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-sm text-white dark:text-amber-400 font-semibold uppercase tracking-wider">RE - ENTRY</span>
+                        <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
+                            {{ number_format($item['re_total']) }}
+                        </h4>
+                    </div>
+                    <div class="flex flex-col text-xs md:text-sm text-white/90 space-y-1 border-l border-white/30 pl-4">
+                        <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">AI</span><span class="font-bold text-white">{{ number_format($item['re_ainul']) }}</span></div>
+                        <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">MT</span><span class="font-bold text-white">{{ number_format($item['re_kim']) }}</span></div>
+                        <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">SN</span><span class="font-bold text-white">{{ number_format($item['re_slamet']) }}</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SPEED -->
+            <div class="rounded-2xl border border-violet-100 bg-[#00FF01] p-5 dark:border-violet-900/40 dark:bg-violet-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-sm text-white dark:text-violet-400 font-semibold uppercase tracking-wider">SPEED</span>
+                        <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
+                            {{ number_format($item['speed_total']) }}
+                        </h4>
+                    </div>
+                    <div class="flex flex-col text-xs md:text-sm text-white/90 space-y-1 border-l border-white/30 pl-4">
+                        <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">AI</span><span class="font-bold text-white">{{ number_format($item['speed_ainul']) }}</span></div>
+                        <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">MT</span><span class="font-bold text-white">{{ number_format($item['speed_kim']) }}</span></div>
+                        <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">SN</span><span class="font-bold text-white">{{ number_format($item['speed_slamet']) }}</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADJUSTMENT -->
+            <div class="rounded-2xl border border-fuchsia-100 bg-[#FFDF20] p-5 dark:border-fuchsia-900/40 dark:bg-fuchsia-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-sm text-white dark:text-fuchsia-400 font-semibold uppercase tracking-wider">ADJUSTMENT</span>
+                        <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
+                            {{ number_format($item['adjustment_total']) }}
+                        </h4>
+                    </div>
+                    <div class="flex flex-col text-xs md:text-sm text-white/90 space-y-1 border-l border-white/30 pl-4">
+                        <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">AI</span><span class="font-bold text-white">{{ number_format($item['adjustment_ainul']) }}</span></div>
+                        <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">MT</span><span class="font-bold text-white">{{ number_format($item['adjustment_kim']) }}</span></div>
+                        <div class="flex items-center justify-between gap-4"><span class="font-medium text-white">SN</span><span class="font-bold text-white">{{ number_format($item['adjustment_slamet']) }}</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="mt-3 border border-2">
+    @endforeach
+
+{{-- 
+        <div class="rounded-2xl border border-cyan-100 bg-[#FF00FE] p-5 dark:border-cyan-900/40 dark:bg-cyan-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+            <div class="flex items-center justify-between">
+                <div>
+                    <span class="text-sm text-white dark:text-cyan-400 font-semibold uppercase tracking-wider">KOKUMIN</span>
+                    <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
+                        {{ number_format($total_achievements['kokumin_total']) }}
+                    </h4>
                 </div>
             </div>
         </div>
@@ -134,45 +421,30 @@
         <div class="rounded-2xl border border-rose-100 bg-red-500 p-5 dark:border-rose-900/40 dark:bg-rose-950/10 md:p-6 shadow-xs hover:shadow-md transition">
             <div class="flex items-center justify-between">
                 <div>
-                    <span class="text-sm text-white dark:text-white font-semibold uppercase tracking-wider">BELUM REGISTRASI</span>
+                    <span class="text-sm text-white dark:text-white font-semibold uppercase tracking-wider"> UNREGISTERED</span>
                     <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
                         {{ number_format($total_achievements['total_clients'] - $total_achievements['registered_total'] - $total_achievements['kokumin_total']) }}
                     </h4>
-                </div>
-                <div class="flex items-center justify-center w-12 h-12 bg-white text-white rounded-xl shadow-sm">
-                    <svg class="fill-red-500 w-6 h-6" viewBox="0 0 24 24">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
                 </div>
             </div>
         </div>
         <div class="rounded-2xl border border-rose-100 bg-green-500 p-5 dark:border-rose-900/40 dark:bg-rose-950/10 md:p-6 shadow-xs hover:shadow-md transition">
             <div class="flex items-center justify-between">
                 <div>
-                    <span class="text-sm text-white dark:text-rose-400 font-semibold uppercase tracking-wider">SUDAH REGISTRASI</span>
+                    <span class="text-sm text-white dark:text-rose-400 font-semibold uppercase tracking-wider">REGISTERED</span>
                     <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
                         {{ number_format($total_achievements['registered_total']) }}
                     </h4>
-                </div>
-                <div class="flex items-center justify-center w-12 h-12 bg-white text-white rounded-xl shadow-sm">
-                    <svg class="fill-green-500 w-6 h-6" viewBox="0 0 24 24">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
                 </div>
             </div>
         </div>
         <div class="rounded-2xl border border-rose-100 bg-red-500 p-5 dark:border-rose-900/40 dark:bg-rose-950/10 md:p-6 shadow-xs hover:shadow-md transition">
             <div class="flex items-center justify-between">
                 <div>
-                    <span class="text-sm text-white dark:text-rose-400 font-semibold uppercase tracking-wider">BELUM KONFIRMASI</span>
+                    <span class="text-sm text-white dark:text-rose-400 font-semibold uppercase tracking-wider">UNCONFIRMED</span>
                     <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
                         {{ number_format($total_achievements['not_confirmed_total']) }}
                     </h4>
-                </div>
-                <div class="flex items-center justify-center w-12 h-12 bg-white text-white rounded-xl shadow-sm">
-                    <svg class="fill-red-500 w-6 h-6" viewBox="0 0 24 24">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
                 </div>
             </div>
         </div>
@@ -180,15 +452,10 @@
         <div class="rounded-2xl border border-emerald-100 bg-green-500 p-5 dark:border-emerald-900/40 dark:bg-emerald-950/10 md:p-6 shadow-xs hover:shadow-md transition">
             <div class="flex items-center justify-between">
                 <div>
-                    <span class="text-sm text-white dark:text-emerald-400 font-semibold uppercase tracking-wider">SUDAH KONFIRMASI</span>
+                    <span class="text-sm text-white dark:text-emerald-400 font-semibold uppercase tracking-wider">CONFIRMED</span>
                     <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
                         {{ number_format($total_achievements['registered_total'] - $total_achievements['not_confirmed_total']) }}
                     </h4>
-                </div>
-                <div class="flex items-center justify-center w-12 h-12 bg-white text-white rounded-xl shadow-sm">
-                    <svg class="fill-green-500 w-6 h-6" viewBox="0 0 24 24">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
                 </div>
             </div>
         </div>
@@ -200,25 +467,15 @@
                         {{ number_format($total_achievements['pending_total']) }}
                     </h4>
                 </div>
-                <div class="flex items-center justify-center w-12 h-12 bg-white text-white rounded-xl shadow-sm">
-                    <svg class="fill-red-500 w-6 h-6" viewBox="0 0 24 24">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
-                </div>
             </div>
         </div>
         <div class="rounded-2xl border border-rose-100 bg-green-500 p-5 dark:border-rose-900/40 dark:bg-rose-950/10 md:p-6 shadow-xs hover:shadow-md transition">
             <div class="flex items-center justify-between">
                 <div>
-                    <span class="text-sm text-white dark:text-rose-400 font-semibold uppercase tracking-wider">Sudah E-Sign</span>
+                    <span class="text-sm text-white dark:text-rose-400 font-semibold uppercase tracking-wider">E-Signed</span>
                     <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
                         {{ number_format($total_achievements['speed_total'] + $total_achievements['adjustment_total']) }}
                     </h4>
-                </div>
-                <div class="flex items-center justify-center w-12 h-12 bg-white text-white rounded-xl shadow-sm">
-                    <svg class="fill-green-500 w-6 h-6" viewBox="0 0 24 24">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
                 </div>
             </div>
         </div>
@@ -238,11 +495,6 @@
                         {{ number_format($total_achievements['jpn_total']) }}
                     </h4>
                 </div>
-                <div class="flex items-center justify-center w-12 h-12 bg-white text-white rounded-xl shadow-sm">
-                    <svg class="fill-[#FE9900] w-6 h-6" viewBox="0 0 24 24">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
-                </div>
             </div>
         </div>
 
@@ -253,11 +505,6 @@
                     <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
                         {{ number_format($total_achievements['re_total']) }}
                     </h4>
-                </div>
-                <div class="flex items-center justify-center w-12 h-12 bg-white text-white rounded-xl shadow-sm">
-                    <svg class="fill-[#FE0000] w-6 h-6" viewBox="0 0 24 24">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
                 </div>
             </div>
         </div>
@@ -270,11 +517,6 @@
                         {{ number_format($total_achievements['speed_total']) }}
                     </h4>
                 </div>
-                <div class="flex items-center justify-center w-12 h-12 bg-white text-white rounded-xl shadow-sm">
-                    <svg class="fill-[#00FF01] w-6 h-6" viewBox="0 0 24 24">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
-                </div>
             </div>
         </div>
 
@@ -286,14 +528,8 @@
                         {{ number_format($total_achievements['adjustment_total']) }}
                     </h4>
                 </div>
-                <div class="flex items-center justify-center w-12 h-12 bg-white text-white rounded-xl shadow-sm">
-                    <svg class="fill-[#FFDF20] w-6 h-6" viewBox="0 0 24 24">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
-                </div>
             </div>
-        </div>
-    </div>
+        </div> --}}
     <div class="my-6">
         <h1 class="text-2xl font-bold text-gray-800 dark:text-white/90">Detail Data PIC Registrasi</h1>
     </div>

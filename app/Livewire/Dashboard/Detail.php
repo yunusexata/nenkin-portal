@@ -15,6 +15,7 @@ class Detail extends Component
 
     public $pic_achievements = [];
     public $total_achievements = [];
+    public $batch_achievements = [];
 
     public function mount()
     {
@@ -89,6 +90,156 @@ class Detail extends Component
 
     private function getDashboardStats()
     {
+        if ($this->selectedBatch != 'all') {
+            $this->batch_achievements = Client::query()
+                ->leftJoin('users', function ($join) {
+                    $join->on('users.client_id', '=', 'clients.id')
+                        ->whereNull('users.deleted_at');
+                })
+                ->leftJoin('client_confirmations', function ($join) {
+                    $join->on('client_confirmations.client_id', '=', 'clients.id')
+                        ->whereNull('client_confirmations.deleted_at');
+                })
+                ->leftJoin('client_esigns', function ($join) {
+                    $join->on('client_esigns.client_id', '=', 'clients.id')
+                        ->whereNull('client_esigns.deleted_at');
+                })
+                ->when($this->selectedBatch != 'all', function ($q) {
+                    $q->where('clients.source_file_name', $this->selectedBatch);
+                })
+                // Optional: If you only want clients that have actually been batched, uncomment this:
+                // ->whereNotNull('client_confirmations.client_closing_batch_number')
+                ->selectRaw("
+            client_confirmations.client_closing_batch_number,
+    
+            -- 6. JPN
+            COUNT(DISTINCT clients.id) FILTER (
+                WHERE client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_JEPANG . "'
+            ) AS jpn_total,
+            COUNT(DISTINCT clients.id) FILTER (
+                WHERE client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_JEPANG . "' AND clients.pic = 'ainul'
+            ) AS jpn_ainul,
+            COUNT(DISTINCT clients.id) FILTER (
+                WHERE client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_JEPANG . "' AND clients.pic = 'kim'
+            ) AS jpn_kim,
+            COUNT(DISTINCT clients.id) FILTER (
+                WHERE client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_JEPANG . "' AND clients.pic = 'slamet'
+            ) AS jpn_slamet,
+    
+            -- 7. RE
+            COUNT(DISTINCT clients.id) FILTER (
+                WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_NORMAL . "' 
+                AND client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_INDONESIA . "'
+            ) AS re_total,
+            COUNT(DISTINCT clients.id) FILTER (
+                WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_NORMAL . "' 
+                AND client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_INDONESIA . "' AND clients.pic = 'ainul'
+            ) AS re_ainul,
+            COUNT(DISTINCT clients.id) FILTER (
+                WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_NORMAL . "' 
+                AND client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_INDONESIA . "' AND clients.pic = 'kim'
+            ) AS re_kim,
+            COUNT(DISTINCT clients.id) FILTER (
+                WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_NORMAL . "' 
+                AND client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_INDONESIA . "' AND clients.pic = 'slamet'
+            ) AS re_slamet,
+    
+            -- 8. SPEED
+            COUNT(DISTINCT clients.id) FILTER (
+                WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_SPEED . "' AND client_esigns.id IS NOT NULL
+            ) AS speed_total,
+            COUNT(DISTINCT clients.id) FILTER (
+                WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_SPEED . "' AND client_esigns.id IS NOT NULL AND clients.pic = 'ainul'
+            ) AS speed_ainul,
+            COUNT(DISTINCT clients.id) FILTER (
+                WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_SPEED . "' AND client_esigns.id IS NOT NULL AND clients.pic = 'kim'
+            ) AS speed_kim,
+            COUNT(DISTINCT clients.id) FILTER (
+                WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_SPEED . "' AND client_esigns.id IS NOT NULL AND clients.pic = 'slamet'
+            ) AS speed_slamet,
+    
+            -- 9. ADJUSTMENT
+            COUNT(DISTINCT clients.id) FILTER (
+                WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_ADJUSTMENT . "' AND client_esigns.id IS NOT NULL
+            ) AS adjustment_total,
+            COUNT(DISTINCT clients.id) FILTER (
+                WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_ADJUSTMENT . "' AND client_esigns.id IS NOT NULL AND clients.pic = 'ainul'
+            ) AS adjustment_ainul,
+            COUNT(DISTINCT clients.id) FILTER (
+                WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_ADJUSTMENT . "' AND client_esigns.id IS NOT NULL AND clients.pic = 'kim'
+            ) AS adjustment_kim,
+            COUNT(DISTINCT clients.id) FILTER (
+                WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_ADJUSTMENT . "' AND client_esigns.id IS NOT NULL AND clients.pic = 'slamet'
+            ) AS adjustment_slamet
+        ")
+                ->groupBy('client_confirmations.client_closing_batch_number')
+                ->orderBy('client_confirmations.client_closing_batch_number', 'asc')
+                ->get()
+                ->toArray();
+        }
+        // $this->total_achievements = Client::query()
+        //     ->leftJoin('users', function ($join) {
+        //         $join->on('users.client_id', '=', 'clients.id')
+        //             ->whereNull('users.deleted_at');
+        //     })
+        //     ->leftJoin('client_confirmations', function ($join) {
+        //         $join->on('client_confirmations.client_id', '=', 'clients.id')
+        //             ->whereNull('client_confirmations.deleted_at');
+        //     })
+        //     ->leftJoin('client_esigns', function ($join) {
+        //         $join->on('client_esigns.client_id', '=', 'clients.id')
+        //             ->whereNull('client_esigns.deleted_at');
+        //     })
+        //     ->when($this->selectedBatch != 'all', function ($q) {
+        //         $q->where('clients.source_file_name', $this->selectedBatch);
+        //     })
+        //     ->selectRaw("
+        //     COUNT(DISTINCT clients.id) AS total_clients,
+
+        //     COUNT(DISTINCT clients.id) FILTER (
+        //         WHERE clients.claim_type = '" . Client::CLAIM_TYPE_KOKUMIN . "'
+        //     ) AS kokumin_total,
+
+        //     COUNT(DISTINCT clients.id) FILTER (
+        //         WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "'
+        //         AND users.id IS NOT NULL
+        //     ) AS registered_total,
+
+        //     COUNT(DISTINCT clients.id) FILTER (
+        //         WHERE client_confirmations.id IS NULL
+        //         AND clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "'
+        //         AND users.id IS NOT NULL
+        //     ) AS not_confirmed_total,
+
+        //     COUNT(DISTINCT clients.id) FILTER (
+        //         WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "'
+        //         AND client_confirmations.claim_type IN (
+        //             '" . Client::CLAIM_TYPE_SPEED . "',
+        //             '" . Client::CLAIM_TYPE_ADJUSTMENT . "'
+        //         )
+        //         AND client_esigns.id IS NULL
+        //     ) AS pending_total,
+
+        //     COUNT(DISTINCT clients.id) FILTER (
+        //         WHERE client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_JEPANG . "'
+        //     ) AS jpn_total,
+
+        //     COUNT(DISTINCT clients.id) FILTER (
+        //         WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_NORMAL . "'
+        //         AND client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_INDONESIA . "'
+        //     ) AS re_total,
+
+        //     COUNT(DISTINCT clients.id) FILTER (
+        //         WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_SPEED . "'
+        //         AND client_esigns.id IS NOT NULL
+        //     ) AS speed_total,
+
+        //     COUNT(DISTINCT clients.id) FILTER (
+        //         WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_ADJUSTMENT . "'
+        //         AND client_esigns.id IS NOT NULL
+        //     ) AS adjustment_total
+        // ")
+        //     ->first()->toArray();
         $this->total_achievements = Client::query()
             ->leftJoin('users', function ($join) {
                 $join->on('users.client_id', '=', 'clients.id')
@@ -106,51 +257,128 @@ class Detail extends Component
                 $q->where('clients.source_file_name', $this->selectedBatch);
             })
             ->selectRaw("
-            COUNT(DISTINCT clients.id) AS total_clients,
+        -- 1. TOTAL CLIENTS
+        COUNT(DISTINCT clients.id) AS total_clients,
+        COUNT(DISTINCT clients.id) FILTER (WHERE clients.pic = 'ainul') AS total_clients_ainul,
+        COUNT(DISTINCT clients.id) FILTER (WHERE clients.pic = 'kim') AS total_clients_kim,
+        COUNT(DISTINCT clients.id) FILTER (WHERE clients.pic = 'slamet') AS total_clients_slamet,
 
-            COUNT(DISTINCT clients.id) FILTER (
-                WHERE clients.claim_type = '" . Client::CLAIM_TYPE_KOKUMIN . "'
-            ) AS kokumin_total,
+        -- 2. KOKUMIN
+        COUNT(DISTINCT clients.id) FILTER (WHERE clients.claim_type = '" . Client::CLAIM_TYPE_KOKUMIN . "') AS kokumin_total,
+        COUNT(DISTINCT clients.id) FILTER (WHERE clients.claim_type = '" . Client::CLAIM_TYPE_KOKUMIN . "' AND clients.pic = 'ainul') AS kokumin_ainul,
+        COUNT(DISTINCT clients.id) FILTER (WHERE clients.claim_type = '" . Client::CLAIM_TYPE_KOKUMIN . "' AND clients.pic = 'kim') AS kokumin_kim,
+        COUNT(DISTINCT clients.id) FILTER (WHERE clients.claim_type = '" . Client::CLAIM_TYPE_KOKUMIN . "' AND clients.pic = 'slamet') AS kokumin_slamet,
 
-            COUNT(DISTINCT clients.id) FILTER (
-                WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "'
-                AND users.id IS NOT NULL
-            ) AS registered_total,
+        -- 3. REGISTERED
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "' AND users.id IS NOT NULL
+        ) AS registered_total,
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "' AND users.id IS NOT NULL AND clients.pic = 'ainul'
+        ) AS registered_ainul,
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "' AND users.id IS NOT NULL AND clients.pic = 'kim'
+        ) AS registered_kim,
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "' AND users.id IS NOT NULL AND clients.pic = 'slamet'
+        ) AS registered_slamet,
 
-            COUNT(DISTINCT clients.id) FILTER (
-                WHERE client_confirmations.id IS NULL
-                AND clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "'
-                AND users.id IS NOT NULL
-            ) AS not_confirmed_total,
+        -- 4. NOT CONFIRMED
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE client_confirmations.id IS NULL AND clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "' AND users.id IS NOT NULL
+        ) AS not_confirmed_total,
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE client_confirmations.id IS NULL AND clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "' AND users.id IS NOT NULL AND clients.pic = 'ainul'
+        ) AS not_confirmed_ainul,
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE client_confirmations.id IS NULL AND clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "' AND users.id IS NOT NULL AND clients.pic = 'kim'
+        ) AS not_confirmed_kim,
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE client_confirmations.id IS NULL AND clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "' AND users.id IS NOT NULL AND clients.pic = 'slamet'
+        ) AS not_confirmed_slamet,
 
-            COUNT(DISTINCT clients.id) FILTER (
-                WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "'
-                AND client_confirmations.claim_type IN (
-                    '" . Client::CLAIM_TYPE_SPEED . "',
-                    '" . Client::CLAIM_TYPE_ADJUSTMENT . "'
-                )
-                AND client_esigns.id IS NULL
-            ) AS pending_total,
-            
-            COUNT(DISTINCT clients.id) FILTER (
-                WHERE client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_JEPANG . "'
-            ) AS jpn_total,
+        -- 5. PENDING
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "' 
+            AND client_confirmations.claim_type IN ('" . Client::CLAIM_TYPE_SPEED . "', '" . Client::CLAIM_TYPE_ADJUSTMENT . "') 
+            AND client_esigns.id IS NULL
+        ) AS pending_total,
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "' 
+            AND client_confirmations.claim_type IN ('" . Client::CLAIM_TYPE_SPEED . "', '" . Client::CLAIM_TYPE_ADJUSTMENT . "') 
+            AND client_esigns.id IS NULL AND clients.pic = 'ainul'
+        ) AS pending_ainul,
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "' 
+            AND client_confirmations.claim_type IN ('" . Client::CLAIM_TYPE_SPEED . "', '" . Client::CLAIM_TYPE_ADJUSTMENT . "') 
+            AND client_esigns.id IS NULL AND clients.pic = 'kim'
+        ) AS pending_kim,
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE clients.claim_type != '" . Client::CLAIM_TYPE_KOKUMIN . "' 
+            AND client_confirmations.claim_type IN ('" . Client::CLAIM_TYPE_SPEED . "', '" . Client::CLAIM_TYPE_ADJUSTMENT . "') 
+            AND client_esigns.id IS NULL AND clients.pic = 'slamet'
+        ) AS pending_slamet,
+        
+        -- 6. JPN
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_JEPANG . "'
+        ) AS jpn_total,
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_JEPANG . "' AND clients.pic = 'ainul'
+        ) AS jpn_ainul,
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_JEPANG . "' AND clients.pic = 'kim'
+        ) AS jpn_kim,
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_JEPANG . "' AND clients.pic = 'slamet'
+        ) AS jpn_slamet,
 
-            COUNT(DISTINCT clients.id) FILTER (
-                WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_NORMAL . "'
-                AND client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_INDONESIA . "'
-            ) AS re_total,
+        -- 7. RE
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_NORMAL . "' 
+            AND client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_INDONESIA . "'
+        ) AS re_total,
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_NORMAL . "' 
+            AND client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_INDONESIA . "' AND clients.pic = 'ainul'
+        ) AS re_ainul,
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_NORMAL . "' 
+            AND client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_INDONESIA . "' AND clients.pic = 'kim'
+        ) AS re_kim,
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_NORMAL . "' 
+            AND client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_INDONESIA . "' AND clients.pic = 'slamet'
+        ) AS re_slamet,
 
-            COUNT(DISTINCT clients.id) FILTER (
-                WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_SPEED . "'
-                AND client_esigns.id IS NOT NULL
-            ) AS speed_total,
+        -- 8. SPEED
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_SPEED . "' AND client_esigns.id IS NOT NULL
+        ) AS speed_total,
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_SPEED . "' AND client_esigns.id IS NOT NULL AND clients.pic = 'ainul'
+        ) AS speed_ainul,
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_SPEED . "' AND client_esigns.id IS NOT NULL AND clients.pic = 'kim'
+        ) AS speed_kim,
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_SPEED . "' AND client_esigns.id IS NOT NULL AND clients.pic = 'slamet'
+        ) AS speed_slamet,
 
-            COUNT(DISTINCT clients.id) FILTER (
-                WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_ADJUSTMENT . "'
-                AND client_esigns.id IS NOT NULL
-            ) AS adjustment_total
-        ")
+        -- 9. ADJUSTMENT
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_ADJUSTMENT . "' AND client_esigns.id IS NOT NULL
+        ) AS adjustment_total,
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_ADJUSTMENT . "' AND client_esigns.id IS NOT NULL AND clients.pic = 'ainul'
+        ) AS adjustment_ainul,
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_ADJUSTMENT . "' AND client_esigns.id IS NOT NULL AND clients.pic = 'kim'
+        ) AS adjustment_kim,
+        COUNT(DISTINCT clients.id) FILTER (
+            WHERE client_confirmations.claim_type = '" . Client::CLAIM_TYPE_ADJUSTMENT . "' AND client_esigns.id IS NOT NULL AND clients.pic = 'slamet'
+        ) AS adjustment_slamet
+    ")
             ->first()->toArray();
     }
 

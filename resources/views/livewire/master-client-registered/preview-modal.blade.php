@@ -3,7 +3,7 @@
  modalId="importModal" :isOpen="false" class="max-w-[96vw] p-10" wire:ignore.self>
     <div class="relative w-full bg-white dark:bg-gray-900 overflow-y-scroll max-h-[95vw]">
         {{-- Blocking overlay --}}
-        <div wire:loading wire:target="getData" class="absolute inset-0 bg-white/70 dark:bg-gray-900/70 z-50 flex items-center justify-center backdrop-blur-[2px]">
+        <div wire:loading.flex class="absolute inset-0 bg-white/70 dark:bg-gray-900/70 z-50 flex items-center justify-center backdrop-blur-[2px]">
             <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 flex flex-col items-center gap-3">
                 <svg class="animate-spin h-10 w-8 text-brand-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -33,7 +33,7 @@
                             class="border-b-2 px-1 py-4 text-sm font-medium"
                             wire:click="getData('registered', 'fix')"
                         >
-                            Data Client Registered
+                            Data Client Konfirmasi
                         </button>
                         @foreach ($closingHistories as $closing)
                             <button
