@@ -28,7 +28,7 @@ class MenuHelper
             ],
             [
                 'icon' => 'testing',
-                'name' => 'Halaman Testing',
+                'name' => 'Halaman Testing Admin',
                 'path' => 'test_page.index',
             ],
             [
