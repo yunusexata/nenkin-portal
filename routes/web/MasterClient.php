@@ -18,6 +18,7 @@ Route::middleware(['auth', 'access_permission'])->group(function () {
         Route::get('{id}/edit', 'edit')->name('edit');
         Route::get('{id}/detail', 'detail')->name('detail');
     });
+
     Route::group(["controller" => TestPageController::class, "prefix" => "test_page", "as" => "test_page."], function () {
         Route::get('/', 'index')->name('index');
         Route::get('{id}/edit', 'edit')->name('edit');
