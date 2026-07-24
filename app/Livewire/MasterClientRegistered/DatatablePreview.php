@@ -20,7 +20,6 @@ class DatatablePreview extends Component
     use WithDatatable;
 
     public $collection;
-    #[Url(except: '')]
     public $selectedBatch;
     public $closingHistories = [];
     public $bulkPic;

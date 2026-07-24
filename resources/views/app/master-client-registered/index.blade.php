@@ -17,13 +17,13 @@
                 <x-ui.button size="sm" variant="warning" @click="$dispatch('showLockConfirmation')">Tutup Pengisian
                 </x-ui.button>
             @endif
-            <x-ui.button size="sm" variant="primary" @click="$dispatch('validate-modal')">
+            {{-- <x-ui.button size="sm" variant="primary" @click="$dispatch('validate-modal')">
                 Preview Data
-            </x-ui.button>
+            </x-ui.button> --}}
         </div>
         <livewire:master-client-registered.datatable />
         
-        <livewire:master-client-registered.preview-modal />
+        {{-- <livewire:master-client-registered.preview-modal /> --}}
     </x-common.component-card>
  
 @endsection
