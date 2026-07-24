@@ -80,8 +80,6 @@ class DatatablePreview extends Component
         $this->type = $type;
 
         consoleLog($this, 'getAttributeData oi');
-
-        $this->dispatch('open-regular-modal');
     }
 
     public function getQuery(): Builder
