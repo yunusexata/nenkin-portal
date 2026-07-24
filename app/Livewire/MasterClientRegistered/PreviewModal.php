@@ -55,8 +55,10 @@ class PreviewModal extends Component
         $this->dispatch('open-regular-modal');
         $this->dispatch(
             'getAttributeData',
-            name: 'registered',
-            type: 'fix'
+            [
+                'name' => 'registered',
+                'type' => 'fix'
+            ]
         );
     }
 
@@ -64,8 +66,10 @@ class PreviewModal extends Component
     {
         $this->dispatch(
             'getAttributeData',
-            name: $name,
-            type: $type
+            [
+                'name' => $name,
+                'type' => $type
+            ]
         );
     }
 

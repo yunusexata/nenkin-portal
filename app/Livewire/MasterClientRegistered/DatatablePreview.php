@@ -74,10 +74,12 @@ class DatatablePreview extends Component
     //     return RegencyRepository::datatable();
     // }
 
-    public function getAttributeData($name, $type)
+    public function getAttributeData($data)
     {
-        $this->name = $name;
-        $this->type = $type;
+
+        consoleLog($this, $data);
+        $this->name = $data['name'];
+        $this->type = $data['type'];
 
         consoleLog($this, 'getAttributeData oi');
     }
