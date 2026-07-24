@@ -26,6 +26,11 @@ class DatatablePreview extends Component
 
     public $type;
     public $name;
+
+    protected $listeners = [
+        'getAttributeData' => 'getAttributeData',
+    ];
+
     public function mount()
     {
         if ($this->selectedBatch) {
@@ -69,13 +74,12 @@ class DatatablePreview extends Component
     //     return RegencyRepository::datatable();
     // }
 
-    #[On('getData')]
-    public function getData($name, $type)
+    public function getAttributeData($name, $type)
     {
         $this->name = $name;
         $this->type = $type;
 
-        consoleLog($this, 'getData oi');
+        consoleLog($this, 'getAttributeData oi');
 
         $this->dispatch('open-regular-modal');
     }

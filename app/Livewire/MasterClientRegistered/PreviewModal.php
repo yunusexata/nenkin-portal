@@ -51,12 +51,12 @@ class PreviewModal extends Component
             return;
         }
         consoleLog($this, 'trytyrty');
-        $this->dispatch('getData', 'registered', 'fix');
+        $this->dispatch('getAttributeData', 'registered', 'fix');
     }
 
     public function getData($name, $type)
     {
-        $this->dispatch('getData', $name, $type);
+        $this->dispatch('getAttributeData', $name, $type);
     }
 
     public function render()
