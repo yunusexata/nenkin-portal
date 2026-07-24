@@ -32,6 +32,7 @@ class PermissionHelper
     const ACCESS_ROLE = "role";
 
     // Form Gensen
+    const ACCESS_TEST_PAGE = 'test_page';
     const ACCESS_FILTER_ALL_PIC = 'filter_all_pic';
     const ACCESS_IMPORT_DATA_JEPANG = 'import_data_jepang';
     const ACCESS_MASTER_CLIENT = 'master_client';

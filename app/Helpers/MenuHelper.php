@@ -27,6 +27,11 @@ class MenuHelper
                 'path' => 'master_client_registered.index',
             ],
             [
+                'icon' => 'testing',
+                'name' => 'Halaman Testing',
+                'path' => 'test_page.index',
+            ],
+            [
                 // 'id' => 'menu_admin'
                 'name' => 'Admin',
                 'icon' => 'user',

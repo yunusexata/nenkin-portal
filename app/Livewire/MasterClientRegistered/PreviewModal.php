@@ -50,14 +50,12 @@ class PreviewModal extends Component
             Alert::fail($this, "Gagal", 'Silakan pilih batch terlebih dahulu');
             return;
         }
-
-        $this->dispatch('open-regular-modal');
+        consoleLog($this, 'trytyrty');
         $this->dispatch('getData', 'registered', 'fix');
     }
 
     public function getData($name, $type)
     {
-
         $this->dispatch('getData', $name, $type);
     }
 

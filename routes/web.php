@@ -26,6 +26,15 @@ Route::group([], __DIR__ . '/web/Other.php');
 Route::group([], __DIR__ . '/web/Account.php');
 Route::group([], __DIR__ . '/web/MasterClient.php');
 
+Route::post('/lw-test', function (\Illuminate\Http\Request $request) {
+    logger()->info('LW TEST', [
+        'headers' => $request->headers->all(),
+        'cookies' => $request->cookies->all(),
+    ]);
+
+    return response()->json(['ok' => true]);
+});
+
 Route::get('/dev-login', function () {
     $user = \App\Models\User::first();
     auth()->login($user);
