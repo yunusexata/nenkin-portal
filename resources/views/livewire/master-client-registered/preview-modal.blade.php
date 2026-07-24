@@ -89,7 +89,7 @@
                     </div>
 
                     {{-- REGISTERED TAB --}}
-                    <div x-transition class="mt-4">
+                    <div class="mt-4">
                         <div class="overflow-x-auto max-h-[450px] overflow-y-auto rounded-lg border border-gray-200 dark:border-gray-700">
                                 
                             {{-- <livewire:master-client-registered.datatable-preview

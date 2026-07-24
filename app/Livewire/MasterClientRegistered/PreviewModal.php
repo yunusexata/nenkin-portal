@@ -67,9 +67,6 @@ class PreviewModal extends Component
             return;
         }
         consoleLog($this, 'trytyrty');
-
-        $this->dispatch('open-regular-modal');
-
         $this->name = 'registered';
         $this->type = 'fix';
     }
@@ -143,9 +140,9 @@ class PreviewModal extends Component
         $totalsQuery = clone $query;
 
         // // 2. FIX: Strip out conflicting clauses from the original query
-        $totalsQuery->setEagerLoads([]); // Remove relationships to save memory
+        // $totalsQuery->setEagerLoads([]); // Remove relationships to save memory
         $totalsQuery->reorder();         // Clears the "ORDER BY clients.is_exported"
-        $totalsQuery->limit(null)->offset(null); // Clears any pagination limits
+        // $totalsQuery->limit(null)->offset(null); // Clears any pagination limits
 
         // 3. Join the relationship tables
         $totalsQuery->leftJoin('client_esigns', function ($j) {
