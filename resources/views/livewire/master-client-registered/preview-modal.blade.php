@@ -92,7 +92,10 @@
                 >
                     <div class="overflow-x-auto max-h-[450px] overflow-y-auto rounded-lg border border-gray-200 dark:border-gray-700">
                               
-                        <livewire:master-client-registered.datatable-preview :selectedBatch="$selectedBatch"/>
+                        <livewire:master-client-registered.datatable-preview
+                            :selectedBatch="$selectedBatch"
+                                    wire:key="datatable-preview"
+                        />
                     </div>
                 </div>
 

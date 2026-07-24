@@ -133,7 +133,7 @@ class DatatablePreview extends Component
         // 1. Clone the query
         $totalsQuery = clone $query;
 
-        // 2. FIX: Strip out conflicting clauses from the original query
+        // // 2. FIX: Strip out conflicting clauses from the original query
         $totalsQuery->setEagerLoads([]); // Remove relationships to save memory
         $totalsQuery->reorder();         // Clears the "ORDER BY clients.is_exported"
         $totalsQuery->limit(null)->offset(null); // Clears any pagination limits
