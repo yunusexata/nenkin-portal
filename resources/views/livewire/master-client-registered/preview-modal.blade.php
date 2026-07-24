@@ -1,5 +1,4 @@
-<x-ui.modal x-data="{ open: false }" @open-regular-modal.window="open = true"     @close-regular-modal.window="open = false"
- modalId="importModal" :isOpen="false" class="max-w-[96vw] p-10" wire:ignore.self>
+<x-ui.modal x-data="{ open: false }" @open-regular-modal.window="open = true"     @close-regular-modal.window="open = false" :isOpen="false" class="max-w-[96vw] p-10" wire:ignore.self>
     <div class="relative w-full bg-white dark:bg-gray-900 overflow-y-scroll max-h-[95vw]">
         {{-- Blocking overlay --}}
         <div wire:loading.flex class="absolute inset-0 bg-white/70 dark:bg-gray-900/70 z-50 flex items-center justify-center backdrop-blur-[2px]">
@@ -17,77 +16,7 @@
         </h4>
 
         <div class="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-            <div x-data="{ tab: 'registered' }">
-
-                {{-- Tabs --}}
-                <div class="border-b border-gray-200 dark:border-gray-700">
-                    <nav class="-mb-px flex space-x-8">
-
-                        <button
-                            type="button"
-                            @click="tab = 'registered'"
-                            :class="tab === 'registered'
-                                ? 'border-brand-500 text-brand-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700'"
-                            class="border-b-2 px-1 py-4 text-sm font-medium"
-                            wire:click="getData('registered', 'fix')"
-                        >
-                            Data Client Konfirmasi
-                        </button>
-                        @foreach ($closingHistories as $closing)
-                            <button
-                                type="button"
-                                @click="tab = 'closing {{ $closing->batch_number }}'"
-                                :class="tab === 'closing {{ $closing->batch_number }}'
-                                    ? 'border-red-500 text-red-600'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700'"
-                                class="border-b-2 px-1 py-4 text-sm font-medium"
-                                wire:click="getData('{{ $closing->batch_number }}', 'closing')"
-                            >
-                                Closing {{ $closing->batch_number }} {{ $closing->created_at->format('Ymd H_i_s') }}
-                            </button>
-                        @endforeach
-                        <button
-                            type="button"
-                            @click="tab = 'unclosed'"
-                            :class="tab === 'unclosed'
-                                ? 'border-red-500 text-red-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700'"
-                            class="border-b-2 px-1 py-4 text-sm font-medium"
-                            wire:click="getData('unclosed', 'fix')"
-                        >
-                            Data Belum Closing
-                        </button>
-                        <button
-                            type="button"
-                            @click="tab = 'unconfirmed'"
-                            :class="tab === 'unconfirmed'
-                                ? 'border-red-500 text-red-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700'"
-                            class="border-b-2 px-1 py-4 text-sm font-medium"
-                            wire:click="getData('unconfirmed', 'fix')"
-                        >
-                            Data Belum Konfirmasi
-                        </button>
-                        <button
-                            type="button"
-                            @click="tab = 'kokumin'"
-                            :class="tab === 'kokumin'
-                                ? 'border-red-500 text-red-600'
-                                : 'border-transparent text-gray-500 hover:text-gray-700'"
-                            class="border-b-2 px-1 py-4 text-sm font-medium"
-                            wire:click="getData('kokumin', 'fix')"
-                        >
-                            Data Client Kokumin
-                        </button>
-
-                    </nav>
-                </div>
-
-                {{-- REGISTERED TAB --}}
-                
-
-            </div>
+            
         </div>
     </div>
 </x-ui.modal>
