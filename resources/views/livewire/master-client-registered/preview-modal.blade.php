@@ -2,6 +2,7 @@
 <x-ui.modal x-data="{ open: false }" @open-regular-modal.window="open = true"     @close-regular-modal.window="open = false"
  modalId="importModal" :isOpen="false" class="max-w-[96vw] p-10" wire:ignore.self>
     <div class="relative w-full bg-white dark:bg-gray-900 overflow-y-scroll max-h-[95vw]">
+
         {{-- Blocking overlay --}}
         <div wire:loading wire:target="input_file, storeImport" class="absolute inset-0 bg-white/70 dark:bg-gray-900/70 z-50 flex items-center justify-center backdrop-blur-[2px]">
             <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 flex flex-col items-center gap-3">
@@ -19,12 +20,12 @@
             Import Excel Master Data Client
         </h4>
 
-    <div class="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-        <div class="p-6">
-            
+        <div class="border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+            <div class="p-6">
+                
 
+            </div>
         </div>
-    </div>
     </div>
 </x-ui.modal>
 
