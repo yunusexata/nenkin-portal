@@ -31,7 +31,6 @@
 
 
 @push('scripts')
-    {{-- <script src="{{ asset('assets/js/jquery.min.js') }}"></script> --}}
     <script>
     document.addEventListener('livewire:init', () => {
         Livewire.on('onSuccessImportModal', () => {
