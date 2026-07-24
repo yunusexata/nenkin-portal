@@ -29,10 +29,10 @@
 
                             <button
                                 type="button"
-                                @click="tab = 'registered'"
+                                {{-- @click="tab = 'registered'"
                                 :class="tab === 'registered'
                                     ? 'border-brand-500 text-brand-600'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700'"
+                                    : 'border-transparent text-gray-500 hover:text-gray-700'" --}}
                                 class="border-b-2 px-1 py-4 text-sm font-medium"
                                 wire:click="getData('registered', 'fix')"
                             >
@@ -41,10 +41,10 @@
                             @foreach ($closingHistories as $closing)
                                 <button
                                     type="button"
-                                    @click="tab = 'closing {{ $closing->batch_number }}'"
+                                    {{-- @click="tab = 'closing {{ $closing->batch_number }}'"
                                     :class="tab === 'closing {{ $closing->batch_number }}'
                                         ? 'border-red-500 text-red-600'
-                                        : 'border-transparent text-gray-500 hover:text-gray-700'"
+                                        : 'border-transparent text-gray-500 hover:text-gray-700'" --}}
                                     class="border-b-2 px-1 py-4 text-sm font-medium"
                                     wire:click="getData('{{ $closing->batch_number }}', 'closing')"
                                 >
@@ -53,10 +53,10 @@
                             @endforeach
                             <button
                                 type="button"
-                                @click="tab = 'unclosed'"
+                                {{-- @click="tab = 'unclosed'"
                                 :class="tab === 'unclosed'
                                     ? 'border-red-500 text-red-600'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700'"
+                                    : 'border-transparent text-gray-500 hover:text-gray-700'" --}}
                                 class="border-b-2 px-1 py-4 text-sm font-medium"
                                 wire:click="getData('unclosed', 'fix')"
                             >
@@ -64,10 +64,10 @@
                             </button>
                             <button
                                 type="button"
-                                @click="tab = 'unconfirmed'"
+                                {{-- @click="tab = 'unconfirmed'"
                                 :class="tab === 'unconfirmed'
                                     ? 'border-red-500 text-red-600'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700'"
+                                    : 'border-transparent text-gray-500 hover:text-gray-700'" --}}
                                 class="border-b-2 px-1 py-4 text-sm font-medium"
                                 wire:click="getData('unconfirmed', 'fix')"
                             >
@@ -75,10 +75,10 @@
                             </button>
                             <button
                                 type="button"
-                                @click="tab = 'kokumin'"
+                                {{-- @click="tab = 'kokumin'"
                                 :class="tab === 'kokumin'
                                     ? 'border-red-500 text-red-600'
-                                    : 'border-transparent text-gray-500 hover:text-gray-700'"
+                                    : 'border-transparent text-gray-500 hover:text-gray-700'" --}}
                                 class="border-b-2 px-1 py-4 text-sm font-medium"
                                 wire:click="getData('kokumin', 'fix')"
                             >
