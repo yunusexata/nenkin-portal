@@ -20,6 +20,7 @@ class DatatablePreview extends Component
     use WithDatatable;
 
     public $collection;
+    #[Url(except: '')]
     public $selectedBatch;
     public $closingHistories = [];
     public $bulkPic;
@@ -60,51 +61,6 @@ class DatatablePreview extends Component
     public function getColumns(): array
     {
         return [
-            [
-                'name' => 'Action',
-                'sortable' => false,
-                'searchable' => false,
-                'render' => function ($item) {
-                    $editHtml = "";
-
-                    $id = Crypt::encrypt($item->id);
-                    if ($this->isCanUpdate) {
-                        $editUrl = route('regency.edit', $id);
-                        $editHtml = "<div class='col-auto mb-2'>
-                            <a class='btn btn-primary btn-sm' href='$editUrl'>
-                                <i class='ki-duotone ki-notepad-edit fs-1'>
-                                    <span class='path1'></span>
-                                    <span class='path2'></span>
-                                </i>
-                                Ubah
-                            </a>
-                        </div>";
-                    }
-
-                    $destroyHtml = "";
-                    if ($this->isCanDelete) {
-                        $destroyHtml = "<div class='col-auto mb-2'>
-                            <button class='btn btn-danger btn-sm m-0' 
-                                wire:click=\"showDeleteDialog($item->id)\">
-                                <i class='ki-duotone ki-trash fs-1'>
-                                    <span class='path1'></span>
-                                    <span class='path2'></span>
-                                    <span class='path3'></span>
-                                    <span class='path4'></span>
-                                    <span class='path5'></span>
-                                </i>
-                                Hapus
-                            </button>
-                        </div>";
-                    }
-
-                    $html = "<div class='row'>
-                        $editHtml $destroyHtml 
-                    </div>";
-
-                    return $html;
-                },
-            ],
             [
                 'key' => 'name',
             ],
