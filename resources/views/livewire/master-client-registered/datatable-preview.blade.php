@@ -229,4 +229,5 @@
 
         
         {{ $data->links(data: ['scrollTo' => false]) }}
+        
     </div>

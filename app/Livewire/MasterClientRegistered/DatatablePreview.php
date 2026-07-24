@@ -26,20 +26,19 @@ class DatatablePreview extends Component
 
     public $type;
     public $name;
-
     protected $listeners = [
         'getAttributeData' => 'getAttributeData',
     ];
 
-    public function mount()
+    public function onMount()
     {
+
         if ($this->selectedBatch) {
             $this->closingHistories = ClientClosingHistoryRepository::getBy([
                 ['source_file_name', $this->selectedBatch]
             ]);
         }
     }
-    public function onMount() {}
 
     #[On('refresh-table')]
     public function refreshTable()
