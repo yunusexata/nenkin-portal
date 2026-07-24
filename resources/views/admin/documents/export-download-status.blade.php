@@ -17,7 +17,7 @@
                 $isDownloaded = !empty($item->download_id) || !empty($item->downloaded_at);
                 $statusText = $isDownloaded ? 'Mendownload' : 'Belum Download';
                 $rowStyle = !$isDownloaded ? 'background-color: #FFC7CE; color: #9C0006; font-weight: bold;' : '';
-                $docTypeLabel = $item->document_type ? strtoupper(str_replace('_', ' ', $item->document_type)) : 'Semua Dokumen (General)';
+                $docTypeLabel = 'Semua Dokumen (General)';
                 $batchInfo = 'Batch #' . ($item->batch_id ?? '-') . ' (' . ($item->batch_created_at ? \Carbon\Carbon::parse($item->batch_created_at)->format('Y-m-d H:i') : '-') . ')';
                 $picLabel = $item->client_pic ? strtoupper($item->client_pic) : '-';
             @endphp
