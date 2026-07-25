@@ -26,11 +26,11 @@ class MenuHelper
                 'name' => 'Master Client Konfirmasi',
                 'path' => 'master_client_registered.index',
             ],
-            [
-                'icon' => 'testing',
-                'name' => 'Halaman Testing Admin',
-                'path' => 'test_page.index',
-            ],
+            // [
+            //     'icon' => 'testing',
+            //     'name' => 'Halaman Testing Admin',
+            //     'path' => 'test_page.index',
+            // ],
             [
                 // 'id' => 'menu_admin'
                 'name' => 'Admin',

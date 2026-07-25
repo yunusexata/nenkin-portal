@@ -66,7 +66,9 @@ class PreviewModal extends Component
             Alert::fail($this, "Gagal", 'Silakan pilih batch terlebih dahulu');
             return;
         }
-        consoleLog($this, 'trytyrty');
+
+        $this->dispatch('open-regular-modal');
+
         $this->name = 'registered';
         $this->type = 'fix';
     }
@@ -90,311 +92,9 @@ class PreviewModal extends Component
     // {
     //     return view('livewire.master-client-registered.preview-modal');
     // }
-    public function baseQuery($batchName = null, $claimType = null, $pic = null, $closing_id = null, $orderByClaimType = false): Builder
-    {
-        if ($this->type == 'fix') {
-            if ($this->name == 'registered') {
 
-                // REGISTERED
-                $query = Client::query()
-                    ->where('clients.claim_type', '!=', Client::CLAIM_TYPE_KOKUMIN)
-                    ->join('client_confirmations', function ($j) {
-                        $j->on('client_confirmations.client_id', '=', 'clients.id')
-                            ->whereNull('client_confirmations.deleted_at');
-                    })
-                    ->when($closing_id, function ($q) use ($closing_id) {
-                        $q->where('client_confirmations.client_closing_history_id', $closing_id);
-                    })
-                    ->when($batchName && $batchName != 'all', function ($q) use ($batchName) {
-                        $q->where('clients.source_file_name', $batchName);
-                    })
-                    ->when($claimType && $claimType === Client::CLAIM_TYPE_NORMAL, function ($q) {
-                        $q->where('client_confirmations.claim_type', Client::CLAIM_TYPE_NORMAL);
-                    })
-                    ->when($claimType &&
-                        in_array(
-                            $claimType,
-                            [Client::CLAIM_TYPE_SPEED, Client::CLAIM_TYPE_ADJUSTMENT]
-                        ), function ($q) use ($claimType) {
-                        $q->where('client_confirmations.claim_type', $claimType)
-                            ->whereHas('esign');
-                    })
-                    ->when($claimType && $claimType === Client::STATUS_PENDING, function ($q) {
-                        $q->whereIn('client_confirmations.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
-                            ->whereDoesntHave('esign');
-                    })
-                    ->when($pic, function ($q) use ($pic) {
-                        $q->where('clients.pic', 'ILIKE', '%' . $pic . '%');
-                    })
-                    ->whereHas('confirmation');
-            }
-            if ($this->name === 'unclosed') {
-
-                // UNCLOSING
-                $query = Client::query()
-                    ->where('clients.claim_type', '!=', Client::CLAIM_TYPE_KOKUMIN)
-                    ->join('client_confirmations', function ($j) {
-                        $j->on('client_confirmations.client_id', '=', 'clients.id')
-                            ->whereNull('client_confirmations.deleted_at');
-                    })
-                    ->where('client_confirmations.client_closing_history_id', null)
-                    ->when($batchName && $batchName != 'all', function ($q) use ($batchName) {
-                        $q->where('clients.source_file_name', $batchName);
-                    })
-                    ->when($claimType && $claimType === Client::CLAIM_TYPE_NORMAL, function ($q) {
-                        $q->where('client_confirmations.claim_type', Client::CLAIM_TYPE_NORMAL);
-                    })
-                    ->when($claimType &&
-                        in_array(
-                            $claimType,
-                            [Client::CLAIM_TYPE_SPEED, Client::CLAIM_TYPE_ADJUSTMENT]
-                        ), function ($q) use ($claimType) {
-                        $q->where('client_confirmations.claim_type', $claimType)
-                            ->whereHas('esign');
-                    })
-                    ->when($claimType && $claimType === Client::STATUS_PENDING, function ($q) {
-                        $q->whereIn('client_confirmations.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
-                            ->whereDoesntHave('esign');
-                    })
-                    ->when($pic, function ($q) use ($pic) {
-                        $q->where('clients.pic', 'ILIKE', '%' . $pic . '%');
-                    });
-            }
-            if ($this->name === 'unconfirmed') {
-
-                // UNREGISTERED
-
-                $query = Client::query()
-                    ->where('clients.claim_type', '!=', Client::CLAIM_TYPE_KOKUMIN)
-                    ->leftJoin('client_confirmations', function ($j) {
-                        $j->on('client_confirmations.client_id', '=', 'clients.id')
-                            ->whereNull('client_confirmations.deleted_at');
-                    })
-                    ->when($closing_id, function ($q) use ($closing_id) {
-                        $q->where('client_confirmations.client_closing_history_id', $closing_id);
-                    })
-                    ->when($batchName && $batchName != 'all', function ($q) use ($batchName) {
-                        $q->where('clients.source_file_name', $batchName);
-                    })
-                    ->when($claimType && $claimType === Client::CLAIM_TYPE_NORMAL, function ($q) {
-                        $q->where('client_confirmations.claim_type', Client::CLAIM_TYPE_NORMAL);
-                    })
-                    ->when($claimType &&
-                        in_array(
-                            $claimType,
-                            [Client::CLAIM_TYPE_SPEED, Client::CLAIM_TYPE_ADJUSTMENT]
-                        ), function ($q) use ($claimType) {
-                        $q->where('client_confirmations.claim_type', $claimType)
-                            ->whereHas('esign');
-                    })
-                    ->when($claimType && $claimType === Client::STATUS_PENDING, function ($q) {
-                        $q->whereIn('client_confirmations.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
-                            ->whereDoesntHave('esign');
-                    })
-                    ->when($pic, function ($q) use ($pic) {
-                        $q->where('clients.pic', 'ILIKE', '%' . $pic . '%');
-                    })
-                    ->whereDoesntHave('confirmation');
-            }
-            if ($this->name === 'kokumin') {
-
-                // KOKUMIN
-
-                $query = Client::query()
-                    ->where('clients.claim_type', '=', Client::CLAIM_TYPE_KOKUMIN)
-                    ->leftJoin('client_confirmations', function ($j) {
-                        $j->on('client_confirmations.client_id', '=', 'clients.id')
-                            ->whereNull('client_confirmations.deleted_at');
-                    })
-                    ->when($closing_id, function ($q) use ($closing_id) {
-                        $q->where('client_confirmations.client_closing_history_id', $closing_id);
-                    })
-                    ->when($batchName && $batchName != 'all', function ($q) use ($batchName) {
-                        $q->where('clients.source_file_name', $batchName);
-                    })
-                    ->when($claimType && $claimType === Client::CLAIM_TYPE_NORMAL, function ($q) {
-                        $q->where('client_confirmations.claim_type', Client::CLAIM_TYPE_NORMAL);
-                    })
-                    ->when($claimType &&
-                        in_array(
-                            $claimType,
-                            [Client::CLAIM_TYPE_SPEED, Client::CLAIM_TYPE_ADJUSTMENT]
-                        ), function ($q) use ($claimType) {
-                        $q->where('client_confirmations.claim_type', $claimType)
-                            ->whereHas('esign');
-                    })
-                    ->when($claimType && $claimType === Client::STATUS_PENDING, function ($q) {
-                        $q->whereIn('client_confirmations.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
-                            ->whereDoesntHave('esign');
-                    })
-                    ->when($pic, function ($q) use ($pic) {
-                        $q->where('clients.pic', 'ILIKE', '%' . $pic . '%');
-                    })
-                    ->whereDoesntHave('confirmation');
-            }
-        } else {
-            // REGISTERED
-            $query = Client::query()
-                ->where('clients.claim_type', '!=', Client::CLAIM_TYPE_KOKUMIN)
-                ->join('client_confirmations', function ($j) {
-                    $j->on('client_confirmations.client_id', '=', 'clients.id')
-                        ->whereNull('client_confirmations.deleted_at');
-                })
-                ->when($closing_id, function ($q) use ($closing_id) {
-                    $q->where('client_confirmations.client_closing_history_id', $closing_id);
-                })
-                ->when($batchName && $batchName != 'all', function ($q) use ($batchName) {
-                    $q->where('clients.source_file_name', $batchName);
-                })
-                ->when($claimType && $claimType === Client::CLAIM_TYPE_NORMAL, function ($q) {
-                    $q->where('client_confirmations.claim_type', Client::CLAIM_TYPE_NORMAL);
-                })
-                ->when($claimType &&
-                    in_array(
-                        $claimType,
-                        [Client::CLAIM_TYPE_SPEED, Client::CLAIM_TYPE_ADJUSTMENT]
-                    ), function ($q) use ($claimType) {
-                    $q->where('client_confirmations.claim_type', $claimType)
-                        ->whereHas('esign');
-                })
-                ->when($claimType && $claimType === Client::STATUS_PENDING, function ($q) {
-                    $q->whereIn('client_confirmations.claim_type', [Client::CLAIM_TYPE_ADJUSTMENT, Client::CLAIM_TYPE_SPEED])
-                        ->whereDoesntHave('esign');
-                })
-                ->when($pic, function ($q) use ($pic) {
-                    $q->where('clients.pic', 'ILIKE', '%' . $pic . '%');
-                })
-                ->whereHas('confirmation');
-        }
-        return $query;
-    }
     public function getQuery(): Builder
     {
-        // $totalsQuery = ClientClosingHistory::query();
-        // $query = $totalsQuery;
-        // if ($this->type == 'fix') {
-        //     if ($this->name == 'registered') {
-        //         $totalsQuery = $this->baseQuery(
-        //             $this->selectedBatch,
-        //             $this->filter_claim_type,
-        //             $this->bulkPic
-        //         );
-        //         $query = $this->baseQuery(
-        //             $this->selectedBatch,
-        //             $this->filter_claim_type,
-        //             $this->bulkPic
-        //         )
-        //             ->select('clients.*')
-        //             ->selectRaw("
-        //     EXISTS (
-        //         SELECT 1
-        //         FROM client_esigns
-        //         WHERE client_esigns.client_id = clients.id
-        //             AND client_esigns.deleted_at IS NULL
-        //     ) as esign_exists
-        // ")
-        //             ->orderByDesc('clients.is_exported')
-        //             ->orderBy('clients.exported_at', 'ASC')
-        //             ->orderByDesc('clients.no_jp');
-        //     }
-        //     if ($this->name === 'unclosed') {
-        //         $totalsQuery = $this->baseQuery(
-        //             $this->selectedBatch,
-        //             $this->filter_claim_type,
-        //             $this->bulkPic
-        //         );
-        //         $query = $this->baseQuery(
-        //             $this->selectedBatch,
-        //             $this->filter_claim_type,
-        //             $this->bulkPic
-        //         )
-        //             ->select('clients.*')
-        //             ->selectRaw("
-        //     EXISTS (
-        //         SELECT 1
-        //         FROM client_esigns
-        //         WHERE client_esigns.client_id = clients.id
-        //             AND client_esigns.deleted_at IS NULL
-        //     ) as esign_exists
-        // ")
-        //             ->orderByDesc('clients.is_exported')
-        //             ->orderBy('clients.exported_at', 'ASC')
-        //             ->orderByDesc('clients.no_jp');
-        //     }
-        //     if ($this->name === 'unconfirmed') {
-        //         $totalsQuery = $this->baseQuery(
-        //             $this->selectedBatch,
-        //             $this->filter_claim_type,
-        //             $this->bulkPic
-        //         );
-        //         $query = $this->baseQuery(
-        //             $this->selectedBatch,
-        //             $this->filter_claim_type,
-        //             $this->bulkPic
-        //         )
-        //             ->select('clients.*')
-        //             ->selectRaw("
-        //     EXISTS (
-        //         SELECT 1
-        //         FROM client_esigns
-        //         WHERE client_esigns.client_id = clients.id
-        //             AND client_esigns.deleted_at IS NULL
-        //     ) as esign_exists
-        // ")
-        //             ->orderByDesc('clients.is_exported')
-        //             ->orderByDesc('clients.no_jp');
-        //     }
-        //     if ($this->name === 'kokumin') {
-        //         $totalsQuery = $this->baseQuery(
-        //             $this->selectedBatch,
-        //             $this->filter_claim_type,
-        //             $this->bulkPic
-        //         );
-        //         $query = $this->baseQuery(
-        //             $this->selectedBatch,
-        //             $this->filter_claim_type,
-        //             $this->bulkPic
-        //         )
-        //             ->select('clients.*')
-        //             ->selectRaw("
-        //     EXISTS (
-        //         SELECT 1
-        //         FROM client_esigns
-        //         WHERE client_esigns.client_id = clients.id
-        //             AND client_esigns.deleted_at IS NULL
-        //     ) as esign_exists
-        // ")
-        //             ->orderByDesc('clients.is_exported')
-        //             ->orderByDesc('clients.no_jp');
-        //     }
-        // } else {
-        //     $totalsQuery = $this->baseQuery(
-        //         $this->selectedBatch,
-        //         $this->filter_claim_type,
-        //         $this->bulkPic,
-        //         $this->name,
-        //         true
-        //     );
-        //     $query = $this->baseQuery(
-        //         $this->selectedBatch,
-        //         $this->filter_claim_type,
-        //         $this->bulkPic,
-        //         $this->name,
-        //         true
-        //     )
-        //         ->select('clients.*')
-        //         ->selectRaw("
-        //     EXISTS (
-        //         SELECT 1
-        //         FROM client_esigns
-        //         WHERE client_esigns.client_id = clients.id
-        //             AND client_esigns.deleted_at IS NULL
-        //     ) as esign_exists
-        // ")
-        //         ->orderByDesc('clients.is_exported')
-        //         ->orderByDesc('client_confirmations.claim_type', 'DESC')
-        //         ->orderByDesc('clients.no_jp');
-        // }
         $query = ClientClosingHistory::query();
         if ($this->type == 'fix') {
             if ($this->name == 'registered') {
@@ -434,71 +134,17 @@ class PreviewModal extends Component
                 true
             );
         }
-        // $query->join('client_esigns', function ($j) {
-        //     $j->on('client_esigns.client_id', '=', 'clients.id')
-        //         ->whereNull('client_esigns.deleted_at');
-        // });
-
-        // 1. Clone the query
-
-        // 2. FIX: Strip out conflicting clauses from the original query
-        // $totalsQuery->setEagerLoads([]); // Remove relationships to save memory
-        // $totalsQuery->reorder();         // Clears the "ORDER BY clients.is_exported"
-        // $totalsQuery->limit(null)->offset(null); // Clears any pagination limits
-
-        // 3. Join the relationship tables
-        // $totalsQuery->leftJoin('client_esigns', function ($j) {
-        //     $j->on('client_esigns.client_id', '=', 'clients.id')
-        //         ->whereNull('client_esigns.deleted_at');
-        // });
 
         $totalsQuery = clone $query;
 
-        // // 2. FIX: Strip out conflicting clauses from the original query
+        // 2. FIX: Strip out conflicting clauses from the original query
         $totalsQuery->setEagerLoads([]); // Remove relationships to save memory
         $totalsQuery->reorder();         // Clears the "ORDER BY clients.is_exported"
         $totalsQuery->limit(null)->offset(null); // Clears any pagination limits
 
-        // dd($totalsQuery->count());
-
-        // 4. Execute the conditional aggregation
         $this->totals = [];
 
         if ($this->selectedBatch) {
-            //     consoleLog(
-            //         $this,
-            //         [
-            //             $totalsQuery->toSql(),
-            //             $totalsQuery->getBindings()
-            //         ]
-            //     );
-            //     consoleLog(
-            //         $this,
-            //         [
-            //             $totalsQuery
-            //                 ->selectRaw("
-            //     SUM(
-            //         CASE
-            //             WHEN clients.pic = 'ainul'
-            //             THEN 1
-            //             ELSE 0
-            //         END
-            //     ) as total_ai
-            // ")
-            //                 ->first()
-            //         ]
-            //     );
-            // $result = $totalsQuery
-            //     ->selectRaw("
-            //         SUM(
-            //             CASE
-            //                 WHEN clients.pic = 'ainul'
-            //                 THEN 1
-            //                 ELSE 0
-            //             END
-            //         ) as total_ai
-            //     ")
-            //     ->first();
             $result = $totalsQuery->select([
 
                 // AI
@@ -554,7 +200,6 @@ class PreviewModal extends Component
 
     public function getView(): string
     {
-        // return 'livewire.master-client-registered.datatable-preview';
         return 'livewire.master-client-registered.preview-modal';
     }
 }

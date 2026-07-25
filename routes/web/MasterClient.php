@@ -19,11 +19,11 @@ Route::middleware(['auth', 'access_permission'])->group(function () {
         Route::get('{id}/detail', 'detail')->name('detail');
     });
 
-    Route::group(["controller" => TestPageController::class, "prefix" => "test_page", "as" => "test_page."], function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('{id}/edit', 'edit')->name('edit');
-        Route::get('{id}/detail', 'detail')->name('detail');
-    });
+    // Route::group(["controller" => TestPageController::class, "prefix" => "test_page", "as" => "test_page."], function () {
+    //     Route::get('/', 'index')->name('index');
+    //     Route::get('{id}/edit', 'edit')->name('edit');
+    //     Route::get('{id}/detail', 'detail')->name('detail');
+    // });
 
     Route::group(["controller" => ClientController::class, "prefix" => "client_form_confirmation", "as" => "client_form_confirmation."], function () {
         Route::get('/', 'form_confirmation')->name('index');
