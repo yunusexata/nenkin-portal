@@ -393,7 +393,6 @@ class PreviewModal extends Component
         ")
                 ->orderByDesc('clients.is_exported')
                 ->orderByDesc('client_confirmations.claim_type', 'DESC')
-                ->orderBy('clients.exported_at', 'ASC')
                 ->orderByDesc('clients.no_jp');
         }
         // $query->join('client_esigns', function ($j) {
@@ -420,17 +419,40 @@ class PreviewModal extends Component
         $this->totals = [];
 
         if ($this->selectedBatch) {
-            $this->totals = $totalsQuery
-                ->selectRaw("
-                    SUM(
-                        CASE
-                            WHEN clients.pic = 'ainul'
-                            THEN 1
-                            ELSE 0
-                        END
-                    ) as total_ai
-                ")
-                ->first();
+            consoleLog(
+                $this,
+                [
+                    $totalsQuery->toSql(),
+                    $totalsQuery->getBindings()
+                ]
+            );
+            consoleLog(
+                $this,
+                [
+                    $totalsQuery
+                        ->selectRaw("
+            SUM(
+                CASE
+                    WHEN clients.pic = 'ainul'
+                    THEN 1
+                    ELSE 0
+                END
+            ) as total_ai
+        ")
+                        ->first()
+                ]
+            );
+            // $this->totals = $totalsQuery
+            //     ->selectRaw("
+            //         SUM(
+            //             CASE
+            //                 WHEN clients.pic = 'ainul'
+            //                 THEN 1
+            //                 ELSE 0
+            //             END
+            //         ) as total_ai
+            //     ")
+            //     ->first();
             // $this->totals = $totalsQuery->select([
 
             //     // AI
