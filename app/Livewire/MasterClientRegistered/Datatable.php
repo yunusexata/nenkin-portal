@@ -473,6 +473,7 @@ class Datatable extends Component
                             </button>
                         </div>";
                     }
+
                     $esignHtml = '';
                     if ($item->esign_exists) {
                         $esignHtml = "<div class='col-auto'>
