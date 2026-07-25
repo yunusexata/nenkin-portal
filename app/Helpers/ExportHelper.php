@@ -61,6 +61,7 @@ class ExportHelper
             //             $table->addRow();
             //             foreach ($cols as $col) {
             //                 $table->addCell($col['width'], isset($col['option']) ? $col['option'] : null)->addText($col['value'], isset($col['text_style']) ? $col['text_style'] : null, isset($col['text_option']) ? $col['text_option'] : null);
+
             //             }
             //         }
             //     }
