@@ -422,14 +422,14 @@ class PreviewModal extends Component
         if ($this->selectedBatch) {
             $this->totals = $totalsQuery
                 ->selectRaw("
-        SUM(
-            CASE
-                WHEN clients.pic = 'ainul'
-                THEN 1
-                ELSE 0
-            END
-        ) as total_ai
-    ")
+                    SUM(
+                        CASE
+                            WHEN clients.pic = 'ainul'
+                            THEN 1
+                            ELSE 0
+                        END
+                    ) as total_ai
+                ")
                 ->first();
             // $this->totals = $totalsQuery->select([
 
