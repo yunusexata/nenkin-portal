@@ -279,7 +279,11 @@ class PreviewModal extends Component
                     $this->filter_claim_type,
                     $this->bulkPic
                 );
-                $query = $totalsQuery
+                $query = $this->baseQuery(
+                    $this->selectedBatch,
+                    $this->filter_claim_type,
+                    $this->bulkPic
+                )
                     ->select('clients.*')
                     ->selectRaw("
             EXISTS (
@@ -299,7 +303,11 @@ class PreviewModal extends Component
                     $this->filter_claim_type,
                     $this->bulkPic
                 );
-                $query = $totalsQuery
+                $query = $this->baseQuery(
+                    $this->selectedBatch,
+                    $this->filter_claim_type,
+                    $this->bulkPic
+                )
                     ->select('clients.*')
                     ->selectRaw("
             EXISTS (
@@ -319,7 +327,11 @@ class PreviewModal extends Component
                     $this->filter_claim_type,
                     $this->bulkPic
                 );
-                $query = $totalsQuery
+                $query = $this->baseQuery(
+                    $this->selectedBatch,
+                    $this->filter_claim_type,
+                    $this->bulkPic
+                )
                     ->select('clients.*')
                     ->selectRaw("
             EXISTS (
@@ -338,7 +350,11 @@ class PreviewModal extends Component
                     $this->filter_claim_type,
                     $this->bulkPic
                 );
-                $query = $totalsQuery
+                $query = $this->baseQuery(
+                    $this->selectedBatch,
+                    $this->filter_claim_type,
+                    $this->bulkPic
+                )
                     ->select('clients.*')
                     ->selectRaw("
             EXISTS (
@@ -359,7 +375,13 @@ class PreviewModal extends Component
                 $this->name,
                 true
             );
-            $query = $totalsQuery
+            $query = $this->baseQuery(
+                $this->selectedBatch,
+                $this->filter_claim_type,
+                $this->bulkPic,
+                $this->name,
+                true
+            )
                 ->select('clients.*')
                 ->selectRaw("
             EXISTS (
@@ -387,39 +409,61 @@ class PreviewModal extends Component
         // $totalsQuery->limit(null)->offset(null); // Clears any pagination limits
 
         // 3. Join the relationship tables
-        $totalsQuery->leftJoin('client_esigns', function ($j) {
-            $j->on('client_esigns.client_id', '=', 'clients.id')
-                ->whereNull('client_esigns.deleted_at');
-        });
+        // $totalsQuery->leftJoin('client_esigns', function ($j) {
+        //     $j->on('client_esigns.client_id', '=', 'clients.id')
+        //         ->whereNull('client_esigns.deleted_at');
+        // });
+
+        // dd($totalsQuery->count());
 
         // 4. Execute the conditional aggregation
-        // $this->totals = $totalsQuery->select([
+        $this->totals = $totalsQuery->select([
 
-        //     // AI
-        //     DB::raw("SUM(CASE WHEN clients.pic = 'ainul' THEN 1 ELSE 0 END) as total_ai"),
-        //     // MT
-        //     DB::raw("SUM(CASE WHEN clients.pic = 'kim' THEN 1 ELSE 0 END) as total_mt"),
-        //     // SN
-        //     DB::raw("SUM(CASE WHEN clients.pic = 'slamet' THEN 1 ELSE 0 END) as total_sn"),
+            // AI
+            DB::raw("SUM(CASE WHEN clients.pic = 'ainul' THEN 1 ELSE 0 END) as total_ai"),
+            // MT
+            DB::raw("SUM(CASE WHEN clients.pic = 'kim' THEN 1 ELSE 0 END) as total_mt"),
+            // SN
+            DB::raw("SUM(CASE WHEN clients.pic = 'slamet' THEN 1 ELSE 0 END) as total_sn"),
 
-        //     // KOKUMIN
-        //     DB::raw("SUM(CASE WHEN clients.claim_type = '" . Client::CLAIM_TYPE_KOKUMIN . "' THEN 1 ELSE 0 END) as total_kokumin"),
+            // KOKUMIN
+            DB::raw("SUM(CASE WHEN clients.claim_type = '" . Client::CLAIM_TYPE_KOKUMIN . "' THEN 1 ELSE 0 END) as total_kokumin"),
 
-        //     // PENDING
-        //     DB::raw("SUM(CASE WHEN client_confirmations.claim_type IN ('" . Client::CLAIM_TYPE_SPEED . "', '" . Client::CLAIM_TYPE_ADJUSTMENT . "') AND client_esigns.id IS NULL THEN 1 ELSE 0 END) as total_pending"),
+            // PENDING
+            DB::raw("SUM(CASE WHEN client_confirmations.claim_type IN ('" . Client::CLAIM_TYPE_SPEED . "', '" . Client::CLAIM_TYPE_ADJUSTMENT . "') AND  NOT EXISTS (
+                SELECT 1
+                FROM client_esigns ce
+                WHERE ce.client_id = clients.id
+                AND ce.deleted_at IS NULL
+            )
+             THEN 1 ELSE 0 END) as total_pending"),
 
-        //     // SPEED
-        //     DB::raw("SUM(CASE WHEN client_confirmations.claim_type = '" . Client::CLAIM_TYPE_SPEED . "' AND client_esigns.id IS NOT NULL THEN 1 ELSE 0 END) as total_speed"),
+            // SPEED
+            DB::raw("SUM(CASE WHEN client_confirmations.claim_type = '" . Client::CLAIM_TYPE_SPEED . "' 
+            AND EXISTS (
+                SELECT 1
+                FROM client_esigns ce
+                WHERE ce.client_id = clients.id
+                AND ce.deleted_at IS NULL
+            )
+             THEN 1 ELSE 0 END) as total_speed"),
 
-        //     // ADJUSTMENT
-        //     DB::raw("SUM(CASE WHEN client_confirmations.claim_type = '" . Client::CLAIM_TYPE_ADJUSTMENT . "' AND client_esigns.id IS NOT NULL THEN 1 ELSE 0 END) as total_adjustment"),
+            // ADJUSTMENT
+            DB::raw("SUM(CASE WHEN client_confirmations.claim_type = '" . Client::CLAIM_TYPE_ADJUSTMENT . "' 
+            AND EXISTS (
+                SELECT 1
+                FROM client_esigns ce
+                WHERE ce.client_id = clients.id
+                AND ce.deleted_at IS NULL
+            )
+             THEN 1 ELSE 0 END) as total_adjustment"),
 
-        //     // RE
-        //     DB::raw("SUM(CASE WHEN client_confirmations.claim_type = '" . Client::CLAIM_TYPE_NORMAL . "' AND client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_JEPANG . "' THEN 1 ELSE 0 END) as total_re"),
+            // RE
+            DB::raw("SUM(CASE WHEN client_confirmations.claim_type = '" . Client::CLAIM_TYPE_NORMAL . "' AND client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_JEPANG . "' THEN 1 ELSE 0 END) as total_re"),
 
-        //     // JPN
-        //     DB::raw("SUM(CASE WHEN clients.claim_type <> '" . Client::CLAIM_TYPE_KOKUMIN . "' AND client_confirmations.id IS NULL OR (client_confirmations.claim_type = '" . Client::CLAIM_TYPE_NORMAL . "' AND client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_INDONESIA . "' AND client_confirmations.back_to_jp_type = '" . ClientConfirmation::BACK_TO_JP_TYPE_YES . "') THEN 1 ELSE 0 END) as total_jpn"),
-        // ])->first();
+            // JPN
+            DB::raw("SUM(CASE WHEN clients.claim_type <> '" . Client::CLAIM_TYPE_KOKUMIN . "' AND client_confirmations.id IS NULL OR (client_confirmations.claim_type = '" . Client::CLAIM_TYPE_NORMAL . "' AND client_confirmations.current_position = '" . ClientConfirmation::CURRENT_POSITION_INDONESIA . "' AND client_confirmations.back_to_jp_type = '" . ClientConfirmation::BACK_TO_JP_TYPE_YES . "') THEN 1 ELSE 0 END) as total_jpn"),
+        ])->first();
         return $query ?? ClientClosingHistory::query();
     }
 
