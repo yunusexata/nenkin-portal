@@ -158,7 +158,7 @@ class PreviewModal extends Component
                 DB::raw("SUM(CASE WHEN clients.claim_type = '" . Client::CLAIM_TYPE_KOKUMIN . "' THEN 1 ELSE 0 END) as total_kokumin"),
 
                 // PENDING
-                DB::raw("SUM(CASE WHEN client_confirmations.claim_type IN ('" . Client::CLAIM_TYPE_SPEED . "', '" . Client::CLAIM_TYPE_ADJUSTMENT . "') AND  NOT EXISTS (
+                DB::raw("SUM(CASE WHEN client_confirmations.claim_type IN ('" . Client::CLAIM_TYPE_SPEED . "', '" . Client::CLAIM_TYPE_ADJUSTMENT . "') AND NOT EXISTS (
                 SELECT 1
                 FROM client_esigns ce
                 WHERE ce.client_id = clients.id

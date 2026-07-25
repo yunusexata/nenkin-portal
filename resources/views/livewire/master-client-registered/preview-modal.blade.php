@@ -94,6 +94,42 @@
                                 <!-- Footer Totals Section -->
                                 <div class="mt-8 pt-6 border-t border-gray-200 p-3">
                                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+
+                                        <!-- Speed Card -->
+                                        <div class="bg-white w-100 rounded-lg shadow-sm border border-gray-100 border-l-4 border-l-[#00ff3c] p-4 flex justify-between px-5">
+                                            <span class="text-3xl font-medium text-gray-500 uppercase">Speed</span>
+                                            <span class="text-4xl font-bold text-gray-800">{{ $totals['total_speed'] ?? 0 }}</span>
+                                        </div>
+                                        
+                                        <!-- Adjustment Card -->
+                                        <div class="bg-white w-100 rounded-lg shadow-sm border border-gray-100 border-l-4 border-l-[#fffb00] p-4 flex justify-between px-5">
+                                            <span class="text-3xl font-medium text-gray-500 uppercase">Adjustment</span>
+                                            <span class="text-4xl font-bold text-gray-800">{{ $totals['total_adjustment'] ?? 0 }}</span>
+                                        </div>
+                                        
+                                        <!-- Pending Card -->
+                                        <div class="bg-white w-100 rounded-lg shadow-sm border border-gray-100 border-l-4 border-l-[#465FFF] p-4 flex justify-between px-5">
+                                            <span class="text-3xl font-medium text-gray-500 uppercase">Pending</span>
+                                            <span class="text-4xl font-bold text-gray-800">{{ $totals['total_pending'] ?? 0 }}</span>
+                                        </div>
+
+                                        <!-- RE Card -->
+                                        <div class="bg-white w-100 rounded-lg shadow-sm border border-gray-100 border-l-4 border-l-[#ff9900] p-4 flex justify-between px-5">
+                                            <span class="text-3xl font-medium text-gray-500 uppercase">RE</span>
+                                            <span class="text-4xl font-bold text-gray-800">{{ $totals['total_re'] ?? 0 }}</span>
+                                        </div>
+                                        
+                                        <!-- JPN Card -->
+                                        <div class="bg-white w-100 rounded-lg shadow-sm border border-gray-100 border-l-4 border-l-[#ff0015] p-4 flex justify-between px-5">
+                                            <span class="text-3xl font-medium text-gray-500 uppercase">JPN</span>
+                                            <span class="text-4xl font-bold text-gray-800">{{ $totals['total_jpn'] ?? 0 }}</span>
+                                        </div>
+
+                                        <!-- Kokumin Card (Using Purple as a distinct color) -->
+                                        <div class="bg-white w-100 rounded-lg shadow-sm border border-gray-100 border-l-4 border-l-purple-500 p-4 flex justify-between px-5">
+                                            <span class="text-3xl font-medium text-gray-500 uppercase">Kokumin</span>
+                                            <span class="text-4xl font-bold text-gray-800">{{ $totals['total_kokumin'] ?? 0 }}</span>
+                                        </div>
                                         
                                         <!-- AI Card -->
                                         <div class="bg-white w-100 rounded-lg shadow-sm border border-gray-100 border-l-4 border-l-[#465FFF] p-4 flex justify-between px-5">
@@ -111,41 +147,6 @@
                                         <div class="bg-white w-100 rounded-lg shadow-sm border border-gray-100 border-l-4 border-l-[#ff0015] p-4 flex justify-between px-5">
                                             <span class="text-3xl font-medium text-gray-500 uppercase">SN</span>
                                             <span class="text-4xl font-bold text-gray-800">{{ $totals['total_sn'] ?? 0 }}</span>
-                                        </div>
-                                        <!-- Pending Card -->
-                                        <div class="bg-white w-100 rounded-lg shadow-sm border border-gray-100 border-l-4 border-l-[#465FFF] p-4 flex justify-between px-5">
-                                            <span class="text-3xl font-medium text-gray-500 uppercase">Pending</span>
-                                            <span class="text-4xl font-bold text-gray-800">{{ $totals['total_pending'] ?? 0 }}</span>
-                                        </div>
-
-                                        <!-- Speed Card -->
-                                        <div class="bg-white w-100 rounded-lg shadow-sm border border-gray-100 border-l-4 border-l-[#00ff3c] p-4 flex justify-between px-5">
-                                            <span class="text-3xl font-medium text-gray-500 uppercase">Speed</span>
-                                            <span class="text-4xl font-bold text-gray-800">{{ $totals['total_speed'] ?? 0 }}</span>
-                                        </div>
-
-                                        <!-- JPN Card -->
-                                        <div class="bg-white w-100 rounded-lg shadow-sm border border-gray-100 border-l-4 border-l-[#ff0015] p-4 flex justify-between px-5">
-                                            <span class="text-3xl font-medium text-gray-500 uppercase">JPN</span>
-                                            <span class="text-4xl font-bold text-gray-800">{{ $totals['total_jpn'] ?? 0 }}</span>
-                                        </div>
-
-                                        <!-- RE Card -->
-                                        <div class="bg-white w-100 rounded-lg shadow-sm border border-gray-100 border-l-4 border-l-[#ff9900] p-4 flex justify-between px-5">
-                                            <span class="text-3xl font-medium text-gray-500 uppercase">RE</span>
-                                            <span class="text-4xl font-bold text-gray-800">{{ $totals['total_re'] ?? 0 }}</span>
-                                        </div>
-
-                                        <!-- Adjustment Card -->
-                                        <div class="bg-white w-100 rounded-lg shadow-sm border border-gray-100 border-l-4 border-l-[#fffb00] p-4 flex justify-between px-5">
-                                            <span class="text-3xl font-medium text-gray-500 uppercase">Adjustment</span>
-                                            <span class="text-4xl font-bold text-gray-800">{{ $totals['total_adjustment'] ?? 0 }}</span>
-                                        </div>
-
-                                        <!-- Kokumin Card (Using Purple as a distinct color) -->
-                                        <div class="bg-white w-100 rounded-lg shadow-sm border border-gray-100 border-l-4 border-l-purple-500 p-4 flex justify-between px-5">
-                                            <span class="text-3xl font-medium text-gray-500 uppercase">Kokumin</span>
-                                            <span class="text-4xl font-bold text-gray-800">{{ $totals['total_kokumin'] ?? 0 }}</span>
                                         </div>
 
                                     </div>
