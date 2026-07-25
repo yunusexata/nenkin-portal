@@ -92,45 +92,45 @@ class PreviewModal extends Component
     // }
     public function getQuery(): Builder
     {
-        // $query = ClientClosingHistory::query();
-        // if ($this->type == 'fix') {
-        //     if ($this->name == 'registered') {
-        //         $query = ClientRepository::getClientRegistered(
-        //             $this->selectedBatch,
-        //             $this->filter_claim_type,
-        //             $this->bulkPic
-        //         );
-        //     }
-        //     if ($this->name === 'unclosed') {
-        //         $query = ClientRepository::getClientUnclosing(
-        //             $this->selectedBatch,
-        //             $this->filter_claim_type,
-        //             $this->bulkPic
-        //         );
-        //     }
-        //     if ($this->name === 'unconfirmed') {
-        //         $query = ClientRepository::getClientUnregistered(
-        //             $this->selectedBatch,
-        //             $this->filter_claim_type,
-        //             $this->bulkPic
-        //         );
-        //     }
-        //     if ($this->name === 'kokumin') {
-        //         $query = ClientRepository::getClientKokumin(
-        //             $this->selectedBatch,
-        //             $this->filter_claim_type,
-        //             $this->bulkPic
-        //         );
-        //     }
-        // } else {
-        $query = ClientRepository::getClientRegistered(
-            $this->selectedBatch,
-            $this->filter_claim_type,
-            $this->bulkPic,
-            $this->name,
-            true
-        );
-        // }
+        $query = ClientClosingHistory::query();
+        if ($this->type == 'fix') {
+            if ($this->name == 'registered') {
+                $query = ClientRepository::getClientRegistered(
+                    $this->selectedBatch,
+                    $this->filter_claim_type,
+                    $this->bulkPic
+                );
+            }
+            if ($this->name === 'unclosed') {
+                $query = ClientRepository::getClientUnclosing(
+                    $this->selectedBatch,
+                    $this->filter_claim_type,
+                    $this->bulkPic
+                );
+            }
+            if ($this->name === 'unconfirmed') {
+                $query = ClientRepository::getClientUnregistered(
+                    $this->selectedBatch,
+                    $this->filter_claim_type,
+                    $this->bulkPic
+                );
+            }
+            if ($this->name === 'kokumin') {
+                $query = ClientRepository::getClientKokumin(
+                    $this->selectedBatch,
+                    $this->filter_claim_type,
+                    $this->bulkPic
+                );
+            }
+        } else {
+            $query = ClientRepository::getClientRegistered(
+                $this->selectedBatch,
+                $this->filter_claim_type,
+                $this->bulkPic,
+                $this->name,
+                true
+            );
+        }
         // $query->join('client_esigns', function ($j) {
         //     $j->on('client_esigns.client_id', '=', 'clients.id')
         //         ->whereNull('client_esigns.deleted_at');
