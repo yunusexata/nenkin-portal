@@ -359,3 +359,21 @@
         </div>
         
     </div>
+
+    @push('scripts')
+        <script>
+            
+        Livewire.on('showEsign', (data) => {
+            Swal.fire({
+                title: "E-Sign",
+                icon: "info",
+                html: `
+                    <img id="preview" src="`+data+`">
+                `,
+                showCloseButton: true,
+                showCancelButton: false,
+                focusConfirm: false,    
+            });
+        });
+        </script>
+    @endpush

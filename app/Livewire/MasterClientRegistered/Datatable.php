@@ -473,9 +473,17 @@ class Datatable extends Component
                             </button>
                         </div>";
                     }
+                    $esignHtml = '';
+                    if ($item->esign_exists) {
+                        $esignHtml = "<div class='col-auto'>
+                                <button type='button' class='inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-2 py-1 text-sm bg-success-500 text-white shadow-theme-xs hover:bg-red-600 disabled:bg-brand-300' wire:click=\"dispatch('showEsign', '" . $item?->esign?->signature_data . "')\">
+                                    <span class='material-symbols-outlined text-lg' data-icon='signature'>signature</span>
+                                </button>
+                            </div>";
+                    }
 
                     $html = "<div class='flex flex-nowrap justify-start p-0 m-0 gap-1'>
-                        $destroyHtml
+                        $destroyHtml $esignHtml
                     </div>";
 
                     return $html;

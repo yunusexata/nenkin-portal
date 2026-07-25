@@ -148,7 +148,6 @@
                                             <span class="text-3xl font-medium text-gray-500 uppercase">SN</span>
                                             <span class="text-4xl font-bold text-gray-800">{{ $totals['total_sn'] ?? 0 }}</span>
                                         </div>
-
                                     </div>
                                 </div>
 
