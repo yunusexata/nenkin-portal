@@ -270,130 +270,169 @@ class PreviewModal extends Component
     }
     public function getQuery(): Builder
     {
-        $totalsQuery = ClientClosingHistory::query();
-        $query = $totalsQuery;
+        // $totalsQuery = ClientClosingHistory::query();
+        // $query = $totalsQuery;
+        // if ($this->type == 'fix') {
+        //     if ($this->name == 'registered') {
+        //         $totalsQuery = $this->baseQuery(
+        //             $this->selectedBatch,
+        //             $this->filter_claim_type,
+        //             $this->bulkPic
+        //         );
+        //         $query = $this->baseQuery(
+        //             $this->selectedBatch,
+        //             $this->filter_claim_type,
+        //             $this->bulkPic
+        //         )
+        //             ->select('clients.*')
+        //             ->selectRaw("
+        //     EXISTS (
+        //         SELECT 1
+        //         FROM client_esigns
+        //         WHERE client_esigns.client_id = clients.id
+        //             AND client_esigns.deleted_at IS NULL
+        //     ) as esign_exists
+        // ")
+        //             ->orderByDesc('clients.is_exported')
+        //             ->orderBy('clients.exported_at', 'ASC')
+        //             ->orderByDesc('clients.no_jp');
+        //     }
+        //     if ($this->name === 'unclosed') {
+        //         $totalsQuery = $this->baseQuery(
+        //             $this->selectedBatch,
+        //             $this->filter_claim_type,
+        //             $this->bulkPic
+        //         );
+        //         $query = $this->baseQuery(
+        //             $this->selectedBatch,
+        //             $this->filter_claim_type,
+        //             $this->bulkPic
+        //         )
+        //             ->select('clients.*')
+        //             ->selectRaw("
+        //     EXISTS (
+        //         SELECT 1
+        //         FROM client_esigns
+        //         WHERE client_esigns.client_id = clients.id
+        //             AND client_esigns.deleted_at IS NULL
+        //     ) as esign_exists
+        // ")
+        //             ->orderByDesc('clients.is_exported')
+        //             ->orderBy('clients.exported_at', 'ASC')
+        //             ->orderByDesc('clients.no_jp');
+        //     }
+        //     if ($this->name === 'unconfirmed') {
+        //         $totalsQuery = $this->baseQuery(
+        //             $this->selectedBatch,
+        //             $this->filter_claim_type,
+        //             $this->bulkPic
+        //         );
+        //         $query = $this->baseQuery(
+        //             $this->selectedBatch,
+        //             $this->filter_claim_type,
+        //             $this->bulkPic
+        //         )
+        //             ->select('clients.*')
+        //             ->selectRaw("
+        //     EXISTS (
+        //         SELECT 1
+        //         FROM client_esigns
+        //         WHERE client_esigns.client_id = clients.id
+        //             AND client_esigns.deleted_at IS NULL
+        //     ) as esign_exists
+        // ")
+        //             ->orderByDesc('clients.is_exported')
+        //             ->orderByDesc('clients.no_jp');
+        //     }
+        //     if ($this->name === 'kokumin') {
+        //         $totalsQuery = $this->baseQuery(
+        //             $this->selectedBatch,
+        //             $this->filter_claim_type,
+        //             $this->bulkPic
+        //         );
+        //         $query = $this->baseQuery(
+        //             $this->selectedBatch,
+        //             $this->filter_claim_type,
+        //             $this->bulkPic
+        //         )
+        //             ->select('clients.*')
+        //             ->selectRaw("
+        //     EXISTS (
+        //         SELECT 1
+        //         FROM client_esigns
+        //         WHERE client_esigns.client_id = clients.id
+        //             AND client_esigns.deleted_at IS NULL
+        //     ) as esign_exists
+        // ")
+        //             ->orderByDesc('clients.is_exported')
+        //             ->orderByDesc('clients.no_jp');
+        //     }
+        // } else {
+        //     $totalsQuery = $this->baseQuery(
+        //         $this->selectedBatch,
+        //         $this->filter_claim_type,
+        //         $this->bulkPic,
+        //         $this->name,
+        //         true
+        //     );
+        //     $query = $this->baseQuery(
+        //         $this->selectedBatch,
+        //         $this->filter_claim_type,
+        //         $this->bulkPic,
+        //         $this->name,
+        //         true
+        //     )
+        //         ->select('clients.*')
+        //         ->selectRaw("
+        //     EXISTS (
+        //         SELECT 1
+        //         FROM client_esigns
+        //         WHERE client_esigns.client_id = clients.id
+        //             AND client_esigns.deleted_at IS NULL
+        //     ) as esign_exists
+        // ")
+        //         ->orderByDesc('clients.is_exported')
+        //         ->orderByDesc('client_confirmations.claim_type', 'DESC')
+        //         ->orderByDesc('clients.no_jp');
+        // }
+        $query = ClientClosingHistory::query();
         if ($this->type == 'fix') {
             if ($this->name == 'registered') {
-                $totalsQuery = $this->baseQuery(
+                $query = ClientRepository::getClientRegistered(
                     $this->selectedBatch,
                     $this->filter_claim_type,
                     $this->bulkPic
                 );
-                $query = $this->baseQuery(
-                    $this->selectedBatch,
-                    $this->filter_claim_type,
-                    $this->bulkPic
-                )
-                    ->select('clients.*')
-                    ->selectRaw("
-            EXISTS (
-                SELECT 1
-                FROM client_esigns
-                WHERE client_esigns.client_id = clients.id
-                    AND client_esigns.deleted_at IS NULL
-            ) as esign_exists
-        ")
-                    ->orderByDesc('clients.is_exported')
-                    ->orderBy('clients.exported_at', 'ASC')
-                    ->orderByDesc('clients.no_jp');
             }
             if ($this->name === 'unclosed') {
-                $totalsQuery = $this->baseQuery(
+                $query = ClientRepository::getClientUnclosing(
                     $this->selectedBatch,
                     $this->filter_claim_type,
                     $this->bulkPic
                 );
-                $query = $this->baseQuery(
-                    $this->selectedBatch,
-                    $this->filter_claim_type,
-                    $this->bulkPic
-                )
-                    ->select('clients.*')
-                    ->selectRaw("
-            EXISTS (
-                SELECT 1
-                FROM client_esigns
-                WHERE client_esigns.client_id = clients.id
-                    AND client_esigns.deleted_at IS NULL
-            ) as esign_exists
-        ")
-                    ->orderByDesc('clients.is_exported')
-                    ->orderBy('clients.exported_at', 'ASC')
-                    ->orderByDesc('clients.no_jp');
             }
             if ($this->name === 'unconfirmed') {
-                $totalsQuery = $this->baseQuery(
+                $query = ClientRepository::getClientUnregistered(
                     $this->selectedBatch,
                     $this->filter_claim_type,
                     $this->bulkPic
                 );
-                $query = $this->baseQuery(
-                    $this->selectedBatch,
-                    $this->filter_claim_type,
-                    $this->bulkPic
-                )
-                    ->select('clients.*')
-                    ->selectRaw("
-            EXISTS (
-                SELECT 1
-                FROM client_esigns
-                WHERE client_esigns.client_id = clients.id
-                    AND client_esigns.deleted_at IS NULL
-            ) as esign_exists
-        ")
-                    ->orderByDesc('clients.is_exported')
-                    ->orderByDesc('clients.no_jp');
             }
             if ($this->name === 'kokumin') {
-                $totalsQuery = $this->baseQuery(
+                $query = ClientRepository::getClientKokumin(
                     $this->selectedBatch,
                     $this->filter_claim_type,
                     $this->bulkPic
                 );
-                $query = $this->baseQuery(
-                    $this->selectedBatch,
-                    $this->filter_claim_type,
-                    $this->bulkPic
-                )
-                    ->select('clients.*')
-                    ->selectRaw("
-            EXISTS (
-                SELECT 1
-                FROM client_esigns
-                WHERE client_esigns.client_id = clients.id
-                    AND client_esigns.deleted_at IS NULL
-            ) as esign_exists
-        ")
-                    ->orderByDesc('clients.is_exported')
-                    ->orderByDesc('clients.no_jp');
             }
         } else {
-            $totalsQuery = $this->baseQuery(
+            $query = ClientRepository::getClientRegistered(
                 $this->selectedBatch,
                 $this->filter_claim_type,
                 $this->bulkPic,
                 $this->name,
                 true
             );
-            $query = $this->baseQuery(
-                $this->selectedBatch,
-                $this->filter_claim_type,
-                $this->bulkPic,
-                $this->name,
-                true
-            )
-                ->select('clients.*')
-                ->selectRaw("
-            EXISTS (
-                SELECT 1
-                FROM client_esigns
-                WHERE client_esigns.client_id = clients.id
-                    AND client_esigns.deleted_at IS NULL
-            ) as esign_exists
-        ")
-                ->orderByDesc('clients.is_exported')
-                ->orderByDesc('client_confirmations.claim_type', 'DESC')
-                ->orderByDesc('clients.no_jp');
         }
         // $query->join('client_esigns', function ($j) {
         //     $j->on('client_esigns.client_id', '=', 'clients.id')
@@ -412,6 +451,13 @@ class PreviewModal extends Component
         //     $j->on('client_esigns.client_id', '=', 'clients.id')
         //         ->whereNull('client_esigns.deleted_at');
         // });
+
+        $totalsQuery = clone $query;
+
+        // // 2. FIX: Strip out conflicting clauses from the original query
+        $totalsQuery->setEagerLoads([]); // Remove relationships to save memory
+        $totalsQuery->reorder();         // Clears the "ORDER BY clients.is_exported"
+        $totalsQuery->limit(null)->offset(null); // Clears any pagination limits
 
         // dd($totalsQuery->count());
 
@@ -442,18 +488,18 @@ class PreviewModal extends Component
             //                 ->first()
             //         ]
             //     );
-            $result = $totalsQuery
-                ->selectRaw("
-                    SUM(
-                        CASE
-                            WHEN clients.pic = 'ainul'
-                            THEN 1
-                            ELSE 0
-                        END
-                    ) as total_ai
-                ")
-                ->first();
-            $this->totals = $totalsQuery->select([
+            // $result = $totalsQuery
+            //     ->selectRaw("
+            //         SUM(
+            //             CASE
+            //                 WHEN clients.pic = 'ainul'
+            //                 THEN 1
+            //                 ELSE 0
+            //             END
+            //         ) as total_ai
+            //     ")
+            //     ->first();
+            $result = $totalsQuery->select([
 
                 // AI
                 DB::raw("SUM(CASE WHEN clients.pic = 'ainul' THEN 1 ELSE 0 END) as total_ai"),
