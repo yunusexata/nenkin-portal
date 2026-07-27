@@ -54,8 +54,34 @@
                 $isNumberFormat = $request['type'] == App\Helpers\ExportHelper::TYPE_PDF;
             @endphp
             @if ($collection)
+                @php
+                    $total_ai = 0;
+                    $total_mt = 0;
+                    $total_sn = 0;
+
+                    $total_jpn = 0;
+                    $total_re = 0;
+                    $total_speed = 0;
+                    $total_adjusment = 0;
+                    $total_pending = 0;
+                    $total_kokumin = 0;
+                @endphp
                 @foreach ($collection as $index => $data)
                     @php
+                        switch (mb_strtoupper($data['pic'])) {
+                            case mb_strtoupper('ainul'):
+                                $total_ai++;
+                                break;
+                            case mb_strtoupper('kim'):
+                                $total_mt++;
+                                break;
+                            case mb_strtoupper('slamet'):
+                                $total_sn++;
+                                break;
+                            default:
+                                # code...
+                                break;
+                        }
                         /*
                          * Colour matrix:
                          * SPEED                                           → green  #00ff3c
@@ -68,24 +94,47 @@
                         $claimType       = $data?->confirmation?->claim_type ?? '';
                         $currentPosition = $data->confirmation?->current_position;
                         $backToJpType    = $data->confirmation?->back_to_jp_type;
-                        if(in_array($claimType, [
+                        if($data->claim_type === App\Models\Client\Client::CLAIM_TYPE_KOKUMIN){
+                            $rowColor = '#FF00FF';
+                            $total_kokumin++;
+                        }elseif(in_array($claimType, [
                             App\Models\Client\Client::CLAIM_TYPE_SPEED,
                             App\Models\Client\Client::CLAIM_TYPE_ADJUSTMENT
                         ]) && !$data?->esign
                         ){
                             $rowColor = '#465FFF';
+                            $total_pending++;
                         }elseif ($claimType === App\Models\Client\Client::CLAIM_TYPE_SPEED) {
                             $rowColor = '#00ff3c'; // hijau
+                            $total_speed++;
                         } elseif ($claimType === App\Models\Client\Client::CLAIM_TYPE_ADJUSTMENT) {
                             $rowColor = '#fffb00'; // kuning
+                            $total_adjusment;
                         } elseif ($claimType === App\Models\Client\Client::CLAIM_TYPE_NORMAL) {
                             if ($currentPosition === App\Models\Client\ClientConfirmation::CURRENT_POSITION_JEPANG) {
                                 $rowColor = '#ff9900'; // orange — sudah di jepang
+                                $total_jpn++;
                             } elseif (
                                 $currentPosition === App\Models\Client\ClientConfirmation::CURRENT_POSITION_INDONESIA
                                 && $backToJpType === App\Models\Client\ClientConfirmation::BACK_TO_JP_TYPE_YES
                             ) {
                                 $rowColor = '#ff0015'; // merah — akan kembali ke jepang
+                                $total_re++;
+                            }
+                        }else{
+                            switch (mb_strtoupper($data['pic'])) {
+                                case mb_strtoupper('ainul'):
+                                    $total_ai++;
+                                    break;
+                                case mb_strtoupper('kim'):
+                                    $total_mt++;
+                                    break;
+                                case mb_strtoupper('slamet'):
+                                    $total_sn++;
+                                    break;
+                                default:
+                                    # code...
+                                    break;
                             }
                         }
 
@@ -139,6 +188,65 @@
                         <td style="{{ $rowStyle }}">{{ $data['is_exported'] ? 'EXPORTED' : 'UN-EXPORTED' }}</td><td style="{{ $rowStyle }}">{{ $data['exported_at'] ? Carbon\Carbon::parse($data['exported_at'])->format('Ymd H:i:s') : '-' }}</td>
                     </tr>
                 @endforeach
+                <tr>
+                </tr>
+                <tr>
+                </tr>
+                <tr>
+                </tr>
+                <tr>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="text-align: center; background-color:#FFCCFF">PIC</td>
+                    <td style="text-align: center; background-color:#FFCCFF">TOTAL</td>
+                </tr>
+                <tr style="text-align: center; background-color:#">
+                    <td style="text-align: center; background-color:#"></td>
+                    <td style="text-align: center; background-color:#FF00FF">AI</td>
+                    <td style="text-align: center; background-color:#">{{ $total_ai }}</td>
+                </tr>
+                <tr style="text-align: center; background-color:#">
+                    <td style="text-align: center; background-color:#"></td>
+                    <td style="text-align: center; background-color:#FF00FF">MT</td>
+                    <td style="text-align: center; background-color:#">{{ $total_mt }}</td>
+                </tr>
+                <tr style="text-align: center; background-color:#">
+                    <td style="text-align: center; background-color:#"></td>
+                    <td style="text-align: center; background-color:#FF00FF">SN</td>
+                    <td style="text-align: center; background-color:#">{{ $total_sn }}</td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;"></td>
+                    <td style="text-align: center;">TOTAL</td>
+                    <td style="text-align: center;">{{ $total_ai + $total_mt + $total_sn }}</td>
+                </tr>
+                <tr></tr>
+                <tr>
+                    <td></td>
+                    <td style="text-align: center; background-color:#FF9900">JPN</td>
+                    <td style="text-align: center; background-color:#FF9900">{{ $total_jpn }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="text-align: center; background-color:#FF0000">RE-ENTRY</td>
+                    <td style="text-align: center; background-color:#FF0000">{{ $total_re }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="text-align: center; background-color:#00FF00">SPEED</td>
+                    <td style="text-align: center; background-color:#00FF00">{{ $total_speed }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="text-align: center; background-color:#FFFF00">SPEED ADJUSMENT</td>
+                    <td style="text-align: center; background-color:#FFFF00">{{ $total_adjusment }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td style="text-align: center; background-color:#FF00FF">KOKUMIN</td>
+                    <td style="text-align: center; background-color:#FF00FF">{{ $total_kokumin }}</td>
+                </tr>
             @endif
         </tbody>
     </table>
