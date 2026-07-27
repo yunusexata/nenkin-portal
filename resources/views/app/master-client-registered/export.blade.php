@@ -109,7 +109,7 @@
                             $total_speed++;
                         } elseif ($claimType === App\Models\Client\Client::CLAIM_TYPE_ADJUSTMENT) {
                             $rowColor = '#fffb00'; // kuning
-                            $total_adjusment;
+                            $total_adjusment++;
                         } elseif ($claimType === App\Models\Client\Client::CLAIM_TYPE_NORMAL) {
                             if ($currentPosition === App\Models\Client\ClientConfirmation::CURRENT_POSITION_JEPANG) {
                                 $rowColor = '#ff9900'; // orange — sudah di jepang
