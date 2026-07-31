@@ -35,11 +35,11 @@ Route::post('/lw-test', function (\Illuminate\Http\Request $request) {
     return response()->json(['ok' => true]);
 });
 
-Route::get('/dev-login', function () {
-    $user = \App\Models\User::first();
-    auth()->login($user);
-    return redirect('/admin/documents');
-});
+// Route::get('/dev-login', function () {
+//     $user = \App\Models\User::first();
+//     auth()->login($user);
+//     return redirect('/admin/documents');
+// });
 
 
 // Route::get('/generate-ai', function () {
