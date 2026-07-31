@@ -27,15 +27,15 @@ class DocumentAvailableNotification extends Mailable
     public function content(): Content
     {
         logger('mail document available created');
-        
+
         $data = json_decode($this->log->data, true);
         $clientName = $data['client_name'] ?? 'Klien';
-        
+
         return new Content(
             view: 'emails.document_available',
             with: [
                 'clientName' => $clientName,
-                'dashboardUrl' => config('app.url') . '/client/dashboard',
+                'dashboardUrl' => config('app.url') . '/dashboard',
                 'reviewUrl' => config('exata.google_review_url'),
             ],
         );
