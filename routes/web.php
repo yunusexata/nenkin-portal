@@ -85,6 +85,9 @@ Route::middleware(['auth', 'access_permission', 'esign_required'])->group(functi
     Route::group(["controller" => DashboardController::class, "prefix" => "dashboard", "as" => "dashboard."], function () {
         Route::get('/', 'index')->name('index');
     });
+    Route::group(["controller" => DashboardController::class, "prefix" => "client/dashboard", "as" => "dashboard."], function () {
+        Route::get('/', 'index')->name('index');
+    });
 });
 
 // Client Routes
