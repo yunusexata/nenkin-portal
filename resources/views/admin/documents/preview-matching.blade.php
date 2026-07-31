@@ -35,16 +35,26 @@
     @endif
 
     <!-- Section A: Files successfully matched -->
-    <div class="bg-white dark:bg-gray-850 rounded-xl shadow border border-gray-200 dark:border-gray-800 p-6 mb-6">
-        <div class="flex items-center justify-between mb-4 border-b border-gray-100 dark:border-gray-850 pb-3">
-            <div class="flex items-center space-x-2">
-                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-green-500 text-white text-xs font-bold">A</span>
-                <h3 class="text-lg font-bold text-gray-800 dark:text-white">Section A — File Berhasil Match / Siap Upload ({{ count($matchedFiles) }})</h3>
+    <details class="group bg-white dark:bg-gray-850 rounded-xl shadow border border-gray-200 dark:border-gray-800 mb-6">
+        <!-- Header / Toggle -->
+        <summary class="p-6 cursor-pointer list-none">
+            <div class="flex items-center justify-between border-b border-gray-100 dark:border-gray-850 pb-3 group-open:mb-4">
+                <div class="flex items-center space-x-2">
+                    <span class="flex items-center justify-center w-6 h-6 rounded-full bg-green-500 text-white text-xs font-bold">A</span>
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-white">Section A — File Berhasil Match / Siap Upload ({{ count($matchedFiles) }})</h3>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-xs text-gray-400">Akan diunggah ke folder klien terkait</span>
+                    <!-- Chevron Icon for visual feedback -->
+                    <svg class="w-5 h-5 text-gray-500 transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
             </div>
-            <span class="text-xs text-gray-400">Akan diunggah ke folder klien terkait</span>
-        </div>
+        </summary>
 
-        <div class="overflow-x-auto">
+        <!-- Collapsible Content -->
+        <div class="px-6 pb-6 overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
                 <thead class="bg-gray-50 dark:bg-gray-800/50">
                     <tr>
@@ -89,7 +99,7 @@
                 </tbody>
             </table>
         </div>
-    </div>
+    </details>
 
     <!-- Section B: Perlu Perhatian -->
     <div class="mb-6">
