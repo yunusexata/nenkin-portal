@@ -19,12 +19,18 @@ class SocialLoginController extends Controller
     // Redirect the user to the Google authentication page
     public function redirect($provider)
     {
+        if (!in_array($provider, ['google'])) {
+            return redirect('/login')->with('error', 'Login tidak berhasil.');
+        }
         return Socialite::driver($provider)->redirect();
     }
 
     // Handle the callback from Google
     public function callback($provider)
     {
+        if (!in_array($provider, ['google'])) {
+            return redirect('/login')->with('error', 'Login tidak berhasil.');
+        }
         try {
             $socialUser = Socialite::driver($provider)->user();
             // 1. Check for the new array session key
@@ -39,7 +45,9 @@ class SocialLoginController extends Controller
             if (!$user) {
                 return redirect('/login')->with('error', 'Akun tidak ditemukan. Silakan register terlebih dahulu.');
             }
+
             Auth::login($user);
+            session()->regenerate();
             return redirect()->intended('/dashboard');
         } catch (\Exception $e) {
             // Log the error or handle it gracefully
