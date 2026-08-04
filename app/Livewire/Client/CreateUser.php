@@ -21,18 +21,13 @@ class CreateUser extends Component
 {
 
     public $token;
-    #[Validate('required', message: 'Nama Lengkap Harus Diisi', onUpdate: false)]
     public $name;
-    #[Validate('required', message: 'Tanggal Lahir Harus Diisi', onUpdate: false)]
     public $dob;
-    #[Validate('required', message: 'Email Harus Diisi', onUpdate: false)]
-    #[Validate('email', message: "Format Email Tidak Sesuai", onUpdate: false)]
     public $email;
-    #[Validate('required', message: 'Password Harus Diisi', onUpdate: false)]
     public $password;
-    #[Validate('required', message: 'Ketik Ulang Password Harus Diisi', onUpdate: false)]
     public $retypePassword;
 
+    public $is_verified = false;
 
     public function mount()
     {
@@ -50,9 +45,66 @@ class CreateUser extends Component
         }
     }
 
+    public function verify()
+    {
+
+        $validated = $this->validate([
+            'name' => ['required'],
+            'dob' => ['required'],
+        ], [
+            'name.required' => 'Nama Lengkap Harus Diisi',
+            'dob.required' => 'Tanggal Lahir Harus Diisi',
+        ]);
+
+        $magicLink = ClientMagicLinkRepository::findBy([
+            ['token', $this->token]
+        ]);
+
+        if (!$magicLink || !$magicLink->client) {
+            Alert::fail($this, 'Register Gagal', 'Token tidak valid.');
+            return;
+        }
+
+        $client = $magicLink->client;
+
+        $nameMatched = mb_strtolower(trim($client->name)) === mb_strtolower(trim($this->name));
+        $dobMatched = \Carbon\Carbon::parse($client->dob)->isSameDay(\Carbon\Carbon::parse($this->dob));
+
+        if (! $nameMatched || ! $dobMatched) {
+            Alert::fail($this, 'Register Gagal', 'Akun Tidak Sesuai, hubungi PIC');
+            return;
+        }
+
+        // Save the array of data into the session
+        session([
+            'pending_magic_link_data' => [
+                'token' => $this->token,
+                'name'  => $this->name,
+                'dob'   => $this->dob,
+            ]
+        ]);
+
+        $this->is_verified = true;
+    }
+
+    public function registerWithGoogle()
+    {
+        return redirect()->route('auth.socialite.redirect', 'google');
+    }
+
     public function store()
     {
-        $this->validate();
+        $validated = $this->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+            'retypePassword' => ['required', 'same:password'],
+        ], [
+            'email.required' => 'Email Harus Diisi',
+            'email.email' => 'Format Email Tidak Sesuai',
+            'password.required' => 'Password Harus Diisi',
+            'retypePassword.required' => 'Ketik Ulang Password Harus Diisi',
+            'retypePassword.same' => 'Password tidak sama',
+        ]);
 
         $client = ClientMagicLinkRepository::findBy([
             ['token', $this->token]

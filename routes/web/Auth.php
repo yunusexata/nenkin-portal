@@ -5,11 +5,17 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Auth\SocialLoginController;
+
+// Socialite Routes
+Route::get('/auth/{provider}/redirect', [SocialLoginController::class, 'redirect'])->name('auth.socialite.redirect');
+Route::get('/auth/{provider}/callback', [SocialLoginController::class, 'callback'])->name('auth.socialite.callback');
+
 Route::middleware('guest')->group(function () {
     Route::get('/', [AuthController::class, 'login']);
     Route::get("/login", [AuthController::class, "login"])->name("login");
     Route::get("/logout", [AuthController::class, "logout"])->name('signout');
-    
+
     // Client Forgot Password Routes
     Route::get('/forgot-password', [ForgotPasswordController::class, 'show'])->name('password.request');
     Route::post('/forgot-password', [ForgotPasswordController::class, 'send'])->middleware('throttle:3,1')->name('password.email');

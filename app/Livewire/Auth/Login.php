@@ -18,6 +18,12 @@ class Login extends Component
     #[Validate('required', message: 'Password Harus Diisi', onUpdate: false)]
     public $password;
 
+
+    public function registerWithGoogle()
+    {
+        return redirect()->route('auth.socialite.redirect', 'google');
+    }
+
     public function store()
     {
         $this->validate();
