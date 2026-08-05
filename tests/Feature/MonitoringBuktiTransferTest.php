@@ -238,4 +238,13 @@ test('excel export respects pic scoping and contains consistent status', functio
 
     expect($exportedData->pluck('name'))->toContain('Client Ainul');
     expect($exportedData->pluck('name'))->not->toContain('Client Slamet');
+
+    // Assert that the compiled export view contains the data (not empty due to array cast bug)
+    $viewHtml = view('app.monitoring-bukti-transfer.export', [
+        'collection' => $exportedData,
+        'request' => ['documentType' => 'all']
+    ])->render();
+
+    expect($viewHtml)->toContain('Client Ainul');
+    expect($viewHtml)->not->toContain('Client Slamet');
 });

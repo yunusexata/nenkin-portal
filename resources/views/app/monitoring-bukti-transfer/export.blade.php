@@ -15,15 +15,14 @@
     <tbody>
         @foreach ($collection as $index => $item)
             @php
-                $itemArray = (array)$item;
-                $status = $itemArray['status'] ?? 'not_downloaded';
-                $pic = $itemArray['pic'] ?? null;
-                $source_file_name = $itemArray['source_file_name'] ?? null;
-                $client_closing_batch_number = $itemArray['client_closing_batch_number'] ?? null;
-                $document_type = $itemArray['document_type'] ?? null;
-                $last_downloaded_at = $itemArray['last_downloaded_at'] ?? null;
-                $no_jp = $itemArray['no_jp'] ?? null;
-                $name = $itemArray['name'] ?? '';
+                $status = $item->status ?? 'not_downloaded';
+                $pic = $item->pic ?? null;
+                $source_file_name = $item->source_file_name ?? null;
+                $client_closing_batch_number = $item->client_closing_batch_number ?? null;
+                $document_type = $item->document_type ?? null;
+                $last_downloaded_at = $item->last_downloaded_at ?? null;
+                $no_jp = $item->no_jp ?? null;
+                $name = $item->name ?? '';
 
                 $statusText = match($status) {
                     'downloaded' => 'Mendownload',
@@ -56,7 +55,3 @@
     </tbody>
 </table>
 
-<div style="margin-top: 15px; font-size: 11px; color: #555;">
-    <p><strong>Keterangan:</strong></p>
-    <p>* Status <strong>Downloaded*</strong> (kuning) menunjukkan data historis/seeder dan bukan unduhan live-tracked.</p>
-</div>

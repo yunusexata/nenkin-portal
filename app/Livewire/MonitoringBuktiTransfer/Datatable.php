@@ -184,7 +184,7 @@ class Datatable extends Component
     public function export($type)
     {
         $fileName = "Monitoring Bukti Transfer " . \Carbon\Carbon::now()->format('Y-m-d H_i_s');
-        $query = $this->getQuery();
+        $query = $this->datatableGetProcessedQuery();
 
         $request = [
             'title' => 'Monitoring Bukti Transfer',
