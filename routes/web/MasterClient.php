@@ -37,6 +37,13 @@ Route::middleware(['auth', 'access_permission'])->group(function () {
     Route::group(["controller" => \App\Http\Controllers\Admin\ReviewController::class, "prefix" => "admin/reviews", "as" => "admin_review."], function () {
         Route::get('/', 'index')->name('index');
     });
+    Route::group([
+        "controller" => \App\Http\Controllers\MasterClient\MonitoringBuktiTransferController::class,
+        "prefix" => "monitoring-bukti-transfer",
+        "as" => "monitoring_bukti_transfer.",
+    ], function () {
+        Route::get('/', 'index')->name('index');
+    });
 });
 
 Route::group(["controller" => ClientController::class, "prefix" => "client", "as" => "client."], function () {

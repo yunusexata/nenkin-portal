@@ -50,6 +50,15 @@ class HistoricalDocumentDownloadsSeeder extends Seeder
             $now = now();
 
             foreach ($emailAnchors as $clientId => $anchor) {
+                // sebelum insert, cek sudah ada record untuk client tsb
+                $existing = DB::table('document_downloads')
+                    ->where('client_id', $clientId)
+                    ->whereIn('source', ['proof_high', 'notified_only', 'infra_log'])
+                    ->exists();
+                if ($existing) {
+                    continue; // skip — sudah ter-seed
+                }
+
                 $notifSentAt = $anchor->notification_sent_at;
                 $batchId = $clientBatches->has($clientId) ? $clientBatches[$clientId]->batch_id : null;
 

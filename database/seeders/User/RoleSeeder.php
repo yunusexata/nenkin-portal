@@ -18,6 +18,7 @@ class RoleSeeder extends Seeder
     ];
     const sales = [
         PermissionHelper::ACCESS_DASHBOARD => [PermissionHelper::TYPE_READ],
+        PermissionHelper::ACCESS_MONITORING_BUKTI_TRANSFER => [PermissionHelper::TYPE_READ],
     ];
     const client = [
         PermissionHelper::ACCESS_DASHBOARD => [PermissionHelper::TYPE_READ],

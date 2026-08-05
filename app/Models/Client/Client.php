@@ -145,6 +145,14 @@ class Client extends Model
     {
         return $this->hasOne(\App\Models\UpodSurveyResponse::class);
     }
+    public function downloads()
+    {
+        return $this->hasMany(\App\Models\DocumentDownload::class, 'client_id');
+    }
+    public function liveDownloads()
+    {
+        return $this->downloads()->where('source', 'live_tracked');
+    }
     public function resolvedUpodType(?array $picMappings = null): string
     {
         $type = null;
