@@ -96,6 +96,44 @@ class Datatable extends Component
                 'key' => 'dd_meta.downloaded_at',
                 'name' => 'Waktu Download',
             ],
+            [
+                'sortable' => false,
+                'searchable' => false,
+                'name' => 'Aksi',
+                'render' => function ($item) {
+                    $client = $item;
+                    $hasAllDocs = false;
+                    if ($client) {
+                        dd($client);
+                        $clientDocs = $client->documents;
+                        $hasIchijikin = $clientDocs->where('type', 'ichijikin')->isNotEmpty();
+                        $hasResi = $clientDocs->where('type', 'resi')->isNotEmpty();
+                        $hasKwitansi = $clientDocs->where('type', 'kwitansi')->isNotEmpty();
+                        $hasAllDocs = $hasIchijikin && $hasResi && $hasKwitansi;
+                    }
+                    $html = '';
+
+                    if ($client) {
+                        if ($hasAllDocs) {
+                            $html = "<a href='" . route('admin.documents.download-zip', $client->id) . "' 
+                                                class='inline-flex items-center text-brand-600 dark:text-brand-400 hover:underline font-semibold'
+                                                title='Download ZIP'>
+                                                Download ZIP
+                                                <svg class='w-4 h-4 ml-0.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4'></path></svg>
+                                            </a>";
+                        } else {
+                            $html = '<button class="inline-flex items-center text-gray-400 dark:text-gray-500 font-semibold cursor-not-allowed opacity-50" 
+                                                title="Dokumen belum lengkap" 
+                                                disabled>
+                                                Download ZIP
+                                                <svg class="w-4 h-4 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                            </button>';
+                        }
+                    }
+
+                    return $html;
+                }
+            ]
         ];
     }
 
