@@ -33,10 +33,22 @@ class Datatable extends Component
     public $batches = [];
     public $closings = [];
 
-    public function updatingSelectedBatch() { $this->resetPage(); }
-    public function updatingSelectedClosing() { $this->resetPage(); }
-    public function updatingDocumentType() { $this->resetPage(); }
-    public function updatingFilterStatus() { $this->resetPage(); }
+    public function updatingSelectedBatch()
+    {
+        $this->resetPage();
+    }
+    public function updatingSelectedClosing()
+    {
+        $this->resetPage();
+    }
+    public function updatingDocumentType()
+    {
+        $this->resetPage();
+    }
+    public function updatingFilterStatus()
+    {
+        $this->resetPage();
+    }
 
     public function onMount()
     {
@@ -71,9 +83,19 @@ class Datatable extends Component
             ['key' => 'clients.pic', 'name' => 'PIC'],
             ['key' => 'clients.source_file_name', 'name' => 'Batch Upload'],
             ['key' => 'client_confirmations.client_closing_batch_number', 'name' => 'Kloter Closing'],
-            ['key' => 'document_type', 'name' => 'Tipe Dokumen', 'sortable' => false],
+            [
+                'searchable' => false,
+                'sortable' => false,
+                'key' => 'documents.type',
+                'name' => 'Tipe Dokumen',
+            ],
             ['key' => 'status', 'name' => 'Status Download', 'sortable' => false],
-            ['key' => 'last_downloaded_at', 'name' => 'Waktu Download', 'sortable' => false],
+            [
+                'searchable' => false,
+                'sortable' => false,
+                'key' => 'dd_meta.downloaded_at',
+                'name' => 'Waktu Download',
+            ],
         ];
     }
 
@@ -102,14 +124,14 @@ class Datatable extends Component
             )
             ->join('documents', function ($j) {
                 $j->on('documents.client_id', '=', 'clients.id')
-                  ->whereNull('documents.deleted_at');
+                    ->whereNull('documents.deleted_at');
                 if ($this->documentType && $this->documentType !== 'all') {
                     $j->where('documents.type', $this->documentType);
                 }
             })
             ->leftJoin('client_confirmations', function ($j) {
                 $j->on('client_confirmations.client_id', '=', 'clients.id')
-                  ->whereNull('client_confirmations.deleted_at');
+                    ->whereNull('client_confirmations.deleted_at');
             })
             // Sub-query downloads (source-based, filtered by doc type)
             ->leftJoinSub(
@@ -136,8 +158,12 @@ class Datatable extends Component
         }
 
         $query->groupBy(
-            'clients.id', 'clients.no_jp', 'clients.name', 'clients.pic',
-            'clients.source_file_name', 'client_confirmations.client_closing_batch_number',
+            'clients.id',
+            'clients.no_jp',
+            'clients.name',
+            'clients.pic',
+            'clients.source_file_name',
+            'client_confirmations.client_closing_batch_number',
             'client_confirmations.closed_at'
         );
 
