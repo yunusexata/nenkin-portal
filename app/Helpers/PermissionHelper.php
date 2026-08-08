@@ -39,6 +39,7 @@ class PermissionHelper
     const ACCESS_MASTER_CLIENT_REGISTERED = 'master_client_registered';
     const ACCESS_CLIENT = 'client';
     const ACCESS_CLIENT_FORM_CONFIRMATION = 'client_form_confirmation';
+    const ACCESS_POV_CLIENT = 'pov_client';
     const ACCESS_CLIENT_DOCUMENT = 'client_document';
     const ACCESS_CLIENT_AGREEMENT = 'client_agreement';
     const ACCESS_ADMIN_UPLOAD_DOCUMENT = 'admin_upload_document';
@@ -58,6 +59,7 @@ class PermissionHelper
         self::ACCESS_MASTER_CLIENT_REGISTERED,
         self::ACCESS_CLIENT,
         self::ACCESS_CLIENT_FORM_CONFIRMATION,
+        self::ACCESS_POV_CLIENT,
         self::ACCESS_CLIENT_DOCUMENT,
         self::ACCESS_ADMIN_UPLOAD_DOCUMENT,
         self::ACCESS_ADMIN_REVIEW,
@@ -75,6 +77,7 @@ class PermissionHelper
         self::ACCESS_IMPORT_DATA_JEPANG => 'Import Data Jepang',
         self::ACCESS_MASTER_CLIENT => 'Master Data Klien',
         self::ACCESS_MASTER_CLIENT_REGISTERED => 'Master Klien Konfirmasi',
+        self::ACCESS_POV_CLIENT => 'Dashboard POV Client',
         self::ACCESS_CLIENT => 'Master Klien',
         self::ACCESS_CLIENT_DOCUMENT => 'Document Klien',
         self::ACCESS_CLIENT_AGREEMENT => 'Surat Perjanjian Klien',
@@ -96,6 +99,7 @@ class PermissionHelper
         self::ACCESS_CLIENT => self::TYPE_ALL,
         self::ACCESS_CLIENT_DOCUMENT => [self::TYPE_READ],
         self::ACCESS_CLIENT_AGREEMENT => [self::TYPE_READ],
+        self::ACCESS_POV_CLIENT => [self::TYPE_READ],
         self::ACCESS_CLIENT_FORM_CONFIRMATION => self::TYPE_ALL,
         self::ACCESS_ADMIN_UPLOAD_DOCUMENT => self::TYPE_ALL,
         self::ACCESS_ADMIN_REVIEW => self::TYPE_ALL,

@@ -483,8 +483,15 @@ class Datatable extends Component
                             </div>";
                     }
 
+                    $clientHtml = "<div class='col-auto'>
+                                <a href='" . route('pov_client.index', Crypt::encrypt($item->id)) . "' target='_BLANK' class='inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-2 py-1 text-sm bg-blue-600 text-white shadow-theme-xs hover:bg-blue-800 disabled:bg-brand-300'>
+                                    <span class='material-symbols-outlined text-lg' data-icon='identity_platform'>identity_platform</span>
+                                </a>
+                            </div>";
+
+
                     $html = "<div class='flex flex-nowrap justify-start p-0 m-0 gap-1'>
-                        $destroyHtml $esignHtml
+                        $destroyHtml $esignHtml $clientHtml
                     </div>";
 
                     return $html;

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MasterClient\ClientController;
 use App\Http\Controllers\MasterClient\MasterClientController;
 use App\Http\Controllers\MasterClient\MasterClientRegisteredController;
@@ -17,6 +18,9 @@ Route::middleware(['auth', 'access_permission'])->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('{id}/edit', 'edit')->name('edit');
         Route::get('{id}/detail', 'detail')->name('detail');
+    });
+    Route::group(["controller" => DashboardController::class, "prefix" => "pov_client", "as" => "pov_client."], function () {
+        Route::get('/{id}', 'povClient')->name('index');
     });
 
     // Route::group(["controller" => TestPageController::class, "prefix" => "test_page", "as" => "test_page."], function () {
