@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\MasterClient;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Repositories\Client\ClientRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use setasign\Fpdi\Fpdi;
 
 class ClientController extends Controller
@@ -55,14 +58,21 @@ class ClientController extends Controller
 
 
     // $this->drawLabelPdf(, 'result', $user);
-    public function download()
+    public function download(Request $request)
     {
+
         $model = auth()->user();
-        if (!$model || !$model->client || !$model->client->esign) {
-            abort(404, 'Dokumen Perjanjian belum ditandatangani.');
+        if ($model->hasRole(User::ROLE_SUPER_ADMIN)) {
+            $client_id = Crypt::decrypt($request->client_id);
+            $client = ClientRepository::find($client_id);
+            $esign = $client->esign;
+        } else {
+            if (!$model || !$model->client || !$model->client->esign) {
+                abort(404, 'Dokumen Perjanjian belum ditandatangani.');
+            }
+            $esign = $model->client->esign;
         }
 
-        $esign = $model->client->esign;
 
         // Try to serve pre-generated file from storage first
         if ($esign->path && \Illuminate\Support\Facades\Storage::disk('local')->exists($esign->path)) {

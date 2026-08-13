@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Document;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,10 +15,16 @@ class DocumentController extends Controller
     /**
      * Download document via signed URL with 15 minutes expiration.
      */
-    public function download($type)
+    public function download($type, Request $request)
     {
         // Ensure the logged in user is a client and has an associated client ID
-        $clientId = auth()->user()->client_id;
+
+        $model = auth()->user();
+        if ($model->hasRole(User::ROLE_SUPER_ADMIN)) {
+            $clientId = Crypt::decrypt($request->client_id);
+        } else {
+            $clientId = $model->client_id;
+        }
 
         if (!$clientId) {
             abort(403, 'Akses ditolak: User tidak terasosiasi dengan klien manapun.');
@@ -29,23 +37,25 @@ class DocumentController extends Controller
         $content = Storage::disk('supabase')->get($document->bucket_path);
 
         // Record live download activity for PT Sumber Rezeki Exata Indonesia payroll audit
-        try {
-            DB::table('document_downloads')->insert([
-                'client_id'     => $clientId,
-                'document_id'   => $document->id,
-                'batch_id'      => $document->batch_id,
-                'ip_address'    => request()->ip(),
-                'user_agent'    => request()->userAgent(),
-                'downloaded_at' => now(),
-                'source'        => 'live_tracked',
-                'created_at'    => now(),
-                'updated_at'    => now(),
-            ]);
-        } catch (\Throwable $e) {
-            logger()->warning('Failed to record document download activity: ' . $e->getMessage(), [
-                'client_id'   => $clientId,
-                'document_id' => $document->id,
-            ]);
+        if ($model->hasRole(User::ROLE_CLIENT)) {
+            try {
+                DB::table('document_downloads')->insert([
+                    'client_id'     => $clientId,
+                    'document_id'   => $document->id,
+                    'batch_id'      => $document->batch_id,
+                    'ip_address'    => request()->ip(),
+                    'user_agent'    => request()->userAgent(),
+                    'downloaded_at' => now(),
+                    'source'        => 'live_tracked',
+                    'created_at'    => now(),
+                    'updated_at'    => now(),
+                ]);
+            } catch (\Throwable $e) {
+                logger()->warning('Failed to record document download activity: ' . $e->getMessage(), [
+                    'client_id'   => $clientId,
+                    'document_id' => $document->id,
+                ]);
+            }
         }
 
         return response($content)

@@ -413,7 +413,8 @@
 
                     {{-- BAGIAN YANG DIPERBARUI: Mengubah ikon menjadi tombol solid --}}
                     @if ($hasEsign)
-                        <a href="{{ route('agreement.download') }}" 
+                        <a href="{{ route('agreement.download',
+                        ['client_id' => auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN) ? $client_id : null]) }}" 
                         download
                         class="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-bold px-3 py-2 rounded-lg transition-colors duration-200 shadow-sm flex-shrink-0">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -499,7 +500,11 @@
                             {{ $document->uploaded_at?->translatedFormat('d M Y') ?? 'Baru saja' }}
                         </div>
                     </div>
-                    <a href="{{ route('documents.download', ['type' => $type]) }}"
+                    <a href="{{ route('documents.download', [
+                    'type' => $type,
+                    'client_id' => auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN) ? $client_id : null
+                    ]) }}"
+                       download
                        id="btn-download-doc-{{ Str::slug($type) }}"
                        class="w-8 h-8 flex items-center justify-center rounded-xl bg-[#001B5E] hover:bg-[#0049FF] text-white transition-all active:scale-95 flex-shrink-0">
                         <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24">
@@ -521,7 +526,7 @@
                         <div class="font-semibold text-sm text-orange-800">Dokumen Perjanjian — Sudah Ditandatangani</div>
                         <div class="text-xs text-orange-500">Ditandatangani</div>
                     </div>
-                    <a href="{{ route('agreement.download') }}"
+                    <a href="{{ route('agreement.download', ['client_id' => auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN) ? $client_id : null]) }}"
                        id="btn-download-agreement"
                        class="w-8 h-8 flex items-center justify-center rounded-xl bg-[#FF4800] hover:bg-[#e03e00] text-white transition-all active:scale-95 flex-shrink-0">
                         <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24">

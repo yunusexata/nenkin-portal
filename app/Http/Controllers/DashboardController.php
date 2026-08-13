@@ -97,13 +97,15 @@ class DashboardController extends Controller
 
         $completedSteps = collect($steps)->where('done', true)->count();
         $totalSteps     = count($steps);
+        $client_id = $request->id;
 
         return view('app.dashboard.client-home', compact(
             'client',
             'documents',
             'steps',
             'completedSteps',
-            'totalSteps'
+            'totalSteps',
+            'client_id'
         ));
     }
 }
