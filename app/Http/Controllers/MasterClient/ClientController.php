@@ -62,7 +62,7 @@ class ClientController extends Controller
     {
 
         $model = auth()->user();
-        if ($model->hasRole(User::ROLE_SUPER_ADMIN)) {
+        if (!$model->hasRole(User::ROLE_CLIENT)) {
             $client_id = Crypt::decrypt($request->client_id);
             $client = ClientRepository::find($client_id);
             $esign = $client->esign;
