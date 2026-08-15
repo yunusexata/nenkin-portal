@@ -15,7 +15,7 @@ Artisan::command('inspire', function () {
 Artisan::command('email:smoke-test', function () {
     $recipients = [
         'yunusexata@gmail.com' => 'Yunus Exata',
-        'adam.zibran.co@gmail.com' => 'Adam Zibran',
+        // 'adam.zibran.co@gmail.com' => 'Adam Zibran',
     ];
 
     foreach ($recipients as $email => $name) {

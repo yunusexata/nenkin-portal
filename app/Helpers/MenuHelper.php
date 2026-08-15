@@ -31,11 +31,6 @@ class MenuHelper
                 'name' => 'Monitoring Bukti Transfer',
                 'path' => 'monitoring_bukti_transfer.index',
             ],
-            [
-                'icon' => 'user',
-                'name' => 'Akses & Permission',
-                'path' => 'permission.index',
-            ],
             // [
             //     'icon' => 'testing',
             //     'name' => 'Halaman Testing Admin',
