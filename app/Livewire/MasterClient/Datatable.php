@@ -303,19 +303,32 @@ class Datatable extends Component
                     return '<span class="bg-' . $style . '-50 dark:bg-' . $style . '-500/15 text-' . $style . '-700 dark:text-' . $style . '-500 text-theme-xs rounded-full px-2 py-0.5 font-medium">' . strtoupper($text) . '</span>';
                 }
             ],
+            [
+                'name' => 'Action',
+                'sortable' => false,
+                'searchable' => false,
+                'render' => function ($item) {
+                    $link = route('client.create', $item->magicLink->token ?? '-');
+
+                    $linkHtml = "
+                        <div class='w-auto'>
+                            <button class='p-1 inline-flex items-center justify-center text-emerald-600 hover:bg-emerald-50 rounded transition-colors'
+                                onclick=\"copyToClipboard('$link')\"
+                            >
+                                <span class='material-symbols-outlined text-lg' data-icon='edit'>link</span>
+                            </button>
+                        </div>
+                    ";
+
+                    $html = "<div class='flex flex-nowrap justify-start p-0 m-0'>
+                        $linkHtml
+                    </div>";
+
+                    return $html;
+                },
+            ],
 
         ];
-
-        if (auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN)) {
-            $column[] = [
-                'searchable' => false,
-                'sortable' => false,
-                'name' => 'Link',
-                'render' => function ($item, $index) {
-                    return route('client.create', $item->magicLink->token ?? '-');
-                }
-            ];
-        }
 
         return $column;
     }
