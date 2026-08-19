@@ -38,7 +38,7 @@
                                 <button
                                     type="button"
                                     class="border-b-2 px-1 py-4 text-sm font-medium"
-                                    wire:click="getData('{{ $closing->batch_number }}', 'closing')"
+                                    wire:click="getData('{{ $closing->id }}', 'closing')"
                                 >
                                     Closing {{ $closing->batch_number }} {{ $closing->created_at->format('Ymd H_i_s') }}
                                 </button>
