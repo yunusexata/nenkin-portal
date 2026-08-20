@@ -2,11 +2,14 @@
 
 @section('content')
 <div class="container mx-auto py-4 sm:py-8 px-4 animate-fade-in" 
-     x-data='esignApp({!! json_encode($nik) !!}, {!! json_encode($address) !!}, {!! json_encode(Str::of($client->name)
-    ->replaceMatches('/[^A-Za-z0-9\s]/u', '')
-    ->squish()
-    ->toString()) !!}, {!! json_encode($letterNumber) !!}, {!! json_encode($dateFormatted) !!}, {!! json_encode(\Carbon\Carbon::parse($client->dob)->format('d-m-Y')) !!})'>
->
+     x-data="esignApp(
+         {{ Js::from($nik) }}, 
+         {{ Js::from($address) }}, 
+         {{ Js::from(Str::of($client->name)->replaceMatches('/[^A-Za-z0-9\s]/u', '')->squish()->toString()) }}, 
+         {{ Js::from($letterNumber) }}, 
+         {{ Js::from($dateFormatted) }}, 
+         {{ Js::from(\Carbon\Carbon::parse($client->dob)->format('d-m-Y')) }}
+     )">
     
     @if ($errors->any())
     <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700">

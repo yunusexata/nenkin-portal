@@ -727,7 +727,7 @@ class Datatable extends Component
                     OR EXISTS (
                         SELECT 1
                         FROM client_esigns AS ce
-                        WHERE ce.client_id = c.id
+                        WHERE ce.client_id = cc.client_id
                         AND ce.deleted_at IS NULL
                     )
                 );
