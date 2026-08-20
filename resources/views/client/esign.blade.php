@@ -12,14 +12,14 @@
      )">
     
     @if ($errors->any())
-    <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700">
-        <p class="font-bold mb-1">Terjadi kesalahan saat menyimpan:</p>
-        <ul class="list-disc list-inside space-y-1">
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
+        <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700">
+            <p class="font-bold mb-1">Terjadi kesalahan saat menyimpan:</p>
+            <ul class="list-disc list-inside space-y-1">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
     @endif
 
     {{-- Form POST Utama --}}
