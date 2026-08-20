@@ -212,8 +212,11 @@
             navigator.clipboard.writeText(text)
             .then(() => {
                 Swal.fire({
+                    position: "top-end",
                     icon: 'success',
-                    title: 'Berhasil Copy Link Form Kandidat!',
+                    title: 'Berhasil Copy Data!',
+                    showConfirmButton: false,
+                    timer: 1500
                 });
             });
         }
