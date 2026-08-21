@@ -494,7 +494,7 @@
                     </div>
                     <div class="flex-1 min-w-0">
                         <div class="font-semibold text-sm text-gray-800 truncate">
-                            {{ $document->original_filename ?? strtoupper(str_replace('_', ' ', $type)) }}
+                            {{ strtoupper(str_replace('_', ' ', $type)) }}
                         </div>
                         <div class="text-xs text-gray-400">
                             {{ $document->uploaded_at?->translatedFormat('d M Y') ?? 'Baru saja' }}
