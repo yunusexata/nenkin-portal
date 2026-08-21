@@ -448,6 +448,11 @@
                             {{ $hasDocuments ? $documents->count() . ' dokumen tersedia' : 'Belum ada dokumen' }}
                         </div>
                     </div>
+                    @if ($hasDocuments)
+                        <svg class="w-5 h-5 fill-green-500 flex-shrink-0" viewBox="0 0 24 24">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                        </svg>
+                    @endif
                 </div>
 
                 {{-- Proses Selesai --}}
@@ -464,6 +469,11 @@
                             {{ $hasDocuments ? $documents->count() . ' Proses Nenkin Selesai' : 'Masih Dalam Proses' }}
                         </div>
                     </div>
+                    @if ($hasDocuments)
+                        <svg class="w-5 h-5 fill-green-500 flex-shrink-0" viewBox="0 0 24 24">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                        </svg>
+                    @endif
                 </div>
             </div>
         </div>
@@ -506,10 +516,12 @@
                     ]) }}"
                        download
                        id="btn-download-doc-{{ Str::slug($type) }}"
-                       class="w-8 h-8 flex items-center justify-center rounded-xl bg-[#001B5E] hover:bg-[#0049FF] text-white transition-all active:scale-95 flex-shrink-0">
-                        <svg class="w-4 h-4 fill-white" viewBox="0 0 24 24">
-                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-                        </svg>
+                        class="flex items-center gap-1.5 bg-[#001B5E] hover:bg-[#0049FF] text-white text-xs font-bold px-3 py-2 rounded-lg transition-colors duration-200 shadow-sm flex-shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                            <span>Unduh</span>
+                        </a>
                     </a>
                 </div>
                 @endforeach
