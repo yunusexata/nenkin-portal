@@ -183,7 +183,6 @@
                                         @if($row['error'])
                                             <tr>
                                                 <td class="px-4 py-3">{{ $no_error++ }}</td>
-                                                <td class="px-4 py-3">{{ $no++ }}</td>
                                                 <td class="px-4 py-3">{{ $row['data']['no_jp'] }}</td>
                                                 <td class="px-4 py-3">{{ $row['data']['name'] }}</td>
                                                 <td class="px-4 py-3">{{ $row['data']['dob'] }}</td>

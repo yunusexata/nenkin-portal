@@ -85,12 +85,13 @@ class ImportModal extends Component
                 'note' => $row['note'],
             ];
             $validator = Validator::make($d, [
-                'no_jp' => 'required',
+                'no_jp' => 'required|unique:clients,no_jp',
                 'name' => 'required',
                 'dob' => 'required',
                 'pic' => 'required',
             ], [
                 'no_jp.required' => 'No Input Japan harus di isi',
+                'no_jp.unique' => 'No Input Jepang Sudah Terdaftar',
                 'name.required' => 'Nama harus di isi',
                 'dob.required' => 'Tgl Lahir harus di isi',
                 'phone.required' => 'No Telp harus di isi',
