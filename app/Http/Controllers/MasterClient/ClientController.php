@@ -4,6 +4,7 @@ namespace App\Http\Controllers\MasterClient;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Repositories\Account\UserRepository;
 use App\Repositories\Client\ClientRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -64,6 +65,9 @@ class ClientController extends Controller
         $model = auth()->user();
         if (!$model->hasRole(User::ROLE_CLIENT)) {
             $client_id = Crypt::decrypt($request->client_id);
+            $model = UserRepository::findBy([
+                ['client_id', $client_id]
+            ]);
             $client = ClientRepository::find($client_id);
             $esign = $client->esign;
         } else {
@@ -72,6 +76,8 @@ class ClientController extends Controller
             }
             $esign = $model->client->esign;
         }
+
+
 
 
         // Try to serve pre-generated file from storage first
