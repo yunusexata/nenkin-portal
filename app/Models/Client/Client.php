@@ -104,6 +104,17 @@ class Client extends Model
     {
         return $this->belongsTo(User::class, 'created_by', 'id');
     }
+
+    public function updator()
+    {
+        return $this->belongsTo(User::class, 'updated_by', 'id');
+    }
+
+    public function deletor()
+    {
+        return $this->belongsTo(User::class, 'deleted_by', 'id');
+    }
+
     public function agentPic()
     {
         return $this->belongsTo(User::class, 'pic', 'pic')->role(User::ROLE_SALES);

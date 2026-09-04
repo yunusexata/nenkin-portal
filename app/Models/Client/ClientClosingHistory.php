@@ -19,8 +19,6 @@ class ClientClosingHistory extends Model
         'batch_number',
     ];
 
-
-
     protected $guarded = ['id'];
 
     protected static function onBoot()
@@ -33,5 +31,20 @@ class ClientClosingHistory extends Model
 
             $model->batch_number = ($nextBatchNumber ?? 0) + 1;
         });
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+
+    public function updator()
+    {
+        return $this->belongsTo(User::class, 'updated_by', 'id');
+    }
+
+    public function deletor()
+    {
+        return $this->belongsTo(User::class, 'deleted_by', 'id');
     }
 }
