@@ -53,6 +53,7 @@ class ClientRepository extends MasterDataRepository
                 $j->on('client_confirmations.client_id', '=', 'clients.id')
                     ->where('client_confirmations.claim_type', Client::CLAIM_TYPE_NORMAL)
                     ->where('client_confirmations.current_position', ClientConfirmation::CURRENT_POSITION_INDONESIA)
+                    ->where('client_confirmations.back_to_jp_type', ClientConfirmation::BACK_TO_JP_TYPE_YES)
                     ->whereNull('client_confirmations.deleted_at');
             })
             ->when($batchName && $batchName != 'all', function ($q) use ($batchName) {
