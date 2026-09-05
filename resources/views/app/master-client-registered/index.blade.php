@@ -9,6 +9,10 @@
                 <x-ui.button size="sm" variant="primary" @click="$dispatch('export', { type: '{{ App\Helpers\ExportHelper::TYPE_EXCEL }}' })">Export Excel
                 </x-ui.button>
             @endCan
+            @can(PermissionHelper::transform(PermissionHelper::ACCESS_EXPORT_EXCEL_CLIENT_RE_ENTRY, PermissionHelper::TYPE_READ))
+                <x-ui.button size="sm" variant="primary" @click="$dispatch('exportReEntry', { type: '{{ App\Helpers\ExportHelper::TYPE_EXCEL }}' })">Export Excel Re-Entry
+                </x-ui.button>
+            @endCan
             @if(auth()->user()->hasRole(\App\Models\User::ROLE_HS3) || auth()->user()->hasRole(\App\Models\User::ROLE_SUPER_ADMIN))
                 <x-ui.button size="sm" variant="success" @click="$dispatch('showClosingConfirmation')">Buat Closing
                 </x-ui.button>

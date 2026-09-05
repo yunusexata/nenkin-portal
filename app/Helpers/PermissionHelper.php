@@ -45,6 +45,7 @@ class PermissionHelper
     const ACCESS_ADMIN_UPLOAD_DOCUMENT = 'admin_upload_document';
     const ACCESS_ADMIN_REVIEW = 'admin_review';
     const ACCESS_MONITORING_BUKTI_TRANSFER = 'monitoring_bukti_transfer';
+    const ACCESS_EXPORT_EXCEL_CLIENT_RE_ENTRY = 'export_excel_client_re_entry';
 
     const ACCESS_ALL = [
         self::ACCESS_DASHBOARD,
@@ -64,6 +65,7 @@ class PermissionHelper
         self::ACCESS_ADMIN_UPLOAD_DOCUMENT,
         self::ACCESS_ADMIN_REVIEW,
         self::ACCESS_MONITORING_BUKTI_TRANSFER,
+        self::ACCESS_EXPORT_EXCEL_CLIENT_RE_ENTRY,
     ];
 
     const TRANSLATE_ACCESS = [
@@ -84,6 +86,7 @@ class PermissionHelper
         self::ACCESS_ADMIN_UPLOAD_DOCUMENT => 'Admin Upload Dokumen',
         self::ACCESS_ADMIN_REVIEW => 'Admin Review',
         self::ACCESS_MONITORING_BUKTI_TRANSFER => 'Monitoring Bukti Transfer',
+        self::ACCESS_EXPORT_EXCEL_CLIENT_RE_ENTRY => 'Export Client Re-Entry',
     ];
 
     const ACCESS_TYPE_ALL = [
@@ -104,6 +107,7 @@ class PermissionHelper
         self::ACCESS_ADMIN_UPLOAD_DOCUMENT => self::TYPE_ALL,
         self::ACCESS_ADMIN_REVIEW => self::TYPE_ALL,
         self::ACCESS_MONITORING_BUKTI_TRANSFER => [self::TYPE_READ],
+        self::ACCESS_EXPORT_EXCEL_CLIENT_RE_ENTRY => [self::TYPE_READ],
     ];
 
     /*

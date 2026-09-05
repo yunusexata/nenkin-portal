@@ -3,6 +3,7 @@
 namespace App\Repositories\Client;
 
 use App\Models\Client\Client;
+use App\Models\Client\ClientConfirmation;
 use App\Repositories\MasterDataRepository;
 
 class ClientRepository extends MasterDataRepository
@@ -42,6 +43,34 @@ class ClientRepository extends MasterDataRepository
             ->when($data_type && $data_type === Client::FILTER_DATA_TYPE_NOT_REGISTERED, function ($q) {
                 $q->whereDoesntHave('user');
             });
+    }
+
+    public static function getClientReEntry($batchName = null, $claimType = null, $pic = null)
+    {
+        return Client::query()
+            ->where('clients.claim_type', '!=', Client::CLAIM_TYPE_KOKUMIN)
+            ->join('client_confirmations', function ($j) {
+                $j->on('client_confirmations.client_id', '=', 'clients.id')
+                    ->where('client_confirmations.claim_type', Client::CLAIM_TYPE_NORMAL)
+                    ->where('client_confirmations.current_position', ClientConfirmation::CURRENT_POSITION_INDONESIA)
+                    ->whereNull('client_confirmations.deleted_at');
+            })
+            ->when($batchName && $batchName != 'all', function ($q) use ($batchName) {
+                $q->where('clients.source_file_name', $batchName);
+            })
+            ->whereHas('confirmation')
+            ->select('clients.*')
+            ->selectRaw("
+            EXISTS (
+                SELECT 1
+                FROM client_esigns
+                WHERE client_esigns.client_id = clients.id
+                    AND client_esigns.deleted_at IS NULL
+            ) as esign_exists
+        ")
+            ->orderByDesc('clients.is_exported')
+            ->orderBy('clients.exported_at', 'ASC')
+            ->orderByDesc('clients.no_jp');
     }
 
     public static function getClientRegistered($batchName = null, $claimType = null, $pic = null, $closing_id = null, $orderByClaimType = false)

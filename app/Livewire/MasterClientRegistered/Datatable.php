@@ -878,6 +878,42 @@ class Datatable extends Component
         }
         return $export;
     }
+    #[On('exportReEntry')]
+    public function exportReEntry($type)
+    {
+        if (blank($this->selectedBatch) || $this->selectedBatch === 'all') {
+            Alert::fail($this, "Gagal", 'Silakan pilih batch terlebih dahulu');
+            return;
+        }
+        $fileName = "Data Client Re-Entry " . Carbon::now()->format('Y-m-d H:i:s');
+
+        $qhs3 =  ClientRepository::getClientReEntry(
+            $this->selectedBatch,
+            $this->filter_claim_type,
+            $this->bulkPic
+        );
+        $data['query'][] = $qhs3;
+        $data['view'][] = 'app.master-client-registered.export';
+        $data['request'][] = [
+            'title' => 'Data Client Re-Entry',
+            'type' => $type,
+        ];
+        // dd($data['request'][0]);
+
+        $export = ExportHelper::export(
+            $type,
+            $fileName,
+            $data['query'],
+            $data['view'],
+            $data['request'],
+            [
+                'size' => 'legal',
+                'orientation' => 'landscape',
+            ],
+            true
+        );
+        return $export;
+    }
 
     public function getView(): string
     {
