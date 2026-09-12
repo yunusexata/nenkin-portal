@@ -139,7 +139,7 @@
             </div>
 
             <!-- AI Card -->
-            <div class="rounded-2xl border border-blue-100 bg-blue-500 p-5 dark:border-blue-900/40 dark:bg-blue-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+            <div class="rounded-2xl border border-blue-100 bg-blue-500 p-3 dark:border-blue-900/40 dark:bg-blue-950/10 md:p-3 shadow-xs hover:shadow-md transition">
                 <div class="flex items-center justify-between">
                     
                     <!-- Left Side: AI Total -->
@@ -151,7 +151,7 @@
                     </div>
 
                     <!-- Right Side: Status Breakdown -->
-                    <div class="flex flex-col text-xs md:text-sm text-blue-100 dark:text-blue-300 space-y-1 border-l border-blue-400/50 dark:border-blue-800 pl-4">
+                    <div class="flex flex-col text-xs md:text-sm text-blue-100 dark:text-blue-300 space-y-1 border-l border-blue-400/50 dark:border-blue-800 pl-2">
                         <div class="flex items-center justify-between gap-4">
                             <span class="font-medium text-white">Sudah</span>
                             <span class="font-bold text-white">{{ number_format($totals['total_ai_downloaded']) }}</span>
@@ -165,7 +165,7 @@
                 </div>
             </div>
             <!-- MT Card -->
-            <div class="rounded-2xl border border-blue-100 bg-green-500 p-5 dark:border-blue-900/40 dark:bg-blue-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+            <div class="rounded-2xl border border-blue-100 bg-green-500 p-2 dark:border-blue-900/40 dark:bg-blue-950/10 md:p-2 shadow-xs hover:shadow-md transition">
                 <div class="flex items-center justify-between">
                     
                     <!-- Left Side: AI Total -->
@@ -177,7 +177,7 @@
                     </div>
 
                     <!-- Right Side: Status Breakdown -->
-                    <div class="flex flex-col text-xs md:text-sm text-blue-100 dark:text-blue-300 space-y-1 border-l border-blue-400/50 dark:border-blue-800 pl-4">
+                    <div class="flex flex-col text-xs md:text-sm text-blue-100 dark:text-blue-300 space-y-1 border-l border-blue-400/50 dark:border-blue-800 pl-2">
                         <div class="flex items-center justify-between gap-4">
                             <span class="font-medium text-white">Sudah</span>
                             <span class="font-bold text-white">{{ number_format($totals['total_mt_downloaded']) }}</span>
@@ -191,7 +191,7 @@
                 </div>
             </div>
             <!-- SN Card -->
-            <div class="rounded-2xl border border-blue-100 bg-[#FE9900] p-5 dark:border-indigo-900/40 dark:bg-indigo-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+            <div class="rounded-2xl border border-blue-100 bg-[#FE9900] p-3 dark:border-indigo-900/40 dark:bg-indigo-950/10 md:p-3 shadow-xs hover:shadow-md transition">
                 <div class="flex items-center justify-between">
                     
                     <!-- Left Side: AI Total -->
@@ -203,7 +203,7 @@
                     </div>
 
                     <!-- Right Side: Status Breakdown -->
-                    <div class="flex flex-col text-xs md:text-sm text-indigo-100 dark:text-indigo-300 space-y-1 border-l border-blue-400/50 dark:border-blue-800 pl-4">
+                    <div class="flex flex-col text-xs md:text-sm text-indigo-100 dark:text-indigo-300 space-y-1 border-l border-blue-400/50 dark:border-blue-800 pl-2">
                         <div class="flex items-center justify-between gap-4">
                             <span class="font-medium text-white">Sudah</span>
                             <span class="font-bold text-white">{{ number_format($totals['total_sn_downloaded']) }}</span>
