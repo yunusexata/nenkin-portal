@@ -26,6 +26,50 @@
                     readonly>
         </div>
 
+        <!-- Nomor WA Saat Ini -->
+        <div>
+            <label for="phone_number" class="block text-sm font-semibold text-gray-700 mb-1">
+                Nomor WA Saat Ini
+                <span class="text-xs font-normal text-gray-500">(*digunakan untuk update info & mengirim kwitansi pencairan nenkin)</span>
+                <span class="text-red-500">*</span>
+            </label>
+            <div class="flex rounded-lg shadow-sm">
+                <!-- Country Prefix Select -->
+                <div class="relative shrink-0">
+                    <select id="phone_country_code" 
+                            name="phone_country_code" 
+                            wire:model.live="phone_country_code" 
+                            required
+                            class="h-[44px] px-3 py-2.5 bg-gray-50 border rounded-l-lg text-sm font-semibold text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#F97316] transition @error('phone_country_code') border-red-500 @else border-gray-300 @enderror">
+                        <option value="">Pilih</option>
+                        <option value="62">IND +62</option>
+                        <option value="81">JPN +81</option>
+                    </select>
+                </div>
+
+                <!-- Phone Number Input (Number, Alpine.js leading zero stripper) -->
+                <div class="relative flex-1">
+                    <input type="number" 
+                           id="phone_number" 
+                           name="phone_number" 
+                           wire:model="phone_number" 
+                           x-data 
+                           x-on:input="$el.value = $el.value.replace(/^[0123456]+/, '')"
+                           min="1"
+                           placeholder="{{ $phone_country_code == '81' ? '8012345678' : '81234567890' }}"
+                           class="w-full h-[44px] px-4 py-2.5 rounded-r-lg border border-l-0 text-[#111827] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#F97316] transition @error('phone_number') border-red-500 @else border-gray-300 @enderror"
+                           required>
+                </div>
+            </div>
+
+            @error('phone_country_code')
+                <p class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</p>
+            @enderror
+            @error('phone_number')
+                <p class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</p>
+            @enderror
+        </div>
+
         
         <!-- Status Penerimaan Nenkin 80% -->
         <div>

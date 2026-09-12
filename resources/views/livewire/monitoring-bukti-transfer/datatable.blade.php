@@ -124,7 +124,7 @@
                 color: #fca5a5 !important;
             }
         </style>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 16px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px;">
             
             <!-- Sudah Download Card -->
             <div class="card-sudah-download rounded-lg shadow-sm p-4 flex justify-between px-5 items-center">
@@ -139,21 +139,82 @@
             </div>
 
             <!-- AI Card -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 border-l-4 border-l-[#465FFF] p-4 flex justify-between px-5 items-center">
-                <span class="text-lg font-bold text-gray-500 dark:text-gray-400 uppercase">AI</span>
-                <span class="text-3xl font-extrabold text-gray-800 dark:text-white">{{ $totals['total_ai'] }}</span>
-            </div>
+            <div class="rounded-2xl border border-blue-100 bg-blue-500 p-5 dark:border-blue-900/40 dark:bg-blue-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+                <div class="flex items-center justify-between">
+                    
+                    <!-- Left Side: AI Total -->
+                    <div>
+                        <span class="text-sm text-white dark:text-blue-400 font-semibold uppercase tracking-wider">AI</span>
+                        <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
+                            {{ number_format($totals['total_ai']) }}
+                        </h4>
+                    </div>
 
+                    <!-- Right Side: Status Breakdown -->
+                    <div class="flex flex-col text-xs md:text-sm text-blue-100 dark:text-blue-300 space-y-1 border-l border-blue-400/50 dark:border-blue-800 pl-4">
+                        <div class="flex items-center justify-between gap-4">
+                            <span class="font-medium text-white">Sudah</span>
+                            <span class="font-bold text-white">{{ number_format($totals['total_ai_downloaded']) }}</span>
+                        </div>
+                        <div class="flex items-center justify-between gap-4">
+                            <span class="font-medium text-white">Belum</span>
+                            <span class="font-bold text-white">{{ number_format($totals['total_ai_not_downloaded']) }}</span>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
             <!-- MT Card -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 border-l-4 border-l-[#00ff3c] p-4 flex justify-between px-5 items-center">
-                <span class="text-lg font-bold text-gray-500 dark:text-gray-400 uppercase">MT</span>
-                <span class="text-3xl font-extrabold text-gray-800 dark:text-white">{{ $totals['total_mt'] }}</span>
-            </div>
+            <div class="rounded-2xl border border-blue-100 bg-green-500 p-5 dark:border-blue-900/40 dark:bg-blue-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+                <div class="flex items-center justify-between">
+                    
+                    <!-- Left Side: AI Total -->
+                    <div>
+                        <span class="text-sm text-white dark:text-blue-400 font-semibold uppercase tracking-wider">MT</span>
+                        <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
+                            {{ number_format($totals['total_mt']) }}
+                        </h4>
+                    </div>
 
+                    <!-- Right Side: Status Breakdown -->
+                    <div class="flex flex-col text-xs md:text-sm text-blue-100 dark:text-blue-300 space-y-1 border-l border-blue-400/50 dark:border-blue-800 pl-4">
+                        <div class="flex items-center justify-between gap-4">
+                            <span class="font-medium text-white">Sudah</span>
+                            <span class="font-bold text-white">{{ number_format($totals['total_mt_downloaded']) }}</span>
+                        </div>
+                        <div class="flex items-center justify-between gap-4">
+                            <span class="font-medium text-white">Belum</span>
+                            <span class="font-bold text-white">{{ number_format($totals['total_mt_not_downloaded']) }}</span>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
             <!-- SN Card -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 border-l-4 border-l-[#ff0015] p-4 flex justify-between px-5 items-center">
-                <span class="text-lg font-bold text-gray-500 dark:text-gray-400 uppercase">SN</span>
-                <span class="text-3xl font-extrabold text-gray-800 dark:text-white">{{ $totals['total_sn'] }}</span>
+            <div class="rounded-2xl border border-blue-100 bg-[#FE9900] p-5 dark:border-indigo-900/40 dark:bg-indigo-950/10 md:p-6 shadow-xs hover:shadow-md transition">
+                <div class="flex items-center justify-between">
+                    
+                    <!-- Left Side: AI Total -->
+                    <div>
+                        <span class="text-sm text-white dark:text-indigo-400 font-semibold uppercase tracking-wider">SN</span>
+                        <h4 class="mt-2 font-bold text-white text-title-sm dark:text-white">
+                            {{ number_format($totals['total_sn']) }}
+                        </h4>
+                    </div>
+
+                    <!-- Right Side: Status Breakdown -->
+                    <div class="flex flex-col text-xs md:text-sm text-indigo-100 dark:text-indigo-300 space-y-1 border-l border-blue-400/50 dark:border-blue-800 pl-4">
+                        <div class="flex items-center justify-between gap-4">
+                            <span class="font-medium text-white">Sudah</span>
+                            <span class="font-bold text-white">{{ number_format($totals['total_sn_downloaded']) }}</span>
+                        </div>
+                        <div class="flex items-center justify-between gap-4">
+                            <span class="font-medium text-white">Belum</span>
+                            <span class="font-bold text-white">{{ number_format($totals['total_sn_not_downloaded']) }}</span>
+                        </div>
+                    </div>
+                    
+                </div>
             </div>
         </div>
     </div>
@@ -215,6 +276,9 @@
                             <tr wire:key="row_{{ $index }}" class="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                                 <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{{ $item->no_jp ?? '-' }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-900 dark:text-white font-medium">{{ $item->name }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-900 dark:text-white font-medium">
+                                    <a href="https://api.whatsapp.com/send/?phone={{ App\Helpers\NumberFormatter::formatForWhatsApp($item->current_phone) }}&text=Halo+{{ $item->name }}&type=phone_number&app_absent=0" target="_BLANK" class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors border border-emerald-200/50">💬 {{ $item->current_phone  }}</a>
+                                </td>
                                 <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{{ strtoupper($item->pic) }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{{ $item->source_file_name ?? '-' }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">

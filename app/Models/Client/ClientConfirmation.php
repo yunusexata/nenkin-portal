@@ -28,6 +28,7 @@ class ClientConfirmation extends Model
         'estimated_return_year',
         'indonesia_address',
         'nik',
+        'current_phone',
         'claim_type',
 
         'client_closing_history_id',

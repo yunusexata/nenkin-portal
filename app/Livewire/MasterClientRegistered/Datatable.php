@@ -224,6 +224,11 @@ class Datatable extends Component
                 'render' => fn($item) => $item->phone,
             ],
             [
+                'key' => 'current_phone',
+                'name' => 'WA Update',
+                'render' => fn($item) => $item->current_phone,
+            ],
+            [
                 'key' => 'clients.pic',
                 'name' => 'PIC',
                 'render' => fn($item) => $item->pic,
@@ -507,6 +512,7 @@ class Datatable extends Component
             ->select(
                 'clients.*',
                 'client_confirmations.nenkin_80_received_type',
+                'client_confirmations.current_phone',
                 'client_confirmations.current_position',
                 'client_confirmations.back_to_jp_type',
                 'client_confirmations.departure_type',

@@ -80,6 +80,10 @@ class Datatable extends Component
         return [
             ['key' => 'clients.no_jp', 'name' => 'No Input JPN'],
             ['key' => 'clients.name', 'name' => 'Nama Klien'],
+            [
+                'key' => 'clients.phone',
+                'name' => 'Whatsapp',
+            ],
             ['key' => 'clients.pic', 'name' => 'PIC'],
             ['key' => 'clients.source_file_name', 'name' => 'Batch Upload'],
             ['key' => 'client_confirmations.client_closing_batch_number', 'name' => 'Kloter Closing'],
@@ -147,8 +151,10 @@ class Datatable extends Component
                 'clients.id',
                 'clients.no_jp',
                 'clients.name',
+                'clients.phone',
                 'clients.pic',
                 'clients.source_file_name',
+                'client_confirmations.current_phone',
                 'client_confirmations.client_closing_batch_number',
                 'client_confirmations.closed_at',
                 DB::raw("MAX(CASE WHEN documents.type IS NOT NULL THEN documents.type END) as document_type"),
@@ -201,6 +207,7 @@ class Datatable extends Component
             'clients.name',
             'clients.pic',
             'clients.source_file_name',
+            'client_confirmations.current_phone',
             'client_confirmations.client_closing_batch_number',
             'client_confirmations.closed_at'
         );
@@ -273,20 +280,51 @@ class Datatable extends Component
             'total_downloaded' => 0,
             'total_not_downloaded' => 0,
             'total_ai' => 0,
+            'total_ai_downloaded' => 0,
+            'total_ai_not_downloaded' => 0,
             'total_mt' => 0,
+            'total_mt_downloaded' => 0,
+            'total_mt_not_downloaded' => 0,
             'total_sn' => 0,
+            'total_sn_downloaded' => 0,
+            'total_sn_not_downloaded' => 0,
         ];
 
         foreach ($allRecords as $row) {
-            if ($row->status === 'downloaded' || $row->status === 'seeded') {
+            $isDownloaded = ($row->status === 'downloaded' || $row->status === 'seeded');
+
+            if ($isDownloaded) {
                 $totals['total_downloaded']++;
             } else {
                 $totals['total_not_downloaded']++;
             }
 
-            if ($row->pic === 'ainul') $totals['total_ai']++;
-            if ($row->pic === 'kim') $totals['total_mt']++;
-            if ($row->pic === 'slamet') $totals['total_sn']++;
+            if ($row->pic === 'ainul') {
+                $totals['total_ai']++;
+                if ($isDownloaded) {
+                    $totals['total_ai_downloaded']++;
+                } else {
+                    $totals['total_ai_not_downloaded']++;
+                }
+            }
+
+            if ($row->pic === 'kim') {
+                $totals['total_mt']++;
+                if ($isDownloaded) {
+                    $totals['total_mt_downloaded']++;
+                } else {
+                    $totals['total_mt_not_downloaded']++;
+                }
+            }
+
+            if ($row->pic === 'slamet') {
+                $totals['total_sn']++;
+                if ($isDownloaded) {
+                    $totals['total_sn_downloaded']++;
+                } else {
+                    $totals['total_sn_not_downloaded']++;
+                }
+            }
         }
 
         return $totals;

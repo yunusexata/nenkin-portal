@@ -3,6 +3,7 @@
 namespace App\Livewire\Client;
 
 use App\Helpers\Alert;
+use App\Helpers\NumberFormatter;
 use App\Models\Client\Client;
 use App\Models\Client\ClientConfirmation;
 use App\Models\User;
@@ -23,6 +24,19 @@ class FormConfirmation extends Component
 {
     public $name;
     public $claim_type;
+
+    #[Validate('required|in:62,81', message: [
+        'required' => 'Kode negara nomor WhatsApp wajib dipilih.',
+        'in' => 'Kode negara harus IND (+62) atau JPN (+81).',
+    ], onUpdate: false)]
+    public $phone_country_code = '';
+
+    #[Validate('required|numeric|regex:/^[1-9][0-9]*$/', message: [
+        'required' => 'Nomor WhatsApp saat ini wajib diisi.',
+        'numeric' => 'Nomor WhatsApp hanya boleh berisi angka.',
+        'regex' => 'Nomor WhatsApp tidak boleh diawali dengan angka 0.',
+    ], onUpdate: false)]
+    public $phone_number = '';
 
     #[Validate('required', message: 'Status Penerimaan Nenkin 80% Harus Diisi', onUpdate: false)]
     public $nenkin_80_received_type;
@@ -131,6 +145,27 @@ class FormConfirmation extends Component
     public function store()
     {
         $this->validate();
+
+        $cleanNumber = ltrim(preg_replace('/[^0-9]/', '', (string)$this->phone_number), '0');
+
+        if ($this->phone_country_code === '62') {
+            if (!str_starts_with($cleanNumber, '8')) {
+                $this->addError('phone_number', 'Nomor WhatsApp Indonesia harus diawali dengan angka 8 (contoh: 81234567890).');
+                return;
+            }
+            if (strlen($cleanNumber) < 8 || strlen($cleanNumber) > 13) {
+                $this->addError('phone_number', 'Nomor WhatsApp Indonesia harus berjumlah antara 8 hingga 13 digit.');
+                return;
+            }
+        } elseif ($this->phone_country_code === '81') {
+            if (!preg_match('/^[789]0\d{8}$/', $cleanNumber)) {
+                $this->addError('phone_number', 'Nomor WhatsApp Jepang harus diawali dengan 70, 80, atau 90 dan berjumlah tepat 10 digit (contoh: 8012345678).');
+                return;
+            }
+        }
+
+        $mergedPhone = NumberFormatter::formatForWhatsApp($this->phone_country_code . $cleanNumber);
+
         try {
             if (
                 !$this->current_position
@@ -189,26 +224,11 @@ class FormConfirmation extends Component
                 $is_less_then_7_month = $departure->greaterThanOrEqualTo(now()->addMonths(6));
             }
 
-            // consoleLog($this, [
-            //     'nenkin_80_received_type' => $this->nenkin_80_received_type,
-            //     'current_position' => $this->current_position,
-            //     'back_to_jp_type' => $this->back_to_jp_type,
-            //     'departure' => $this->departure,
-            //     'departure_type' => $this->departure_type,
-            //     'departure_month' => $this->departure ? Carbon::createFromFormat('Y-m', $this->departure)->format('m') : null,
-            //     'departure_year' => $this->departure ? Carbon::createFromFormat('Y-m', $this->departure)->format('Y') : null,
-            //     'is_less_than_7_month' => $is_less_then_7_month ? 'YA' : 'TIDAK',
-            //     'estimated_return' => $this->estimated_return,
-            //     'estimated_return_month' => $this->estimated_return ? Carbon::createFromFormat('Y-m', $this->estimated_return)->format('m') : null,
-            //     'estimated_return_year' => $this->estimated_return ? Carbon::createFromFormat('Y-m', $this->estimated_return)->format('Y') : null,
-            //     'indonesia_address' => $this->indonesia_address,
-            //     'nik' => $this->nik,
-            // ]);
-
             $client_confirmation = ClientConfirmation::firstOrCreate([
                 'client_id' => Auth::user()->client_id,
             ], [
                 'client_id' => Auth::user()->client_id,
+                'current_phone' => $mergedPhone,
                 'nenkin_80_received_type' => $this->nenkin_80_received_type,
                 'current_position' => $this->current_position,
                 'back_to_jp_type' => $this->back_to_jp_type,

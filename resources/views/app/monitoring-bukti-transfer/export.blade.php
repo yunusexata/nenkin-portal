@@ -4,6 +4,7 @@
             <th>No</th>
             <th>No. JP</th>
             <th>Nama Klien</th>
+            <th>Whatsapp</th>
             <th>PIC</th>
             <th>Batch Upload</th>
             <th>Kloter Closing</th>
@@ -23,6 +24,7 @@
                 $last_downloaded_at = $item->last_downloaded_at ?? null;
                 $no_jp = $item->no_jp ?? null;
                 $name = $item->name ?? '';
+                $phone = $item->current_phone ?? '';
 
                 $statusText = match($status) {
                     'downloaded' => 'Mendownload',
@@ -44,6 +46,7 @@
                 <td>{{ $index + 1 }}</td>
                 <td>{{ $no_jp ?? '-' }}</td>
                 <td>{{ $name }}</td>
+                <td>{{ App\Helpers\NumberFormatter::formatForWhatsApp($phone) }}</td>
                 <td>{{ $picLabel }}</td>
                 <td>{{ $batchLabel }}</td>
                 <td>{{ $kloterLabel }}</td>

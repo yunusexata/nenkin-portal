@@ -37,6 +37,7 @@
                 <th class="text-center">NAMA FB</th>
                 <th class="text-center">NAMA IG</th>
                 <th class="text-center">NO TELP</th>
+                <th class="text-center">WA UPDATE</th>
                 <th class="text-center">PIC</th>
                 <th class="text-center">LPK</th>
                 <th class="text-center">NOTE</th>
@@ -166,6 +167,7 @@
                         <td style="{{ $rowStyle }}">{{ mb_strtoupper($data['facebook']) }}</td>
                         <td style="{{ $rowStyle }}">{{ mb_strtoupper($data['instagram']) }}</td>
                         <td style="{{ $rowStyle }}">{{ $data['phone'] }}</td>
+                        <td style="{{ $rowStyle }}">{{ $data->confirmation?->current_phone }}</td>
                         <td style="{{ $rowStyle }}">{{ mb_strtoupper($data['pic']) }}</td>
                         <td style="{{ $rowStyle }}">{{ mb_strtoupper($data['lpk']) }}</td>
                         <td style="{{ $rowStyle }}">{{ mb_strtoupper($data['note']) }}</td>
