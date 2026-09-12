@@ -277,7 +277,7 @@
                                 <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{{ $item->no_jp ?? '-' }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-900 dark:text-white font-medium">{{ $item->name }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-900 dark:text-white font-medium">
-                                    <a href="https://api.whatsapp.com/send/?phone={{ App\Helpers\NumberFormatter::formatForWhatsApp($item->current_phone) }}&text=Halo+{{ $item->name }}&type=phone_number&app_absent=0" target="_BLANK" class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors border border-emerald-200/50">💬 {{ $item->current_phone  }}</a>
+                                    <a href="https://api.whatsapp.com/send/?phone={{ App\Helpers\NumberFormatter::formatForWhatsApp($item->current_phone ?? $item->phone) }}&text=Halo+{{ $item->name }}&type=phone_number&app_absent=0" target="_BLANK" class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors border border-emerald-200/50">💬 {{ $item->current_phone ?? $item->phone  }}</a>
                                 </td>
                                 <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{{ strtoupper($item->pic) }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{{ $item->source_file_name ?? '-' }}</td>

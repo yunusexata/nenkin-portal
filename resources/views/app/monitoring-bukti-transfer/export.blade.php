@@ -24,7 +24,7 @@
                 $last_downloaded_at = $item->last_downloaded_at ?? null;
                 $no_jp = $item->no_jp ?? null;
                 $name = $item->name ?? '';
-                $phone = $item->current_phone ?? '';
+                $phone = $item->current_phone ?? $item->phone ;
 
                 $statusText = match($status) {
                     'downloaded' => 'Mendownload',
