@@ -248,3 +248,62 @@ test('excel export respects pic scoping and contains consistent status', functio
     expect($viewHtml)->toContain('Client Ainul');
     expect($viewHtml)->not->toContain('Client Slamet');
 });
+
+test('admin can filter datatable by pic', function () {
+    $admin = User::factory()->create();
+    $admin->assignRole(User::ROLE_SUPER_ADMIN);
+
+    $cAinul = Client::create(['no_jp' => 'JP501', 'name' => 'Client AinulFilter', 'name_normalized' => 'CLIENT AINULFILTER', 'dob' => '1990-01-01', 'claim_type' => 'speed', 'status' => 'active', 'raw_data' => '{}', 'pic' => 'ainul', 'source_file_name' => 'b1.xlsx', 'imported_at' => now()]);
+    Document::create(['client_id' => $cAinul->id, 'type' => 'resi', 'original_filename' => 'a.jpg', 'bucket_path' => 'a.jpg', 'uploaded_by' => $admin->id]);
+
+    $cSlamet = Client::create(['no_jp' => 'JP502', 'name' => 'Client SlametFilter', 'name_normalized' => 'CLIENT SLAMETFILTER', 'dob' => '1990-01-01', 'claim_type' => 'speed', 'status' => 'active', 'raw_data' => '{}', 'pic' => 'slamet', 'source_file_name' => 'b1.xlsx', 'imported_at' => now()]);
+    Document::create(['client_id' => $cSlamet->id, 'type' => 'resi', 'original_filename' => 'b.jpg', 'bucket_path' => 'b.jpg', 'uploaded_by' => $admin->id]);
+
+    // When bulkPic is empty, both appear
+    Livewire::actingAs($admin)
+        ->test(\App\Livewire\MonitoringBuktiTransfer\Datatable::class)
+        ->assertSee('Client AinulFilter')
+        ->assertSee('Client SlametFilter');
+
+    // When bulkPic is ainul, only Ainul appears
+    Livewire::actingAs($admin)
+        ->test(\App\Livewire\MonitoringBuktiTransfer\Datatable::class)
+        ->set('bulkPic', 'ainul')
+        ->assertSee('Client AinulFilter')
+        ->assertDontSee('Client SlametFilter');
+
+    // When bulkPic is slamet, only Slamet appears
+    Livewire::actingAs($admin)
+        ->test(\App\Livewire\MonitoringBuktiTransfer\Datatable::class)
+        ->set('bulkPic', 'slamet')
+        ->assertSee('Client SlametFilter')
+        ->assertDontSee('Client AinulFilter');
+});
+
+test('admin excel export respects bulk pic filter', function () {
+    $admin = User::factory()->create();
+    $admin->assignRole(User::ROLE_SUPER_ADMIN);
+
+    $cAinul = Client::create(['no_jp' => 'JP601', 'name' => 'Export Client Ainul', 'name_normalized' => 'EXPORT CLIENT AINUL', 'dob' => '1990-01-01', 'claim_type' => 'speed', 'status' => 'active', 'raw_data' => '{}', 'pic' => 'ainul', 'source_file_name' => 'b1.xlsx', 'imported_at' => now()]);
+    Document::create(['client_id' => $cAinul->id, 'type' => 'resi', 'original_filename' => 'a.jpg', 'bucket_path' => 'a.jpg', 'uploaded_by' => $admin->id]);
+
+    $cSlamet = Client::create(['no_jp' => 'JP602', 'name' => 'Export Client Slamet', 'name_normalized' => 'EXPORT CLIENT SLAMET', 'dob' => '1990-01-01', 'claim_type' => 'speed', 'status' => 'active', 'raw_data' => '{}', 'pic' => 'slamet', 'source_file_name' => 'b1.xlsx', 'imported_at' => now()]);
+    Document::create(['client_id' => $cSlamet->id, 'type' => 'resi', 'original_filename' => 'b.jpg', 'bucket_path' => 'b.jpg', 'uploaded_by' => $admin->id]);
+
+    $component = Livewire::actingAs($admin)
+        ->test(\App\Livewire\MonitoringBuktiTransfer\Datatable::class)
+        ->set('bulkPic', 'ainul');
+
+    $exportedData = $component->instance()->getQuery()->get();
+
+    expect($exportedData->pluck('name'))->toContain('Export Client Ainul');
+    expect($exportedData->pluck('name'))->not->toContain('Export Client Slamet');
+
+    $viewHtml = view('app.monitoring-bukti-transfer.export', [
+        'collection' => $exportedData,
+        'request' => ['documentType' => 'all', 'pic' => 'ainul']
+    ])->render();
+
+    expect($viewHtml)->toContain('Export Client Ainul');
+    expect($viewHtml)->not->toContain('Export Client Slamet');
+});

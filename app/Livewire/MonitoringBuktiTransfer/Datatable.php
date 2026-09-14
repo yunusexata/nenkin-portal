@@ -30,6 +30,9 @@ class Datatable extends Component
     #[Url(except: '')]
     public $filterStatus = 'all';   // all | downloaded | seeded | not_downloaded
 
+    #[Url(except: '')]
+    public $bulkPic = '';
+
     public $batches = [];
     public $closings = [];
 
@@ -49,6 +52,10 @@ class Datatable extends Component
     {
         $this->resetPage();
     }
+    public function updatingBulkPic()
+    {
+        $this->resetPage();
+    }
 
     public function onMount()
     {
@@ -56,6 +63,9 @@ class Datatable extends Component
         $this->isCanGetAll = auth()->user()->hasPermissionTo(
             PermissionHelper::transform(PermissionHelper::ACCESS_FILTER_ALL_PIC, PermissionHelper::TYPE_READ)
         );
+        if (!$this->isCanGetAll) {
+            $this->bulkPic = auth()->user()->pic;
+        }
 
         $this->batches = Client::select('source_file_name as name', DB::raw('count(*) as total'))
             ->whereNotNull('source_file_name')
@@ -191,6 +201,8 @@ class Datatable extends Component
         $query->where(function ($q) use ($pic) {
             if (!$this->isCanGetAll) {
                 $q->where('clients.pic', $pic);
+            } elseif ($this->bulkPic && $this->bulkPic !== 'all') {
+                $q->where('clients.pic', 'ILIKE', '%' . $this->bulkPic . '%');
             }
         });
 
@@ -261,6 +273,7 @@ class Datatable extends Component
             'title' => 'Monitoring Bukti Transfer',
             'type' => $type,
             'documentType' => $this->documentType,
+            'pic' => $this->bulkPic,
         ];
 
         return \App\Helpers\ExportHelper::export(

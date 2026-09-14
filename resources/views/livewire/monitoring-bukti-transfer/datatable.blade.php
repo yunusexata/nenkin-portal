@@ -32,7 +32,7 @@
     </div>
 
     <!-- Filters Row -->
-    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;" class="px-5 sm:px-6 mb-5">
+    <div class="grid grid-cols-1 gap-3 px-5 sm:px-6 mb-5 sm:grid-cols-2 md:grid-cols-3 {{ $isCanGetAll ? 'lg:grid-cols-5' : 'lg:grid-cols-4' }}">
         <div>
             <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Batch Client</label>
             <select wire:model.live="selectedBatch" class="h-[42px] w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs text-gray-800 shadow-theme-xs focus:border-brand-500 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white">
@@ -72,6 +72,18 @@
                 <option value="not_downloaded">Belum Mendownload</option>
             </select>
         </div>
+
+        @can(\App\Helpers\PermissionHelper::transform(\App\Helpers\PermissionHelper::ACCESS_FILTER_ALL_PIC, \App\Helpers\PermissionHelper::TYPE_READ))
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Pilih PIC (Sales Agent)</label>
+                <select wire:model.live="bulkPic" class="h-[42px] w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs text-gray-800 shadow-theme-xs focus:border-brand-500 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white">
+                    <option value="">Semua PIC...</option>
+                    @foreach(\App\Models\User::PIC_CHOICE as $value => $name)
+                        <option value="{{ $value }}">{{ ucfirst($name) }}</option>
+                    @endforeach
+                </select>
+            </div>
+        @endcan
     </div>
 
     <!-- Summary Cards Row -->
