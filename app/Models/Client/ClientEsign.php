@@ -77,7 +77,7 @@ class ClientEsign extends Model
         $pdf->SetFont('Times', '', 50);
 
         // NO SURAT
-        $pdf->Text(515, 300, str_pad($user->client_id, 4, '0', STR_PAD_LEFT));
+        $pdf->Text(508, 300, str_pad($user->client_id, 4, '0', STR_PAD_LEFT));
         // HARI
         $pdf->Text(450, 356, \Carbon\Carbon::parse($user->client->esign->signed_at)->locale('id')
             ->translatedFormat('l'));
