@@ -29,8 +29,9 @@
         <!-- Nomor WA Saat Ini -->
         <div>
             <label for="phone_number" class="block text-sm font-semibold text-gray-700 mb-1">
-                Nomor WA Saat Ini
-                <span class="text-xs font-normal text-gray-500">(*digunakan untuk update info & mengirim kwitansi pencairan nenkin)</span>
+                Nomor Whatsapp Aktif saat ini
+                <br>
+                <span class="text-xs font-normal text-gray-500">(*Wajib di isi! karena digunakan untuk update info & mengirim kwitansi pencairan nenkin)</span>
                 <span class="text-red-500">*</span>
             </label>
             <div class="flex rounded-lg shadow-sm">
@@ -41,8 +42,8 @@
                             wire:model.live="phone_country_code" 
                             required
                             class="h-[44px] px-3 py-2.5 bg-gray-50 border rounded-l-lg text-sm font-semibold text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#F97316] transition @error('phone_country_code') border-red-500 @else border-gray-300 @enderror">
-                        <option value="">Pilih</option>
-                        <option value="62">IND +62</option>
+                        <option value="">Pilih Kode</option>
+                        <option value="62">INDO +62</option>
                         <option value="81">JPN +81</option>
                     </select>
                 </div>
