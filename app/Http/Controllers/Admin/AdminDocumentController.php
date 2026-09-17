@@ -801,11 +801,11 @@ class AdminDocumentController extends Controller
             $zip = new \ZipArchive();
             $zipFileName = 'Dokumen_' . Str::slug($client->name) . '_' . now()->format('Ymd') . '.zip';
             $tempDir = storage_path('app/temp');
-            
+
             if (!file_exists($tempDir)) {
                 mkdir($tempDir, 0755, true);
             }
-            
+
             $zipPath = $tempDir . '/' . $zipFileName;
 
             if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
@@ -831,7 +831,6 @@ class AdminDocumentController extends Controller
             return response()->download($zipPath, $zipFileName, [
                 'Content-Type' => 'application/zip',
             ])->deleteFileAfterSend(true);
-
         } catch (\Throwable $e) {
             if (isset($zipPath) && file_exists($zipPath)) {
                 @unlink($zipPath);
@@ -863,21 +862,27 @@ class AdminDocumentController extends Controller
                 $join->on('dd.client_id', '=', 'c.id')
                     ->where(function ($q) use ($batch) {
                         $q->where('dd.batch_id', '=', $batch->id)
-                          ->orWhereNull('dd.batch_id');
+                            ->orWhereNull('dd.batch_id');
                     });
+            })
+            ->leftJoin('client_confirmations as cc', function ($join) use ($batch) {
+                $join->on('cc.client_id', '=', 'c.id')
+                    ->whereNull('cc.deleted_at');
             })
             ->select([
                 'c.id as client_id',
+                'c.phone',
                 'c.no_jp',
                 'c.name as client_name',
                 'c.pic as client_pic',
                 'b.id as batch_id',
                 'b.created_at as batch_created_at',
+                'cc.current_phone as current_phone',
                 DB::raw('MAX(d.type) as document_type'),
                 DB::raw('MAX(dd.id) as download_id'),
                 DB::raw('MAX(dd.downloaded_at) as downloaded_at'),
             ])
-            ->groupBy('c.id', 'c.no_jp', 'c.name', 'c.pic', 'b.id', 'b.created_at')
+            ->groupBy('c.id', 'c.no_jp', 'c.name', 'c.pic', 'c.phone', 'b.id', 'b.created_at', 'cc.current_phone')
             ->orderBy('c.id', 'asc');
 
         $fileName = "Laporan_Status_Download_Batch_" . $batch->id . "_" . now()->format('Ymd_His');

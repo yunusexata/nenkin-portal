@@ -3,6 +3,7 @@
         <tr>
             <th style="font-weight: bold; background-color: #001B5E; color: #ffffff;">No</th>
             <th style="font-weight: bold; background-color: #001B5E; color: #ffffff;">Client ID / No JP</th>
+            <th style="font-weight: bold; background-color: #001B5E; color: #ffffff;">WA Update</th>
             <th style="font-weight: bold; background-color: #001B5E; color: #ffffff;">Nama Klien</th>
             <th style="font-weight: bold; background-color: #001B5E; color: #ffffff;">PIC</th>
             <th style="font-weight: bold; background-color: #001B5E; color: #ffffff;">Batch ID &amp; Tanggal Upload</th>
@@ -24,6 +25,7 @@
             <tr style="{{ $rowStyle }}">
                 <td style="{{ $rowStyle }}">{{ $index + 1 }}</td>
                 <td style="{{ $rowStyle }}">{{ $item->no_jp ?? '-' }}</td>
+                <td style="{{ $rowStyle }}">{{ App\Helpers\NumberFormatter::formatForWhatsApp( $item->current_phone ?? $item->phone) }}</td>
                 <td style="{{ $rowStyle }}">{{ $item->client_name }}</td>
                 <td style="{{ $rowStyle }}">{{ $picLabel }}</td>
                 <td style="{{ $rowStyle }}">{{ $batchInfo }}</td>
