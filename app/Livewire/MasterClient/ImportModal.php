@@ -3,6 +3,7 @@
 namespace App\Livewire\MasterClient;
 
 use App\Helpers\Alert;
+use Illuminate\Validation\Rule;
 use App\Helpers\ExportHelper;
 use App\Helpers\PermissionHelper;
 use App\Imports\ExcelImportBulk;
@@ -85,7 +86,10 @@ class ImportModal extends Component
                 'note' => $row['note'],
             ];
             $validator = Validator::make($d, [
-                'no_jp' => 'required|unique:clients,no_jp',
+                'no_jp' => [
+                    'required',
+                    Rule::unique('clients', 'no_jp')->whereNull('deleted_at')
+                ],
                 'name' => 'required',
                 'dob' => 'required',
                 'pic' => 'required',
