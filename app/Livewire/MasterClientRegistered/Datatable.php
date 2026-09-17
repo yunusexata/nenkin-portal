@@ -90,6 +90,44 @@ class Datatable extends Component
         }
     }
 
+    #[On('on-delete-confirmation-dialog-confirm')]
+    public function onDialogDeleteConfirmationConfirm()
+    {
+        if (!$this->isCanDelete || $this->targetDeleteId == null) {
+            return;
+        }
+
+        ClientConfirmationRepository::deleteBy([
+            ['client_id', $this->targetDeleteId]
+        ]);
+        ClientEsignRepository::deleteBy([
+            ['client_id', $this->targetDeleteId]
+        ]);
+        Alert::success($this, 'Berhasil', 'Data berhasil dihapus');
+    }
+
+    #[On('on-delete-confirmation-dialog-cancel')]
+    public function onDialogDeleteConfirmationCancel()
+    {
+        $this->targetDeleteId = null;
+    }
+
+    public function showDeleteConfirmationDialog($id)
+    {
+        $this->targetDeleteId = $id;
+
+        Alert::confirmation(
+            $this,
+            Alert::ICON_QUESTION,
+            "Hapus Data",
+            "Apakah Anda Yakin Ingin Menghapus Data Ini ?",
+            "on-delete-confirmation-dialog-confirm",
+            "on-delete-confirmation-dialog-cancel",
+            "Hapus",
+            "Batal",
+        );
+    }
+
     #[On('refresh-table')]
     public function refreshTable()
     {
@@ -432,6 +470,14 @@ class Datatable extends Component
                 'sortable' => false,
                 'searchable' => false,
                 'render' => function ($item) {
+                    $destroyHtml = "";
+                    if ($this->isCanDelete) {
+                        $destroyHtml = "<div class='col-auto'>
+                            <button type='button' class='inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-2 py-1 text-sm bg-red-500 text-white shadow-theme-xs hover:bg-red-600 disabled:bg-brand-300' wire:click=\"showDeleteConfirmationDialog($item->id)\">
+                                <span class='material-symbols-outlined text-lg' data-icon='delete'>delete</span>
+                            </button>
+                        </div>";
+                    }
 
                     $esignHtml = '';
                     if ($item->esign_exists) {
@@ -450,7 +496,7 @@ class Datatable extends Component
 
 
                     $html = "<div class='flex flex-nowrap justify-start p-0 m-0 gap-1'>
-                        $esignHtml $clientHtml
+                        $destroyHtml $esignHtml $clientHtml
                     </div>";
 
                     return $html;
