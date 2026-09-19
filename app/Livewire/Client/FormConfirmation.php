@@ -158,8 +158,12 @@ class FormConfirmation extends Component
                 return;
             }
         } elseif ($this->phone_country_code === '81') {
-            if (!preg_match('/^[789]0\d{8}$/', $cleanNumber)) {
-                $this->addError('phone_number', 'Nomor WhatsApp Jepang harus diawali dengan 70, 80, atau 90 dan berjumlah tepat 10 digit (contoh: 8012345678).');
+            // Hapus angka 0 di paling depan jika pengguna menyertakan format lokal (misal: 080... menjadi 80...)
+            $numberToCheck = ltrim($cleanNumber, '0');
+
+            // Validasi nomor seluler (60, 70, 80, 90) dan VoIP (50) dengan total 10 digit
+            if (!preg_match('/^(?:50|[6789]0)\d{8}$/', $numberToCheck)) {
+                $this->addError('phone_number', 'Nomor WhatsApp Jepang harus diawali dengan 50, 60, 70, 80, atau 90 dan berjumlah 10 digit.');
                 return;
             }
         }
