@@ -149,10 +149,6 @@ class FormConfirmation extends Component
         $cleanNumber = ltrim(preg_replace('/[^0-9]/', '', (string)$this->phone_number), '0');
 
         if ($this->phone_country_code === '62') {
-            if (!str_starts_with($cleanNumber, '8')) {
-                $this->addError('phone_number', 'Nomor WhatsApp Indonesia harus diawali dengan angka 8 (contoh: 81234567890).');
-                return;
-            }
             if (strlen($cleanNumber) < 8 || strlen($cleanNumber) > 13) {
                 $this->addError('phone_number', 'Nomor WhatsApp Indonesia harus berjumlah antara 8 hingga 13 digit.');
                 return;
