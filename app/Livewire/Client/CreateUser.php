@@ -164,7 +164,7 @@ class CreateUser extends Component
 
             $user->assignRole(User::ROLE_CLIENT);
 
-            Auth::loginUsingId($user->id);
+            Auth::loginUsingId($user->id, true);
             $this->redirectRoute('login');
 
             DB::commit();

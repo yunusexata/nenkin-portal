@@ -46,7 +46,7 @@ class SocialLoginController extends Controller
                 return redirect('/login')->with('error', 'Akun tidak ditemukan. Silakan register terlebih dahulu.');
             }
 
-            Auth::login($user);
+            Auth::login($user, true);
             session()->regenerate();
             return redirect()->intended('/dashboard');
         } catch (\Exception $e) {
