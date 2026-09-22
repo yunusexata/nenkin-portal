@@ -4,6 +4,7 @@ namespace App\Livewire\MasterClientRegistered;
 
 use App\Helpers\Alert;
 use App\Helpers\ExportHelper;
+use App\Helpers\NumberFormatter;
 use App\Helpers\PermissionHelper;
 use App\Models\Client\Client;
 use App\Models\Client\ClientClosingHistory;
@@ -226,7 +227,9 @@ class Datatable extends Component
             [
                 'key' => 'current_phone',
                 'name' => 'WA Update',
-                'render' => fn($item) => $item->current_phone,
+                'render' => function ($item) {
+                    return NumberFormatter::formatForWhatsApp($item->current_phone);
+                }
             ],
             [
                 'key' => 'clients.pic',

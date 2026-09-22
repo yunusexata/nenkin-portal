@@ -39,6 +39,7 @@ class NumberFormatter
         }
 
         // TAHAP 3: Perbaikan Salah Ketik "Double Prefix" (+620812 / +81090)
+        $clean = preg_replace('/^6262+/', '62', $clean);
         $clean = preg_replace('/^620+/', '62', $clean);
         $clean = preg_replace('/^810+/', '81', $clean);
 
