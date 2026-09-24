@@ -243,7 +243,7 @@ class Datatable extends Component
                 'key' => 'current_phone',
                 'name' => 'WA Update',
                 'render' => function ($item) {
-                    $phone = NumberFormatter::formatForWhatsApp($item->phone);
+                    $phone = NumberFormatter::formatForWhatsApp($item->current_phone);
                     $text = "";
                     if (
                         in_array(
