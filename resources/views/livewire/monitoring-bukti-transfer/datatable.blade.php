@@ -289,7 +289,13 @@
                                 <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{{ $item->no_jp ?? '-' }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-900 dark:text-white font-medium">{{ $item->name }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-900 dark:text-white font-medium">
-                                    <a href="https://api.whatsapp.com/send/?phone={{ App\Helpers\NumberFormatter::formatForWhatsApp($item->current_phone ?? $item->phone) }}&text=Halo+{{ $item->name }}&type=phone_number&app_absent=0" target="_BLANK" class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors border border-emerald-200/50">💬 {{ $item->current_phone ?? $item->phone  }}</a>
+                                    @php
+                                    $text = "";
+                                        if($item->status != 'downloaded' || $item->status != 'seeded'){
+                                             $text = "Halo+Kak%2C+proses+pencairan+Nenkin+Kakak+sudah+selesai%21+%E2%9C%85%0A%0AKwitansi+dan+bukti+pencairannya+sudah+tersedia+di+dalam+sistem.+Jangan+lupa+untuk+login+ke+%5Bhttps://nenkin.exata-indonesia.id%5D+dan+segera+Download+kwitansinya+untuk+disimpan+sebagai+arsip+pribadi+Kakak+ya.%0A%0ATerima+kasih+sudah+mempercayakan+kepengurusan+Nenkin+Kakak+kepada+Exata+Indonesia%21";   
+                                        }
+                                    @endphp
+                                    <a href="https://api.whatsapp.com/send/?phone={{ App\Helpers\NumberFormatter::formatForWhatsApp($item->current_phone ?? $item->phone) }}&text={{ $text }}&type=phone_number&app_absent=0" target="_BLANK" class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors border border-emerald-200/50">💬 {{ $item->current_phone ?? $item->phone  }}</a>
                                 </td>
                                 <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{{ strtoupper($item->pic) }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{{ $item->source_file_name ?? '-' }}</td>
@@ -300,7 +306,7 @@
                                 <td class="px-4 py-3 text-sm">
                                     @php
                                         $statusMeta = match($item->status) {
-                                            'downloaded'     => ['label' => 'Mendownload', 'tone' => 'success', 'tip' => 'Klik download nyata secara live-tracked'],
+                                            'downloaded'     => ['label' => 'Downloaded', 'tone' => 'success', 'tip' => 'Klik download nyata secara live-tracked'],
                                             'seeded'         => ['label' => 'Downloaded*', 'tone' => 'amber',  'tip' => 'Data dari seeder/historis (bukan klik live-tracked)'],
                                             default          => ['label' => 'Belum Mendownload', 'tone' => 'red', 'tip' => 'Belum ada aktivitas download tercatat'],
                                         };
