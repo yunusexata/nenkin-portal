@@ -292,7 +292,7 @@
                                     @php
                                     $text = "";
                                         if($item->status != 'downloaded' || $item->status != 'seeded'){
-                                             $text = "Halo+Kak%2C+proses+pencairan+Nenkin+Kakak+sudah+selesai%21+%E2%9C%85%0A%0AKwitansi+dan+bukti+pencairannya+sudah+tersedia+di+dalam+sistem.+Jangan+lupa+untuk+login+ke+%5Bhttps://nenkin.exata-indonesia.id%5D+dan+segera+Download+kwitansinya+untuk+disimpan+sebagai+arsip+pribadi+Kakak+ya.%0A%0ATerima+kasih+sudah+mempercayakan+kepengurusan+Nenkin+Kakak+kepada+Exata+Indonesia%21";   
+                                             $text = "Halo+Kak+" . strtoupper($item->name) . "+%2C+proses+pencairan+Nenkin+Kakak+sudah+selesai%21+%E2%9C%85%0A%0AKwitansi+dan+bukti+pencairannya+sudah+tersedia+di+dalam+sistem.+Jangan+lupa+untuk+login+ke+%5Bhttps://nenkin.exata-indonesia.id%5D+dan+segera+Download+kwitansinya+untuk+disimpan+sebagai+arsip+pribadi+Kakak+ya.%0A%0ATerima+kasih+sudah+mempercayakan+kepengurusan+Nenkin+Kakak+kepada+Exata+Indonesia%21";   
                                         }
                                     @endphp
                                     <a href="https://api.whatsapp.com/send/?phone={{ App\Helpers\NumberFormatter::formatForWhatsApp($item->current_phone ?? $item->phone) }}&text={{ $text }}&type=phone_number&app_absent=0" target="_BLANK" class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition-colors border border-emerald-200/50">💬 {{ $item->current_phone ?? $item->phone  }}</a>
