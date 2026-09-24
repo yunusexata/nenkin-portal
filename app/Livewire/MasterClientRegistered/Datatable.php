@@ -256,6 +256,7 @@ class Datatable extends Component
                     ) {
                         $text = "Halo+Kak+" . strtoupper($item->name) . "+%2C+pilihan+pencairan+jalur+Speed+Service+untuk+Nenkin+20%25+Kakak+sudah+kami+terima%21+%E2%9A%A1%0A%0AAgar+sistem+kami+bisa+langsung+memprosesnya%2C+Kakak+perlu+menandatangani+Surat+Perjanjian+Speed+Service+secara+digital.+Silakan+login+ke+portal+%0A%0A%5Bhttps://nenkin.exata-indonesia.id%5D%0A%0A+klik+tombol+tanda+tangan+ya.%0A%0AProsesnya+cuma+1+menit+kok%2C+Kak.+Ditunggu+ya%21";
                     }
+
                     if (!$item->user_exists) {
                         $text = "Halo+Kak+" . strtoupper($item->name) . "+%2C+kabar+baik%21+Nenkin+80%25+Kakak+sudah+berhasil+cair+ya.+%F0%9F%8E%89%0A%0AUntuk+mulai+memproses+sisa+Nenkin+20%25-nya%2C+yuk+segera+buat+akun+di+web+Nenkin+Portal+By+Exata+Indonesia.+Caranya+gampang+banget%2C+Kakak+cukup+klik+link+di+bawah+ini%2C+lalu+masukkan+Email+aktif+dan+buat+Password+baru+%28+masukkan+tanggal+lahir+%29%3A%0A%0A%F0%9F%94%97+%5Bhttps://nenkin.exata-indonesia.id%5D%0A%0AKalau+kesulitan+saat+registrasi%2C+langsung+balas+pesan+ini+saja+ya+biar+kami+bantu+pandu.";
                     }
