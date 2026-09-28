@@ -73,7 +73,9 @@ class NumberFormatter
 
         // KONDISI C: Ambiguitas (User tidak mengetik '+' dan tidak mengetik '0')
         // Contoh input: "628123..." atau "819012..." atau "817012..."
-
+        if (preg_match('/^[789]0\d{8}$/', $clean)) {
+            return '81' . $clean;
+        }
         // Cek format murni Jepang
         if (preg_match('/^81[789]0\d{8}$/', $clean)) {
             return $clean;
