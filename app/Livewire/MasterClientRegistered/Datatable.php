@@ -456,14 +456,6 @@ class Datatable extends Component
             ],
             [
                 'searchable' => false,
-                'key' => 'departure_type',
-                'name' => 'Estimasi Bulan Kembali Ke Jepang',
-                'render' => function ($item) {
-                    return $item->departure_type ?? '-';
-                }
-            ],
-            [
-                'searchable' => false,
                 'key' => 'departure_month',
                 'name' => 'Bulan Kembali Ke Jepang',
                 'render' => function ($item) {
