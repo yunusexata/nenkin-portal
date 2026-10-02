@@ -192,6 +192,51 @@ class Datatable extends Component
                     return (($page - 1) * $this->length) + $index + 1;
                 }
             ],
+
+            [
+                'name' => 'Action',
+                'sortable' => false,
+                'searchable' => false,
+                'render' => function ($item) {
+                    $destroyHtml = "";
+                    if ($this->isCanDelete) {
+                        $destroyHtml = "<div class='col-auto'>
+                            <button type='button' class='inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-2 py-1 text-sm bg-red-500 text-white shadow-theme-xs hover:bg-red-600 disabled:bg-brand-300' wire:click=\"showDeleteConfirmationDialog($item->id)\">
+                                <span class='material-symbols-outlined text-lg' data-icon='delete'>delete</span>
+                            </button>
+                        </div>";
+                    }
+
+                    $esignHtml = '';
+                    if ($item->esign_exists) {
+                        $esignHtml = "<div class='col-auto'>
+                                <button type='button' class='inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-2 py-1 text-sm bg-success-500 text-white shadow-theme-xs hover:bg-red-600 disabled:bg-brand-300' wire:click=\"dispatch('showEsign', '" . $item?->esign?->signature_data . "')\">
+                                    <span class='material-symbols-outlined text-lg' data-icon='signature'>signature</span>
+                                </button>
+                            </div>";
+                    }
+                    $credential = $item->email . " " . $item->password;
+                    $credentialHtml = "<div class='col-auto'>
+                                <button type='button' class='inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-2 py-1 text-sm bg-success-500 text-white shadow-theme-xs hover:bg-success-600 disabled:bg-brand-300' onclick=\"copyToClipboard('$credential')\">
+                                    <span class='material-symbols-outlined text-lg' data-icon='edit'>vpn_key</span>
+                                </button>
+                            </div>
+                    ";
+
+                    $clientHtml = "<div class='col-auto'>
+                                <a href='" . route('pov_client.index', Crypt::encrypt($item->id)) . "' target='_BLANK' class='inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-2 py-1 text-sm bg-blue-600 text-white shadow-theme-xs hover:bg-blue-800 disabled:bg-brand-300'>
+                                    <span class='material-symbols-outlined text-lg' data-icon='identity_platform'>identity_platform</span>
+                                </a>
+                            </div>";
+
+
+                    $html = "<div class='flex flex-nowrap justify-start p-0 m-0 gap-1'>
+                        $destroyHtml $esignHtml $clientHtml $credentialHtml
+                    </div>";
+
+                    return $html;
+                },
+            ],
             [
                 'key' => 'clients.no_jp',
                 'name' => 'No Input JPN',
@@ -518,43 +563,6 @@ class Datatable extends Component
                 'name' => 'Waktu Closing',
                 'render' => fn($item) => $item->closed_at ?? 'Belum Masuk Closing',
             ],
-            [
-                'name' => 'Action',
-                'sortable' => false,
-                'searchable' => false,
-                'render' => function ($item) {
-                    $destroyHtml = "";
-                    if ($this->isCanDelete) {
-                        $destroyHtml = "<div class='col-auto'>
-                            <button type='button' class='inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-2 py-1 text-sm bg-red-500 text-white shadow-theme-xs hover:bg-red-600 disabled:bg-brand-300' wire:click=\"showDeleteConfirmationDialog($item->id)\">
-                                <span class='material-symbols-outlined text-lg' data-icon='delete'>delete</span>
-                            </button>
-                        </div>";
-                    }
-
-                    $esignHtml = '';
-                    if ($item->esign_exists) {
-                        $esignHtml = "<div class='col-auto'>
-                                <button type='button' class='inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-2 py-1 text-sm bg-success-500 text-white shadow-theme-xs hover:bg-red-600 disabled:bg-brand-300' wire:click=\"dispatch('showEsign', '" . $item?->esign?->signature_data . "')\">
-                                    <span class='material-symbols-outlined text-lg' data-icon='signature'>signature</span>
-                                </button>
-                            </div>";
-                    }
-
-                    $clientHtml = "<div class='col-auto'>
-                                <a href='" . route('pov_client.index', Crypt::encrypt($item->id)) . "' target='_BLANK' class='inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-2 py-1 text-sm bg-blue-600 text-white shadow-theme-xs hover:bg-blue-800 disabled:bg-brand-300'>
-                                    <span class='material-symbols-outlined text-lg' data-icon='identity_platform'>identity_platform</span>
-                                </a>
-                            </div>";
-
-
-                    $html = "<div class='flex flex-nowrap justify-start p-0 m-0 gap-1'>
-                        $destroyHtml $esignHtml $clientHtml
-                    </div>";
-
-                    return $html;
-                },
-            ],
         ];
     }
 
@@ -577,6 +585,8 @@ class Datatable extends Component
                 'client_confirmations.indonesia_address',
                 'client_confirmations.client_closing_batch_number',
                 'client_confirmations.closed_at',
+                'client_magic_links.email',
+                'client_magic_links.password',
             )
             ->selectRaw("
                 EXISTS (
@@ -602,6 +612,10 @@ class Datatable extends Component
             ->join('client_confirmations', function ($j) {
                 $j->on('client_confirmations.client_id', '=', 'clients.id')
                     ->whereNull('client_confirmations.deleted_at');
+            })
+            ->join('client_magic_links', function ($j) {
+                $j->on('client_magic_links.client_id', '=', 'clients.id')
+                    ->whereNull('client_magic_links.deleted_at');
             })
             ->whereHas('confirmation')
             ->when($this->selectedBatch != 'all', function ($q) {

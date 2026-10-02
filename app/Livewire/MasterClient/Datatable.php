@@ -170,9 +170,20 @@ class Datatable extends Component
                             </button>
                         </div>
                     ";
+                    $credential = $item->email . " " . $item->password;
+                    $credentialHtml = "
+                        <div class='w-auto'>
+                            <button class='p-1 inline-flex items-center justify-center text-blue-600 hover:bg-blue-50 rounded transition-colors'
+                                onclick=\"copyToClipboard('$credential')\"
+                            >
+                                <span class='material-symbols-outlined text-lg' data-icon='edit'>vpn_key</span>
+                            </button>
+                        </div>
+                    ";
 
                     $html = "<div class='flex flex-nowrap justify-start p-0 m-0'>
                         $linkHtml
+                        $credentialHtml
                     </div>";
 
                     return $html;
@@ -386,7 +397,7 @@ class Datatable extends Component
     public function getQuery(): Builder
     {
         return \App\Models\Client\Client::query()
-            ->select('clients.*')
+            ->select('clients.*', 'client_magic_links.email', 'client_magic_links.password')
             ->selectRaw("
                 EXISTS (
                     SELECT 1
@@ -407,6 +418,10 @@ class Datatable extends Component
                         AND users.deleted_at IS NULL
                 ) as user_exists
             ")
+            ->join('client_magic_links', function ($j) {
+                $j->on('client_magic_links.client_id', '=', 'clients.id')
+                    ->whereNull('client_magic_links.deleted_at');
+            })
             ->when($this->selectedBatch != 'all', function ($q) {
                 $q->where('clients.source_file_name', $this->selectedBatch);
             })
