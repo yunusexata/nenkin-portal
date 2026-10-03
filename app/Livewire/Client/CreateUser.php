@@ -24,8 +24,7 @@ class CreateUser extends Component
     public $name;
     public $dob;
     public $email;
-    public $password;
-    public $retypePassword;
+    public $password_dob;
 
     public $is_verified = false;
 
@@ -75,6 +74,7 @@ class CreateUser extends Component
             return;
         }
 
+        $this->password_dob = Carbon::parse($client->dob)->format('dmY');
         // Save the array of data into the session
         session([
             'pending_magic_link_data' => [
@@ -95,15 +95,35 @@ class CreateUser extends Component
     public function store()
     {
         $validated = $this->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-            'retypePassword' => ['required', 'same:password'],
+            'email' => [
+                'required',
+                'email',
+                function ($attribute, $value, $fail) {
+                    $allowedDomains = [
+                        'gmail.com',
+                        'outlook.com',
+                        'hotmail.com',
+                        'yahoo.com',
+                        'yahoo.co.id',
+                        'ymail.com',
+                        'icloud.com',
+                        'live.com'
+                    ];
+
+                    // Split by '@' and get the last part (the domain)
+                    $parts = explode('@', $value);
+                    $domain = end($parts);
+
+                    // strtolower ensures it works even if they type "GMAIL.COM"
+                    if (!in_array(strtolower($domain), $allowedDomains)) {
+                        $domainText = $domain ?: 'tidak valid';
+                        $fail("Domain email \"{$domainText}\" tidak diperbolehkan. Gunakan email yang valid !");
+                    }
+                }
+            ],
         ], [
             'email.required' => 'Email Harus Diisi',
             'email.email' => 'Format Email Tidak Sesuai',
-            'password.required' => 'Password Harus Diisi',
-            'retypePassword.required' => 'Ketik Ulang Password Harus Diisi',
-            'retypePassword.same' => 'Password tidak sama',
         ]);
 
         $client = ClientMagicLinkRepository::findBy([
@@ -128,10 +148,6 @@ class CreateUser extends Component
             return;
         }
 
-        if ($this->password != $this->retypePassword) {
-            Alert::fail($this, 'Register Gagal', 'Pengetikan Ulang Password Tidak Sama');
-            return;
-        }
         $user = UserRepository::findByEmail($this->email);
         if (!empty($user)) {
             Alert::fail($this, 'Register Gagal', 'Email Sudah Digunakan');
@@ -140,7 +156,6 @@ class CreateUser extends Component
         try {
             DB::beginTransaction();
 
-
             $magicLink = ClientMagicLinkRepository::findBy([
                 ['token', $this->token]
             ]);
@@ -148,7 +163,7 @@ class CreateUser extends Component
             $magicLink->update([
                 'used_at' => now(),
                 'email' => $this->email,
-                'password' => $this->password,
+                'password' => $this->password_dob,
             ]);
 
             $user = UserRepository::create([
@@ -156,7 +171,7 @@ class CreateUser extends Component
                 'name' => $client->name,
                 'no_whatsapp' => $magicLink->client->phone,
                 'email' => $this->email,
-                'password' => Hash::make($this->password),
+                'password' => Hash::make($this->password_dob),
                 'pic' => $magicLink->client->pic,
                 'subject_id' => $magicLink->id,
                 'subject_type' => ClientMagicLink::class,
