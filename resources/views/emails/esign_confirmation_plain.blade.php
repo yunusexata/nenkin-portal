@@ -20,8 +20,7 @@ Status           : Selesai ✓
 ESTIMASI PENCAIRAN SPEED SERVICE
 ------------------------------------------
 Tanggal Konfirmasi    : {{ $signedAtFormatted }}
-Estimasi Transfer     : {{ $estimatedDateFormatted }}
-(2 minggu sejak tanggal konfirmasi)
+Estimasi Transfer     : 7-14 hari kerja sejak tanggal konfirmasi
 @endif
 
 ------------------------------------------
