@@ -38,44 +38,6 @@ Route::post('/lw-test', function (\Illuminate\Http\Request $request) {
     return response()->json(['ok' => true]);
 });
 
-Route::get('/test-gen', function () {
-
-    DB::transaction(function () {
-        // chunkById handles large datasets efficiently and avoids memory limits
-        ClientMagicLink::with('client')->chunkById(200, function ($magicLinks) {
-            foreach ($magicLinks as $magicLink) {
-                $client = $magicLink->client;
-
-                // Skip if there is no linked client or the client has no DOB
-                if (!$client || empty($client->dob)) {
-                    continue;
-                }
-
-                // NOTE: Adjust the date format here if your password needs a specific format 
-                // e.g., Carbon::parse($client->dob)->format('dmY')
-                $passwordDob = Carbon::parse($client->dob)->format('dmY');
-
-                // 1. Update Magic Link (stored in plain text according to your previous snippet)
-                $magicLink->update([
-                    'password' => $passwordDob,
-                ]);
-
-                // 2. Update the corresponding User model (hashed)
-                $user = User::where('client_id', $client->id)->first();
-
-                if ($user) {
-                    $user->update([
-                        'password' => Hash::make($passwordDob),
-                    ]);
-                }
-            }
-        });
-
-        return "success";
-    });
-});
-
-
 // Route::get('/generate-ai', function () {
 //     return User::query()
 //         ->whereHas('client', function ($query) {

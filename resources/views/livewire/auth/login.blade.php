@@ -23,7 +23,7 @@
                         </p>
                     </div>
                     <div>
-                        <form wire:submit="store" novalidate="novalidate">
+                        <form wire:submit="store">
                             @csrf
                             <div class="space-y-5">
                                 <!-- Email -->
@@ -33,7 +33,7 @@
                                     </label>
                                     <input type="email" id="email" wire:model="nameOrEmail" name="email" placeholder="info@gmail.com"
                                         class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30
-                                        @error('nameOrEmail') border-red-500 focus:ring-red-500 @enderror" />
+                                        @error('nameOrEmail') border-red-500 focus:ring-red-500 @enderror" required/>
                                     @error('nameOrEmail')
                                         <p class="text-red-500 text-xs mt-1 font-medium">
                                             {{ $message }}
@@ -50,7 +50,8 @@
                                     <div class="grid grid-cols-3 gap-2">
                                         <!-- Tanggal -->
                                         <div>
-                                            <select wire:model="tanggal" class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-2 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 @error('tanggal') border-red-500 focus:ring-red-500 @enderror">
+                                            <select wire:model="tanggal" name="tanggal" class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-2 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 @error('tanggal') border-red-500 focus:ring-red-500 @enderror"
+                                            required>
                                                 <option value="">Tanggal</option>
                                                 @for ($i = 1; $i <= 31; $i++)
                                                     <option value="{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}">{{ $i }}</option>
@@ -59,7 +60,8 @@
                                         </div>
                                         <!-- Bulan -->
                                         <div>
-                                            <select wire:model="bulan" class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-2 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 @error('bulan') border-red-500 focus:ring-red-500 @enderror">
+                                            <select wire:model="bulan" name="bulan" class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-2 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 @error('bulan') border-red-500 focus:ring-red-500 @enderror"
+                                            required>
                                                 <option value="">Bulan</option>
                                                 @foreach (['01' => 'Januari', '02' => 'Februari', '03' => 'Maret', '04' => 'April', '05' => 'Mei', '06' => 'Juni', '07' => 'Juli', '08' => 'Agustus', '09' => 'September', '10' => 'Oktober', '11' => 'November', '12' => 'Desember'] as $val => $name)
                                                     <option value="{{ $val }}">{{ $name }}</option>
@@ -68,7 +70,8 @@
                                         </div>
                                         <!-- Tahun -->
                                         <div>
-                                            <select wire:model="tahun" class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-2 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 @error('tahun') border-red-500 focus:ring-red-500 @enderror">
+                                            <select wire:model="tahun" name="tahun" class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-2 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 @error('tahun') border-red-500 focus:ring-red-500 @enderror"
+                                            required>
                                                 <option value="">Tahun</option>
                                                 @for ($i = date('Y'); $i >= 1950; $i--)
                                                     <option value="{{ $i }}">{{ $i }}</option>

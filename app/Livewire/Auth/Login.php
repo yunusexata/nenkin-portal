@@ -41,12 +41,12 @@ class Login extends Component
         }
 
         if (!$user->hasRole(\App\Models\User::ROLE_CLIENT)) {
-            Alert::fail($this, 'Akses Ditolak', 'Gunakan halaman admin login untuk staf.');
+            Alert::fail($this, 'Akses Ditolak', 'Akun Belum Terdaftar');
             return;
         }
 
         $formattedDob = sprintf('%04d-%02d-%02d', $this->tahun, $this->bulan, $this->tanggal);
-        
+
         $clientDob = null;
         if ($user->client && $user->client->dob) {
             $clientDob = \Carbon\Carbon::parse($user->client->dob)->format('Y-m-d');
