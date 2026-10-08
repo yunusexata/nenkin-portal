@@ -14,6 +14,7 @@ Route::get('/auth/{provider}/callback', [SocialLoginController::class, 'callback
 Route::middleware('guest')->group(function () {
     Route::get('/', [AuthController::class, 'login']);
     Route::get("/login", [AuthController::class, "login"])->name("login");
+    Route::get("/admin-login", [AuthController::class, "adminLogin"])->name("admin-login");
     Route::get("/logout", [AuthController::class, "logout"])->name('signout');
 
     // Client Forgot Password Routes

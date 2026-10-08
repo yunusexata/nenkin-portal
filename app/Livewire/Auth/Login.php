@@ -15,8 +15,14 @@ class Login extends Component
     #[Validate('required', message: 'Nama / Email Harus Diisi', onUpdate: false)]
     public $nameOrEmail;
 
-    #[Validate('required', message: 'Password Harus Diisi', onUpdate: false)]
-    public $password;
+    #[Validate('required', message: 'Tanggal Harus Diisi', onUpdate: false)]
+    public $tanggal;
+
+    #[Validate('required', message: 'Bulan Harus Diisi', onUpdate: false)]
+    public $bulan;
+
+    #[Validate('required', message: 'Tahun Harus Diisi', onUpdate: false)]
+    public $tahun;
 
 
     public function registerWithGoogle()
@@ -34,8 +40,20 @@ class Login extends Component
             return;
         }
 
-        if (!Hash::check($this->password, $user->password)) {
-            Alert::fail($this, 'Login Gagal', 'Password Tidak Sesuai');
+        if (!$user->hasRole(\App\Models\User::ROLE_CLIENT)) {
+            Alert::fail($this, 'Akses Ditolak', 'Gunakan halaman admin login untuk staf.');
+            return;
+        }
+
+        $formattedDob = sprintf('%04d-%02d-%02d', $this->tahun, $this->bulan, $this->tanggal);
+        
+        $clientDob = null;
+        if ($user->client && $user->client->dob) {
+            $clientDob = \Carbon\Carbon::parse($user->client->dob)->format('Y-m-d');
+        }
+
+        if (!$clientDob || $clientDob !== $formattedDob) {
+            Alert::fail($this, 'Login Gagal', 'Tanggal Lahir Tidak Sesuai');
             return;
         }
 
