@@ -199,10 +199,16 @@ class Datatable extends Component
             [
                 'key' => 'name',
                 'name' => 'Nama',
+                'render' => function ($item) {
+                    return "<span onclick=\"copyToClipboard('$item->name')\">$item->name</span>";
+                }
             ],
             [
                 'key' => 'dob',
                 'name' => 'Tgl Lahir',
+                'render' => function ($item) {
+                    return "<span onclick=\"copyToClipboard('$item->dob')\">$item->dob</span>";
+                }
             ],
             [
                 'key' => 'phone',
