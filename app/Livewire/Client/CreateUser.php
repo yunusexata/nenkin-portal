@@ -23,6 +23,9 @@ class CreateUser extends Component
     public $token;
     public $name;
     public $dob;
+    public $tanggal;
+    public $bulan;
+    public $tahun;
     public $email;
     public $password_dob;
 
@@ -49,11 +52,17 @@ class CreateUser extends Component
 
         $validated = $this->validate([
             'name' => ['required'],
-            'dob' => ['required'],
+            'tanggal' => ['required'],
+            'bulan' => ['required'],
+            'tahun' => ['required'],
         ], [
             'name.required' => 'Nama Lengkap Harus Diisi',
-            'dob.required' => 'Tanggal Lahir Harus Diisi',
+            'tanggal.required' => 'Tanggal Harus Diisi',
+            'bulan.required' => 'Bulan Harus Diisi',
+            'tahun.required' => 'Tahun Harus Diisi',
         ]);
+
+        $this->dob = sprintf('%04d-%02d-%02d', $this->tahun, $this->bulan, $this->tanggal);
 
         $magicLink = ClientMagicLinkRepository::findBy([
             ['token', $this->token]

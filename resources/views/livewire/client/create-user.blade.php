@@ -90,15 +90,49 @@
                     </div>
                     <!-- DOB -->
                     <div>
-                        <label for="dob" class="block text-sm font-semibold text-gray-700 mb-1">Tanggal Lahir</label>
-                        <input type="date" 
-                            id="dob" 
-                            wire:model="dob" 
-                            required
-                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-[#111827] focus:outline-none focus:ring-2 focus:ring-[#F97316] focus:border-transparent transition">
-                        @error('dob')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">
+                            Tanggal Lahir<span class="text-red-500">*</span>
+                        </label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <!-- Tanggal -->
+                            <div>
+                                <select wire:model="tanggal" name="tanggal" 
+                                    class="w-full px-2 py-2.5 rounded-lg border border-gray-300 text-sm text-[#111827] bg-white focus:outline-none focus:ring-2 focus:ring-[#F97316] focus:border-transparent transition @error('tanggal') border-red-500 focus:ring-red-500 @enderror"
+                                    required>
+                                    <option value="">Tanggal</option>
+                                    @for ($i = 1; $i <= 31; $i++)
+                                        <option value="{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}">{{ $i }}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                            <!-- Bulan -->
+                            <div>
+                                <select wire:model="bulan" name="bulan" 
+                                    class="w-full px-2 py-2.5 rounded-lg border border-gray-300 text-sm text-[#111827] bg-white focus:outline-none focus:ring-2 focus:ring-[#F97316] focus:border-transparent transition @error('bulan') border-red-500 focus:ring-red-500 @enderror"
+                                    required>
+                                    <option value="">Bulan</option>
+                                    @foreach (['01' => 'Januari', '02' => 'Februari', '03' => 'Maret', '04' => 'April', '05' => 'Mei', '06' => 'Juni', '07' => 'Juli', '08' => 'Agustus', '09' => 'September', '10' => 'Oktober', '11' => 'November', '12' => 'Desember'] as $val => $name)
+                                        <option value="{{ $val }}">{{ $name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <!-- Tahun -->
+                            <div>
+                                <select wire:model="tahun" name="tahun" 
+                                    class="w-full px-2 py-2.5 rounded-lg border border-gray-300 text-sm text-[#111827] bg-white focus:outline-none focus:ring-2 focus:ring-[#F97316] focus:border-transparent transition @error('tahun') border-red-500 focus:ring-red-500 @enderror"
+                                    required>
+                                    <option value="">Tahun</option>
+                                    @for ($i = date('Y'); $i >= 1950; $i--)
+                                        <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                        </div>
+                        @if ($errors->has('tanggal') || $errors->has('bulan') || $errors->has('tahun'))
+                            <p class="text-red-500 text-xs mt-1 font-medium">
+                                Tanggal lahir harus diisi dengan lengkap.
+                            </p>
+                        @endif
                     </div>
                     
                     <!-- Submit Button -->
