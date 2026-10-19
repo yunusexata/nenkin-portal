@@ -286,6 +286,21 @@
                     @else
                         @foreach ($data as $index => $item)
                             <tr wire:key="row_{{ $index }}" class="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                                @php
+                                    $credential = $item->email . " " . $item->password;
+                                    $credentialHtml = "<div class='col-auto'>
+                                                <button type='button' class='inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-2 py-1 text-sm bg-success-500 text-white shadow-theme-xs hover:bg-success-600 disabled:bg-brand-300' onclick=\"copyToClipboard('$credential')\">
+                                                    <span class='material-symbols-outlined text-lg' data-icon='edit'>vpn_key</span>
+                                                </button>
+                                            </div>
+                                    ";
+
+
+                                    $html = "<div class='flex flex-nowrap justify-start p-0 m-0 gap-1'>
+                                        $credentialHtml
+                                    </div>";
+                                @endphp     
+                                <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{!! $html !!}</td>
                                 <td class="px-4 py-3 text-sm text-gray-900 dark:text-white">{{ $item->no_jp ?? '-' }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-900 dark:text-white font-medium">{{ $item->name }}</td>
                                 <td class="px-4 py-3 text-sm text-gray-900 dark:text-white font-medium">

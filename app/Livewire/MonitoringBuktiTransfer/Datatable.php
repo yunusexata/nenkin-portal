@@ -88,6 +88,28 @@ class Datatable extends Component
     public function getColumns(): array
     {
         return [
+
+            [
+                'name' => 'Action',
+                'sortable' => false,
+                'searchable' => false,
+                'render' => function ($item) {
+                    $credential = $item->email . " " . $item->password;
+                    $credentialHtml = "<div class='col-auto'>
+                                <button type='button' class='inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-2 py-1 text-sm bg-success-500 text-white shadow-theme-xs hover:bg-success-600 disabled:bg-brand-300' onclick=\"copyToClipboard('$credential')\">
+                                    <span class='material-symbols-outlined text-lg' data-icon='edit'>vpn_key</span>
+                                </button>
+                            </div>
+                    ";
+
+
+                    $html = "<div class='flex flex-nowrap justify-start p-0 m-0 gap-1'>
+                        $credentialHtml
+                    </div>";
+
+                    return $html;
+                },
+            ],
             ['key' => 'clients.no_jp', 'name' => 'No Input JPN'],
             ['key' => 'clients.name', 'name' => 'Nama Klien'],
             [
@@ -167,6 +189,8 @@ class Datatable extends Component
                 'client_confirmations.current_phone',
                 'client_confirmations.client_closing_batch_number',
                 'client_confirmations.closed_at',
+                'client_magic_links.email',
+                'client_magic_links.password',
                 DB::raw("MAX(CASE WHEN documents.type IS NOT NULL THEN documents.type END) as document_type"),
                 DB::raw("MAX(dd_meta.downloaded_at) as last_downloaded_at"),
                 // Status dihitung di SELECT dan dipakai untuk display + export
@@ -182,6 +206,10 @@ class Datatable extends Component
                 if ($this->documentType && $this->documentType !== 'all') {
                     $j->where('documents.type', $this->documentType);
                 }
+            })
+            ->join('client_magic_links', function ($j) {
+                $j->on('client_magic_links.client_id', '=', 'clients.id')
+                    ->whereNull('client_magic_links.deleted_at');
             })
             ->leftJoin('client_confirmations', function ($j) {
                 $j->on('client_confirmations.client_id', '=', 'clients.id')
@@ -221,7 +249,9 @@ class Datatable extends Component
             'clients.source_file_name',
             'client_confirmations.current_phone',
             'client_confirmations.client_closing_batch_number',
-            'client_confirmations.closed_at'
+            'client_confirmations.closed_at',
+            'client_magic_links.email',
+            'client_magic_links.password',
         );
 
         return $this->applyStatusFilter($query);
