@@ -47,6 +47,7 @@
                 <th class="text-center">BULAN RE ENTRY</th>
                 <th class="text-center">ALASAN RE ENTRY</th>
                 <th class="text-center">STATUS EKSPOR</th>
+                <th class="text-center">wAKTU EKSPOR</th>
                 <th class="text-center">ALAMAT</th>
             </tr>
         </thead>
