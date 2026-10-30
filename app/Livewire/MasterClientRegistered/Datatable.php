@@ -966,7 +966,7 @@ class Datatable extends Component
             $this->bulkPic
         );
         $data['query'][] = $qhs3;
-        $data['view'][] = 'app.master-client-registered.export';
+        $data['view'][] = 'app.master-client-registered.export-reentry';
         $data['request'][] = [
             'title' => 'Data Client Re-Entry',
             'type' => $type,
