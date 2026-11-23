@@ -971,6 +971,18 @@ class Datatable extends Component
             'title' => 'Data Client Re-Entry',
             'type' => $type,
         ];
+
+        $qhs_adjutment =  ClientRepository::getClientAdjustment(
+            $this->selectedBatch,
+            $this->filter_claim_type,
+            $this->bulkPic
+        );
+        $data['query'][] = $qhs_adjutment;
+        $data['view'][] = 'app.master-client-registered.export-closing';
+        $data['request'][] = [
+            'title' => 'Data Client Adjusment',
+            'type' => $type,
+        ];
         // dd($data['request'][0]);
 
         $export = ExportHelper::export(

@@ -45,6 +45,28 @@ class ClientRepository extends MasterDataRepository
             });
     }
 
+    public static function getClientAdjustment($batchName = null, $claimType = null, $pic = null)
+    {
+        return Client::query()
+            ->where('clients.claim_type', '=', Client::CLAIM_TYPE_ADJUSTMENT)
+            ->when($batchName && $batchName != 'all', function ($q) use ($batchName) {
+                $q->where('clients.source_file_name', $batchName);
+            })
+            ->whereHas('confirmation')
+            ->select('clients.*')
+            ->selectRaw("
+            EXISTS (
+                SELECT 1
+                FROM client_esigns
+                WHERE client_esigns.client_id = clients.id
+                    AND client_esigns.deleted_at IS NULL
+            ) as esign_exists
+        ")
+            ->orderByDesc('clients.is_exported')
+            ->orderBy('clients.exported_at', 'ASC')
+            ->orderByDesc('clients.no_jp');
+    }
+
     public static function getClientReEntry($batchName = null, $claimType = null, $pic = null)
     {
         return Client::query()
