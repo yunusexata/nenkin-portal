@@ -708,12 +708,12 @@ class Datatable extends Component
             ], [
                 'client_id' => $client->id,
                 'nenkin_80_received_type' => ClientConfirmation::NENKIN_80_RECEIVED_TYPE_RECEIVED,
-                'current_position' => ClientConfirmation::CURRENT_POSITION_JEPANG,
-                'back_to_jp_type' => null,
-                'departure_month' => null,
-                'departure_year' => null,
-                'estimated_return_month' => now()->addMonth()->format('m'),
-                'estimated_return_year' => now()->addYear()->format('Y'),
+                'current_position' => ClientConfirmation::CURRENT_POSITION_INDONESIA,
+                'back_to_jp_type' => ClientConfirmation::BACK_TO_JP_TYPE_YES,
+                'departure_month' => now()->addMonth()->format('m'),
+                'departure_year' => now()->format('Y'),
+                'estimated_return_month' => null,
+                'estimated_return_year' => null,
                 'indonesia_address' => null,
                 'nik' => null,
             ]);
